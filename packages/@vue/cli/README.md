@@ -1,8 +1,8 @@
-# @vue/cli
+# @mool/cli
 
 ``` sh
-npm install -g @vue/cli
-vue create my-project
+npm install -g @mool/cli
+mool create my-project
 ```
 
-[Full Docs](https://cli.vuejs.org/)
+[Full Docs](https://cli.mooljs.org/)
