@@ -3,12 +3,13 @@ module.exports = cli => {
     name: 'Vuex',
     value: 'vuex',
     description: 'Manage the app state with a centralized store',
-    link: 'https://vuex.vuejs.org/'
+    link: 'https://pinia.vuejs.org/'
   })
 
   cli.onPromptComplete((answers, options) => {
     if (answers.features.includes('vuex')) {
-      options.plugins['@vue/cli-plugin-vuex'] = {}
+      options.plugins['@vue/cli-plugin-pinia'] = {}
     }
   })
 }
+

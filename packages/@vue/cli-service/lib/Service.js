@@ -181,11 +181,11 @@ module.exports = class Service {
       './commands/inspect',
       './commands/help',
       // config plugins are order sensitive
-      './config/base',
-      './config/assets',
-      './config/css',
-      './config/prod',
-      './config/app'
+      './preset/autoImport/index',
+      './preset/compression/index',
+      './preset/service/index',
+      './preset/svg/index',
+      './preset/vue/index'
     ].map((id) => idToPlugin(id))
 
     if (inlinePlugins) {

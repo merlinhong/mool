@@ -1,24 +1,24 @@
 {
-  "name": "@vue/cli",
+  "name": "@mool/cli",
   "version": "5.0.8",
-  "description": "Command line interface for rapid Vue.js development",
+  "description": "Command line interface for rapid mool.js development",
   "bin": {
-    "vue": "bin/vue.js"
+    "mool": "bin/mool.js"
   },
   "types": "types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git",
+    "url": "git+https://github.com/merlinhong/mool.git",
     "directory": "packages/@vue/cli"
   },
   "keywords": [
     "vue",
     "cli"
   ],
-  "author": "Evan You",
+  "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/vue-cli/issues"
+    "url": "https://github.com/merlinhong/mool.git/issues"
   },
   "homepage": "https://cli.vuejs.org/",
   "publishConfig": {

@@ -94,12 +94,12 @@ module.exports = class Creator extends EventEmitter {
     // clone before mutating
     preset = cloneDeep(preset)
     // inject core service
-    preset.plugins['@vue/cli-service'] = Object.assign({
+    preset.plugins['@mool/cli-service'] = Object.assign({
       projectName: name
     }, preset)
 
     if (cliOptions.bare) {
-      preset.plugins['@vue/cli-service'].bare = true
+      preset.plugins['@mool/cli-service'].bare = true
     }
 
     // legacy support for router
