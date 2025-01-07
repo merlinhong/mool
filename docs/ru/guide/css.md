@@ -57,7 +57,7 @@ npm install -D fibers
 const path = require('path')
 
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
   },
@@ -178,5 +178,5 @@ module.exports = {
 - [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip Совет
-Это предпочтительнее, чем вручную обращаться к конкретным загрузчикам, используя `chainWebpack`, потому что настройки необходимо применять в нескольких местах, где используется соответствующий загрузчик.
+Это предпочтительнее, чем вручную обращаться к конкретным загрузчикам, используя `chainVite`, потому что настройки необходимо применять в нескольких местах, где используется соответствующий загрузчик.
 :::

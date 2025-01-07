@@ -29,7 +29,7 @@
 
 默认情况下，一个 Vue CLI 应用会为所有初始化渲染需要的文件自动生成 preload 提示。
 
-这些提示会被 [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) 注入，并且可以通过 `chainWebpack` 的 `config.plugin('preload')` 进行修改和删除。
+这些提示会被 [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) 注入，并且可以通过 `chainVite` 的 `config.plugin('preload')` 进行修改和删除。
 
 ### Prefetch
 
@@ -37,14 +37,14 @@
 
 默认情况下，一个 Vue CLI 应用会为所有作为 async chunk 生成的 JavaScript 文件 ([通过动态 `import()` 按需 code splitting](https://webpack.js.org/guides/code-splitting/#dynamic-imports) 的产物) 自动生成 prefetch 提示。
 
-这些提示会被 [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) 注入，并且可以通过 `chainWebpack` 的 `config.plugin('prefetch')` 进行修改和删除。
+这些提示会被 [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) 注入，并且可以通过 `chainVite` 的 `config.plugin('prefetch')` 进行修改和删除。
 
 示例：
 
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // 移除 prefetch 插件
     config.plugins.delete('prefetch')
 
@@ -81,7 +81,7 @@ module.exports = {
   // 去掉文件名中的 hash
   filenameHashing: false,
   // 删除 HTML 相关的 webpack 插件
-  chainWebpack: config => {
+  chainVite: config => {
     config.plugins.delete('html')
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')
@@ -127,12 +127,12 @@ h('img', { attrs: { src: require('./image.png') }})
 
 在其内部，我们通过 webpack 的 [Assets Modules](https://webpack.js.org/guides/asset-modules/) 配置，用版本哈希值和正确的公共基础路径来决定最终的文件路径，并将小于 8KiB 的资源内联，以减少 HTTP 请求的数量。
 
-你可以通过 [chainWebpack](../config/#chainwebpack) 调整内联文件的大小限制。例如，下列代码会将内联图片资源限制设置为 4KiB：
+你可以通过 [chainVite](../config/#chainVite) 调整内联文件的大小限制。例如，下列代码会将内联图片资源限制设置为 4KiB：
 
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('images')
         .set('parser', {

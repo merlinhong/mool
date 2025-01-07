@@ -55,7 +55,7 @@ If you want to automatically import files (for colors, variables, mixins...), yo
 const path = require('path')
 
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
   },
@@ -184,5 +184,5 @@ Loaders which can be configured via `loaderOptions` include:
 - [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip
-This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+This is preferred over manually tapping into specific loaders using `chainVite`, because these options need to be applied in multiple locations where the corresponding loader is used.
 :::

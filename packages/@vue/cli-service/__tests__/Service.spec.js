@@ -305,11 +305,11 @@ test('api: defaultModes', async () => {
   await (await createMockService([plugin2], false /* init */)).run('test')
 })
 
-test('api: chainWebpack', async () => {
+test('api: chainVite', async () => {
   const service = await createMockService([{
     id: 'test',
     apply: api => {
-      api.chainWebpack(config => {
+      api.chainVite(config => {
         config.output.path('test-dist')
       })
     }
@@ -319,11 +319,11 @@ test('api: chainWebpack', async () => {
   expect(config.output.path).toBe('test-dist')
 })
 
-test('api: configureWebpack', async () => {
+test('api: configureVite', async () => {
   const service = await createMockService([{
     id: 'test',
     apply: api => {
-      api.configureWebpack(config => {
+      api.configureVite(config => {
         config.output = {
           path: 'test-dist-2'
         }
@@ -335,11 +335,11 @@ test('api: configureWebpack', async () => {
   expect(config.output.path).toBe('test-dist-2')
 })
 
-test('api: configureWebpack returning object', async () => {
+test('api: configureVite returning object', async () => {
   const service = await createMockService([{
     id: 'test',
     apply: api => {
-      api.configureWebpack(config => {
+      api.configureVite(config => {
         return {
           output: {
             path: 'test-dist-3'
@@ -353,7 +353,7 @@ test('api: configureWebpack returning object', async () => {
   expect(config.output.path).toBe('test-dist-3')
 })
 
-test('api: configureWebpack preserve ruleNames', async () => {
+test('api: configureVite preserve ruleNames', async () => {
   const service = await createMockService([
     {
       id: 'babel',
@@ -362,7 +362,7 @@ test('api: configureWebpack preserve ruleNames', async () => {
     {
       id: 'test',
       apply: api => {
-        api.configureWebpack({
+        api.configureVite({
           module: {
             rules: []
           }
@@ -381,7 +381,7 @@ test('internal: should correctly set VUE_CLI_ENTRY_FILES', async () => {
   const service = await createMockService([{
     id: 'test',
     apply: api => {
-      api.configureWebpack(config => {
+      api.configureVite(config => {
         config.entry = {
           page1: './src/page1.js',
           page2: './src/page2.js'

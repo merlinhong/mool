@@ -11,7 +11,7 @@ module.exports = function validateWebpackConfig (
   const actualTargetDir = singleConfig.output.path
 
   if (actualTargetDir !== api.resolve(options.outputDir)) {
-    // user directly modifies output.path in configureWebpack or chainWebpack.
+    // user directly modifies output.path in configureVite or chainVite.
     // this is not supported because there's no way for us to give copy
     // plugin the correct value this way.
     throw new Error(

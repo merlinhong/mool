@@ -79,7 +79,7 @@ Vue CLI uses two environment variables to communicate this:
 * `VUE_CLI_MODERN_MODE`: The build was started with the `--modern` flag
 * `VUE_CLI_MODERN_BUILD`: when true, the current config is for the modern build. Otherwise it's for the legacy build.
 
-**Important:** These variables are only accessible when/after `chainWebpack()` and `configureWebpack()` functions are evaluated, (so not directly in the `vue.config.js` module's root scope). That means it's also available in the postcss config file.
+**Important:** These variables are only accessible when/after `chainVite()` and `configureVite()` functions are evaluated, (so not directly in the `vue.config.js` module's root scope). That means it's also available in the postcss config file.
 :::
 
 ::: warning Caveat: Adjusting webpack plugins

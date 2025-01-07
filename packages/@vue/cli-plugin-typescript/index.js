@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = (api, projectOptions) => {
   const useThreads = process.env.NODE_ENV === 'production' && !!projectOptions.parallel
 
-  api.chainWebpack(config => {
+  api.chainVite(config => {
     config.resolveLoader.modules.prepend(path.join(__dirname, 'node_modules'))
 
     if (!projectOptions.pages) {

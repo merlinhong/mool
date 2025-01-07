@@ -319,7 +319,7 @@ module.exports = () => {}
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
 
 module.exports = (api, options) => {
-  api.chainWebpack(webpackConfig => {
+  api.chainVite(webpackConfig => {
     webpackConfig
     .plugin('vue-auto-routing')
       .use(VueAutoRoutingPlugin, [
@@ -332,7 +332,7 @@ module.exports = (api, options) => {
 }
 ```
 
-你也可以使用 `configureWebpack` 方法修改 webpack 配置或者返回一个对象，返回的对象将通过 webpack-merge 被合并到配置中。
+你也可以使用 `configureVite` 方法修改 webpack 配置或者返回一个对象，返回的对象将通过 webpack-merge 被合并到配置中。
 
 ### 添加一个新的 cli-service 命令
 

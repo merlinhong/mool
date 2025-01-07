@@ -23,7 +23,7 @@ const servicePlugin: ServicePlugin = (api, options) => {
   )
   api.registerCommand('lint', args => {})
 
-  api.chainWebpack(webpackConfig => {
+  api.chainVite(webpackConfig => {
     if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
       webpackConfig.devtool('eval-cheap-module-source-map')
 
@@ -33,13 +33,13 @@ const servicePlugin: ServicePlugin = (api, options) => {
     }
   })
 
-  api.configureWebpack(config => {
+  api.configureVite(config => {
     config.output = {
       path: 'test-dist-2'
     }
   })
 
-  api.configureWebpack(config => {
+  api.configureVite(config => {
     return {
       devtool: config.devtool || 'source-map'
     }

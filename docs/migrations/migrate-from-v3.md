@@ -126,19 +126,19 @@ It's strongly recommended to upgrade to `less-loader@5` if your project depends 
 
 The already-deprecated [`baseUrl` option](https://cli.vuejs.org/config/#baseurl) is now [removed](https://github.com/vuejs/vue-cli/pull/4388)
 
-#### `chainWebpack` / `configureWebpack`
+#### `chainVite` / `configureVite`
 
-##### The `minimizer` Method in `chainWebpack`
+##### The `minimizer` Method in `chainVite`
 
-If you've customized the internal rules with `chainWebpack`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config
+If you've customized the internal rules with `chainVite`, please notice that `webpack-chain` was updated from v4 to v6, the most noticeable change is the `minimizer` config
 
 For example, if you want to enable the `drop_console` option in the terser plugin.
-In v3, you may do this in `chainWebpack`:
+In v3, you may do this in `chainVite`:
 
 ```js
 const TerserPlugin = require('terser-webpack-plugin')
 module.exports = {
-  chainWebpack: (config) => {
+  chainVite: (config) => {
     config.optimization.minimizer([
       new TerserPlugin({ terserOptions: { compress: { drop_console: true } } })
     ])
@@ -150,7 +150,7 @@ In v4, it's changed to:
 
 ```js
 module.exports = {
-  chainWebpack: (config) => {
+  chainVite: (config) => {
     config.optimization.minimizer('terser').tap((args) => {
       args[0].terserOptions.compress.drop_console = true
       return args
@@ -165,7 +165,7 @@ module.exports = {
 
 #### Underlying Loaders / Plugins
 
-Not likely to affect users unless you've customized their options via `chainWebpack` / `configureWebpack`
+Not likely to affect users unless you've customized their options via `chainVite` / `configureVite`
 
 `css-loader` was upgraded from v1 to v3:
 

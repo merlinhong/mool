@@ -2,12 +2,12 @@
 
 ## Простая конфигурация
 
-Самый простой способ изменять конфигурацию webpack — использовать объект в опции `configureWebpack` в файле `vue.config.js`:
+Самый простой способ изменять конфигурацию webpack — использовать объект в опции `configureVite` в файле `vue.config.js`:
 
 ```js
 // vue.config.js
 module.exports = {
-  configureWebpack: {
+  configureVite: {
     plugins: [
       new MyAwesomeWebpackPlugin()
     ]
@@ -26,7 +26,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  configureWebpack: config => {
+  configureVite: config => {
     if (process.env.NODE_ENV === 'production') {
       // изменение конфигурации для production...
     } else {
@@ -40,7 +40,7 @@ module.exports = {
 
 Внутренняя конфигурация webpack поддерживается с использованием [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). Библиотека предоставляет абстракцию над обычной конфигурацией webpack, добавляет возможность задавать именованные правила для загрузчиков и плагинов, а затем выбирать эти правила по имени и изменять их параметры.
 
-Это позволяет осуществлять более тонкий контроль над встроенной конфигурацией. Ниже вы увидите примеры изменений, выполненных с помощью опции `chainWebpack` в `vue.config.js`.
+Это позволяет осуществлять более тонкий контроль над встроенной конфигурацией. Ниже вы увидите примеры изменений, выполненных с помощью опции `chainVite` в `vue.config.js`.
 
 ::: tip Совет
 Команда [vue inspect](#просмотр-конфигурации-webpack-проекта) пригодится, когда вы будете пробовать добраться до определённого загрузчика в цепочке.
@@ -51,7 +51,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('vue')
       .use('vue-loader')
@@ -72,7 +72,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // Загрузчик GraphQL
     config.module
       .rule('graphql')
@@ -95,7 +95,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const svgRule = config.module.rule('svg')
 
     // очищаем все существующие загрузчики.
@@ -116,7 +116,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {
@@ -133,7 +133,7 @@ module.exports = {
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {

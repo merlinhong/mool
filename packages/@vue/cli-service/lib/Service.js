@@ -83,11 +83,11 @@ module.exports = class Service {
       })
 
       // apply webpack configs from project config file
-      if (this.projectOptions.chainWebpack) {
-        this.webpackChainFns.push(this.projectOptions.chainWebpack)
+      if (this.projectOptions.chainVite) {
+        this.webpackChainFns.push(this.projectOptions.chainVite)
       }
-      if (this.projectOptions.configureWebpack) {
-        this.webpackRawConfigFns.push(this.projectOptions.configureWebpack)
+      if (this.projectOptions.configureVite) {
+        this.webpackRawConfigFns.push(this.projectOptions.configureVite)
       }
     }
 

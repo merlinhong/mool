@@ -126,19 +126,19 @@ vue upgrade
 
 Уже объявленная как устаревшая [опция `baseUrl`](../config/#baseurl) теперь [удалена](https://github.com/vuejs/vue-cli/pull/4388).
 
-#### `chainWebpack` / `configureWebpack`
+#### `chainVite` / `configureVite`
 
-##### Метод `minimizer` в `chainWebpack`
+##### Метод `minimizer` в `chainVite`
 
-Если настраивали правила через `chainWebpack`, то обратите внимание, что `webpack-chain` обновлён с версии v4 до v6. Наиболее заметным изменением является конфигурация `minimizer`.
+Если настраивали правила через `chainVite`, то обратите внимание, что `webpack-chain` обновлён с версии v4 до v6. Наиболее заметным изменением является конфигурация `minimizer`.
 
 Например, если необходимо включить опцию `drop_console` в плагине terser.
-В версии v3 это можно сделать через `chainWebpack` так:
+В версии v3 это можно сделать через `chainVite` так:
 
 ```js
 const TerserPlugin = require('terser-webpack-plugin')
 module.exports = {
-  chainWebpack: (config) => {
+  chainVite: (config) => {
     config.optimization.minimizer([
       new TerserPlugin({ terserOptions: { compress: { drop_console: true } } })
     ])
@@ -150,7 +150,7 @@ module.exports = {
 
 ```js
 module.exports = {
-  chainWebpack: (config) => {
+  chainVite: (config) => {
     config.optimization.minimizer('terser').tap((args) => {
       args[0].terserOptions.compress.drop_console = true
       return args
@@ -165,7 +165,7 @@ module.exports = {
 
 #### Базовые загрузчики / плагины
 
-Скорее всего это вряд ли повлияет на пользователей, если не настраивали опции через `chainWebpack` / `configureWebpack`
+Скорее всего это вряд ли повлияет на пользователей, если не настраивали опции через `chainVite` / `configureVite`
 
 `css-loader` был обновлён с версии v1 до v3:
 

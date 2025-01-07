@@ -101,7 +101,7 @@ No longer supports generating project with `node-sass`. It has been [deprecated]
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('images')
         .set('parser', {

@@ -57,9 +57,9 @@ module.exports = (api, options) => {
         console.log(`*: ${chalk.green(
           'Nameless Rules'
         )} were added through the ${chalk.green(
-          'configureWebpack()'
+          'configureVite()'
         )} API (possibly by a plugin) instead of ${chalk.green(
-          'chainWebpack()'
+          'chainVite()'
         )} (recommended).
     You can run ${chalk.green(
     'vue-cli-service inspect'

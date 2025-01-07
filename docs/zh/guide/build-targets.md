@@ -66,7 +66,7 @@ dist/myLib.css           0.33 kb                  0.23 kb
 
 ``` js
 module.exports = {
-  configureWebpack: {
+  configureVite: {
     output: {
       libraryExport: 'default'
     }

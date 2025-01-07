@@ -29,7 +29,7 @@ See also:
 
 By default, a Vue CLI app will automatically generate preload hints for all files that are needed for the initial rendering of your app.
 
-The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('preload')`.
+The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainVite` as `config.plugin('preload')`.
 
 ### Prefetch
 
@@ -37,7 +37,7 @@ The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vu
 
 By default, a Vue CLI app will automatically generate prefetch hints for all JavaScript files generated for async chunks (as a result of [on-demand code splitting via dynamic `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
-The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainWebpack` as `config.plugin('prefetch')`.
+The hints are injected using [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) and can be modified / deleted via `chainVite` as `config.plugin('prefetch')`.
 
 ::: tip Note for multi page setups
 When using a multipage setup, the plugin name above should be changed to match the structure 'prefetch-{pagename}', for example 'prefetch-app'.
@@ -48,7 +48,7 @@ Example:
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // remove the prefetch plugin
     config.plugins.delete('prefetch')
 
@@ -85,7 +85,7 @@ module.exports = {
   // disable hashes in filenames
   filenameHashing: false,
   // delete HTML related webpack plugins
-  chainWebpack: config => {
+  chainVite: config => {
     config.plugins.delete('html')
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')
@@ -131,12 +131,12 @@ h('img', { attrs: { src: require('./image.png') }})
 
 Internally, we configured webpack [Assets Modules](https://webpack.js.org/guides/asset-modules/) to determine the final file location with version hashes and correct public base paths, and conditionally inline assets that are smaller than 8KiB, reducing the amount of HTTP requests.
 
-You can adjust the inline file size limit via [chainWebpack](../config/#chainwebpack). For example, to set the limit of inline images to 4KiB instead:
+You can adjust the inline file size limit via [chainVite](../config/#chainVite). For example, to set the limit of inline images to 4KiB instead:
 
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('images')
         .set('parser', {

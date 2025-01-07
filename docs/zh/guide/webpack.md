@@ -2,12 +2,12 @@
 
 ## 简单的配置方式
 
-调整 webpack 配置最简单的方式就是在 `vue.config.js` 中的 `configureWebpack` 选项提供一个对象：
+调整 webpack 配置最简单的方式就是在 `vue.config.js` 中的 `configureVite` 选项提供一个对象：
 
 ``` js
 // vue.config.js
 module.exports = {
-  configureWebpack: {
+  configureVite: {
     plugins: [
       new MyAwesomeWebpackPlugin()
     ]
@@ -26,7 +26,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  configureWebpack: config => {
+  configureVite: config => {
     if (process.env.NODE_ENV === 'production') {
       // 为生产环境修改配置...
     } else {
@@ -40,7 +40,7 @@ module.exports = {
 
 Vue CLI 内部的 webpack 配置是通过 [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain) 维护的。这个库提供了一个 webpack 原始配置的上层抽象，使其可以定义具名的 loader 规则和具名插件，并有机会在后期进入这些规则并对它们的选项进行修改。
 
-它允许我们更细粒度的控制其内部配置。接下来有一些常见的在 `vue.config.js` 中的 `chainWebpack` 修改的例子。
+它允许我们更细粒度的控制其内部配置。接下来有一些常见的在 `vue.config.js` 中的 `chainVite` 修改的例子。
 
 ::: tip 提示
 当你打算链式访问特定的 loader 时，[vue inspect](#审查项目的-webpack-配置) 会非常有帮助。
@@ -51,7 +51,7 @@ Vue CLI 内部的 webpack 配置是通过 [webpack-chain](https://github.com/moz
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('vue')
       .use('vue-loader')
@@ -72,7 +72,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // GraphQL Loader
     config.module
       .rule('graphql')
@@ -95,7 +95,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const svgRule = config.module.rule('svg')
 
     // 清除已有的所有 loader。
@@ -115,7 +115,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {
@@ -132,7 +132,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {

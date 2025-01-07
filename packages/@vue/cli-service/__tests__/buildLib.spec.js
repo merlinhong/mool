@@ -108,7 +108,7 @@ test('build as lib with webpackConfiguration depending on target (js)', async ()
   await project.write('vue.config.js', `
     const path = require('path')
     module.exports = {
-      configureWebpack: config => {
+      configureVite: config => {
         config.resolve.alias['a-library'] = path.resolve(__dirname, 'src', 'a-library.js')
 
         if (config.output.libraryTarget === 'umd') {

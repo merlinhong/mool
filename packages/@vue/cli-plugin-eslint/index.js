@@ -23,7 +23,7 @@ module.exports = (api, options) => {
       ['package.json']
     )
 
-    api.chainWebpack(webpackConfig => {
+    api.chainVite(webpackConfig => {
       const { lintOnSave } = options
       const treatAllAsWarnings = lintOnSave === true || lintOnSave === 'warning'
       const treatAllAsErrors = lintOnSave === 'error'

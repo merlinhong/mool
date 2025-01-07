@@ -23,7 +23,7 @@ npm_config_unsafe_perm=true vue create my-project
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: (config) => {
+  chainVite: (config) => {
     config.resolve.symlinks(false)
   }
 }

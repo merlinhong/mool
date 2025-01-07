@@ -68,7 +68,7 @@ Check if the project has a plugin with given id
 - **Usage**:
 Register a command that will become available as `vue-cli-service [name]`.
 
-## chainWebpack
+## chainVite
 
 - **Arguments**
   - `{function} fn`
@@ -77,7 +77,7 @@ Register a command that will become available as `vue-cli-service [name]`.
 Register a function that will receive a chainable webpack config. This function is lazy and won't be called until `resolveWebpackConfig` is called.
 
 
-## configureWebpack
+## configureVite
 
 - **Arguments**
   - `{object | function} fn`

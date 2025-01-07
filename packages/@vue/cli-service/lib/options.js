@@ -49,8 +49,8 @@ const schema = createSchema(joi => joi.object({
   }),
 
   // webpack
-  chainWebpack: joi.func(),
-  configureWebpack: joi.alternatives().try(
+  chainVite: joi.func(),
+  configureVite: joi.alternatives().try(
     joi.object(),
     joi.func()
   ),
@@ -85,63 +85,31 @@ function hasMultipleCores () {
 }
 
 exports.defaults = () => ({
-  // project deployment base
-  publicPath: '/',
+  // where to the index.html that the root directory of project
+  root: process.cwd(),
+
+  // The public infrastructure path for developing or producing environmental services
+
+  base:'/',
 
   // where to output built files
-  outputDir: 'dist',
+  outDir: 'dist',
 
   // where to put static assets (js/css/img/font/...)
   assetsDir: '',
 
-  // filename for index.html (relative to outputDir)
-  indexPath: 'index.html',
+  // Alias for file system path
+  alias:{},
 
-  // whether filename will contain hash part
-  filenameHashing: true,
+  // Whether to generate a source map file after construction
+  souremap: true,
 
-  // boolean, use full build?
-  runtimeCompiler: false,
+  // Automatically open the application in the browser when the development server starts up. When the value is a string, it will be used as the path name for the URL
+  open: '',
 
-  // whether to transpile all dependencies
-  transpileDependencies: false,
+  // Specify which IP address the server should listen to
+  host: 'localhost',
 
-  // sourceMap for production build?
-  productionSourceMap: !process.env.VUE_CLI_TEST,
-
-  // use thread-loader for babel & TS in production build
-  // enabled by default if the machine has more than 1 cores
-  parallel: hasMultipleCores(),
-
-  // multi-page config
-  pages: undefined,
-
-  // <script type="module" crossorigin="use-credentials">
-  // #1656, #1867, #2025
-  crossorigin: undefined,
-
-  // subresource integrity
-  integrity: false,
-
-  css: {
-    // extract: true,
-    // modules: false,
-    // sourceMap: false,
-    // loaderOptions: {}
-  },
-
-  // whether to use eslint-loader
-  lintOnSave: 'default',
-
-  devServer: {
-    /*
-    open: process.platform === 'darwin',
-    host: '0.0.0.0',
-    port: 8080,
-    https: false,
-    hotOnly: false,
-    proxy: null, // string | Object
-    before: app => {}
-  */
-  }
+  // This option allows you to create custom public chunks. When the value is in object form, each attribute represents a chunk. When the value of this option is in the form of a function, each parsed module will be processed by this function. If the function returns a string, then the module and all its dependencies will be added to a custom chunk named after the return string
+  codeSplit:{},
 })

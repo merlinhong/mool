@@ -94,7 +94,7 @@ class PluginAPI {
    *
    * @param {function} fn
    */
-  chainWebpack (fn) {
+  chainVite (fn) {
     this.service.webpackChainFns.push(fn)
   }
 
@@ -108,7 +108,7 @@ class PluginAPI {
    *
    * @param {object | function} fn
    */
-  configureWebpack (fn) {
+  configureVite (fn) {
     this.service.webpackRawConfigFns.push(fn)
   }
 
@@ -166,8 +166,8 @@ class PluginAPI {
       env: process.env.NODE_ENV,
       test: !!process.env.VUE_CLI_TEST,
       config: [
-        fmtFunc(this.service.projectOptions.chainWebpack),
-        fmtFunc(this.service.projectOptions.configureWebpack)
+        fmtFunc(this.service.projectOptions.chainVite),
+        fmtFunc(this.service.projectOptions.configureVite)
       ]
     }
 

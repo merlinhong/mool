@@ -320,7 +320,7 @@ The API allows service plugins to extend/modify the internal webpack config for 
 const VueAutoRoutingPlugin = require('vue-auto-routing/lib/webpack-plugin')
 
 module.exports = (api, options) => {
-  api.chainWebpack(webpackConfig => {
+  api.chainVite(webpackConfig => {
     webpackConfig
       .plugin('vue-auto-routing')
         .use(VueAutoRoutingPlugin, [
@@ -333,7 +333,7 @@ module.exports = (api, options) => {
 }
 ```
 
-You can also use `configureWebpack` method to modify the  webpack config or return object to be merged with webpack-merge.
+You can also use `configureVite` method to modify the  webpack config or return object to be merged with webpack-merge.
 
 ### Add a new cli-service command
 

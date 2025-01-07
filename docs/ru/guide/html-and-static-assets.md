@@ -29,7 +29,7 @@
 
 По умолчанию приложение Vue CLI автоматически генерирует preload-подсказки для всех файлов, которые необходимы при первоначальном рендеринге вашего приложения.
 
-Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainWebpack` через `config.plugin('preload')`.
+Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainVite` через `config.plugin('preload')`.
 
 ### Prefetch
 
@@ -37,7 +37,7 @@
 
 По умолчанию приложение Vue CLI автоматически генерирует prefetch-подсказки для всех JavaScript-файлов, сгенерированных для асинхронных фрагментов (в результате [разделения кода с помощью динамических импортов `import()`](https://webpack.js.org/guides/code-splitting/#dynamic-imports)).
 
-Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainWebpack` через `config.plugin('prefetch')`.
+Эти подсказки внедряются [@vue/preload-webpack-plugin](https://github.com/vuejs/preload-webpack-plugin) и могут быть изменены / удалены с помощью `chainVite` через `config.plugin('prefetch')`.
 
 ::: tip Примечание для многостраничных конфигураций
 При использовании многостраничной конфигурации имя плагина нужно изменить в соответствии со структурой `prefetch-{pagename}`, например `prefetch-app`.
@@ -48,7 +48,7 @@
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // удаляем prefetch плагин:
     config.plugins.delete('prefetch')
 
@@ -85,7 +85,7 @@ module.exports = {
   // отключение хэшей в именах файлов
   filenameHashing: false,
   // удаление плагинов webpack связанных с HTML
-  chainWebpack: config => {
+  chainVite: config => {
     config.plugins.delete('html')
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')
@@ -131,12 +131,12 @@ h('img', { attrs: { src: require('./image.png') }})
 
 Внутри используется `file-loader` для определения конечного расположения файла с хэшем версии и правильный путь относительно корня, а также `url-loader` для инлайн-встраивания ресурсов, чей размер меньше 8 КБайт, чтобы уменьшить количество HTTP-запросов к серверу.
 
-Изменить размер можно через [chainWebpack](../config/#chainwebpack). Например, чтобы установить лимит в 4 КБайт:
+Изменить размер можно через [chainVite](../config/#chainVite). Например, чтобы установить лимит в 4 КБайт:
 
 ```js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('images')
         .set('parser', {

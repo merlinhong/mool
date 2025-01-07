@@ -49,7 +49,7 @@ module.exports = (api, options) => {
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
 
     // configs that only matters for dev server
-    api.chainWebpack(webpackConfig => {
+    api.chainVite(webpackConfig => {
       if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
         if (!webpackConfig.get('devtool')) {
           webpackConfig

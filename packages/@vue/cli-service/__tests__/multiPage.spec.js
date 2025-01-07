@@ -22,7 +22,7 @@ async function makeProjectMultiPage (project) {
           filename: 'qux.html'
         }
       },
-      chainWebpack: config => {
+      chainVite: config => {
         const splitOptions = config.optimization.get('splitChunks')
         config.optimization.splitChunks(Object.assign({}, splitOptions, {
           minSize: 100

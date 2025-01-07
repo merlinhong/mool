@@ -38,7 +38,7 @@ $color: red;
 const path = require('path')
 
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
   },
@@ -159,5 +159,5 @@ Loader 可以通过 `loaderOptions` 配置，包括：
 - [stylus-loader](https://github.com/shama/stylus-loader)
 
 ::: tip 提示
-这样做比使用 `chainWebpack` 手动指定 loader 更推荐，因为这些选项需要应用在使用了相应 loader 的多个地方。
+这样做比使用 `chainVite` 手动指定 loader 更推荐，因为这些选项需要应用在使用了相应 loader 的多个地方。
 :::

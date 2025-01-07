@@ -62,7 +62,7 @@ However, when you are using a `.js` or `.ts` file as your entry, it may contain 
 
 ``` js
 module.exports = {
-  configureWebpack: {
+  configureVite: {
     output: {
       libraryExport: 'default'
     }

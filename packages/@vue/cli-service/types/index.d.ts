@@ -1,5 +1,5 @@
 import minimist = require('minimist')
-import ChainableConfig = require('webpack-chain')
+import ChainableConfig = require('vite-chainable')
 import webpack = require('webpack')
 import WebpackDevServer = require('webpack-dev-server')
 import express = require('express') // @types/webpack-dev-server depends on @types/express
@@ -73,7 +73,7 @@ declare class PluginAPI {
    *
    * @param fn
    */
-  chainWebpack(fn: WebpackChainFn): void
+  chainVite(fn: WebpackChainFn): void
 
   /**
    * Register
@@ -85,7 +85,7 @@ declare class PluginAPI {
    *
    * @param fn
    */
-  configureWebpack(fn: webpackRawConfigFn): void
+  configureVite(fn: webpackRawConfigFn): void
 
   /**
    * Register a dev serve config function. It will receive the express `app`

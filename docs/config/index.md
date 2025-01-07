@@ -242,7 +242,7 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   Also, when SRI is enabled, preload resource hints are disabled due to a [bug in Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=677022) which causes the resources to be downloaded twice.
 
-### configureWebpack
+### configureVite
 
 - Type: `Object | Function`
 
@@ -252,7 +252,7 @@ See [the plugin's README](https://github.com/vuejs/vue-cli/blob/dev/packages/%40
 
   See also: [Working with Webpack > Simple Configuration](../guide/webpack.md#simple-configuration)
 
-### chainWebpack
+### chainVite
 
 - Type: `Function`
 
@@ -323,7 +323,7 @@ Both removed in v5, see [Working with CSS > CSS Modules](../guide/css.md#css-mod
   See also: [Passing Options to Pre-Processor Loaders](../guide/css.md#passing-options-to-pre-processor-loaders)
 
   ::: tip
-  This is preferred over manually tapping into specific loaders using `chainWebpack`, because these options need to be applied in multiple locations where the corresponding loader is used.
+  This is preferred over manually tapping into specific loaders using `chainVite`, because these options need to be applied in multiple locations where the corresponding loader is used.
   :::
 
 ### devServer

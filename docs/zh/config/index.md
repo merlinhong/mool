@@ -236,7 +236,7 @@ module.exports = defineConfig({
 
   另外，当启用 SRI 时，preload resource hints 会被禁用，因为 [Chrome 的一个 bug](https://bugs.chromium.org/p/chromium/issues/detail?id=677022) 会导致文件被下载两次。
 
-### configureWebpack
+### configureVite
 
 - Type: `Object | Function`
 
@@ -246,7 +246,7 @@ module.exports = defineConfig({
 
   更多细节可查阅：[配合 webpack > 简单的配置方式](../guide/webpack.md#简单的配置方式)
 
-### chainWebpack
+### chainVite
 
 - Type: `Function`
 
@@ -327,7 +327,7 @@ module.exports = defineConfig({
   更多细节可查阅：[向预处理器 Loader 传递选项](../guide/css.html#向预处理器-loader-传递选项)
 
   ::: tip 提示
-  相比于使用 `chainWebpack` 手动指定 loader 更推荐上面这样做，因为这些选项需要应用在使用了相应 loader 的多个地方。
+  相比于使用 `chainVite` 手动指定 loader 更推荐上面这样做，因为这些选项需要应用在使用了相应 loader 的多个地方。
   :::
 
 ### devServer

@@ -66,7 +66,7 @@
 - **Использование**:
 Регистрация команды, доступной как `vue-cli-service [name]`.
 
-## chainWebpack
+## chainVite
 
 - **Аргументы**
   - `{function} fn`
@@ -75,7 +75,7 @@
 Регистрация функции, которая получит chainable-конфигурацию webpack. Эта функция ленива и не будет вызываться до вызова функции `resolveWebpackConfig`.
 
 
-## configureWebpack
+## configureVite
 
 - **Аргументы**
   - `{object | function} fn`

@@ -2,12 +2,12 @@
 
 ## Simple Configuration
 
-The easiest way to tweak the webpack config is providing an object to the `configureWebpack` option in `vue.config.js`:
+The easiest way to tweak the webpack config is providing an object to the `configureVite` option in `vue.config.js`:
 
 ``` js
 // vue.config.js
 module.exports = {
-  configureWebpack: {
+  configureVite: {
     plugins: [
       new MyAwesomeWebpackPlugin()
     ]
@@ -26,7 +26,7 @@ If you need conditional behavior based on the environment, or want to directly m
 ``` js
 // vue.config.js
 module.exports = {
-  configureWebpack: config => {
+  configureVite: config => {
     if (process.env.NODE_ENV === 'production') {
       // mutate config for production...
     } else {
@@ -40,7 +40,7 @@ module.exports = {
 
 The internal webpack config is maintained using [webpack-chain](https://github.com/mozilla-neutrino/webpack-chain). The library provides an abstraction over the raw webpack config, with the ability to define named loader rules and named plugins, and later "tap" into those rules and modify their options.
 
-This allows us finer-grained control over the internal config. Below you will see some examples of common modifications done via the `chainWebpack` option in `vue.config.js`.
+This allows us finer-grained control over the internal config. Below you will see some examples of common modifications done via the `chainVite` option in `vue.config.js`.
 
 ::: tip
 [vue inspect](#inspecting-the-project-s-webpack-config) will be extremely helpful when you are trying to access specific loaders via chaining.
@@ -51,7 +51,7 @@ This allows us finer-grained control over the internal config. Below you will se
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config.module
       .rule('vue')
       .use('vue-loader')
@@ -72,7 +72,7 @@ For CSS related loaders, it's recommended to use [css.loaderOptions](../config/#
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     // GraphQL Loader
     config.module
       .rule('graphql')
@@ -95,7 +95,7 @@ If you want to replace an existing [Base Loader](https://github.com/vuejs/vue-cl
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     const svgRule = config.module.rule('svg')
 
     // clear all existing loaders.
@@ -116,7 +116,7 @@ module.exports = {
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {
@@ -133,7 +133,7 @@ For example, say you want to change the default location of `index.html` from `/
 ``` js
 // vue.config.js
 module.exports = {
-  chainWebpack: config => {
+  chainVite: config => {
     config
       .plugin('html')
       .tap(args => {
