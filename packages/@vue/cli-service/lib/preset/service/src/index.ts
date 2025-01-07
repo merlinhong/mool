@@ -78,13 +78,11 @@ export function Service(opt?: IOpt): Plugin[] {
       },
 
       async configureServer(server) {
-        emitter.on("update", handleFileChange);
-        function handleFileChange(msg) {
+        emitter.on("update", ()=> {
           schedule(() => {
             server.restart();
           });
-        }
-
+        });
         // 监听 service 目录
         const watcher = chokidar.watch(getServiceDir(opt?.path), {
           ignored: /(^|[\/\\])\../, // 忽略隐藏文件

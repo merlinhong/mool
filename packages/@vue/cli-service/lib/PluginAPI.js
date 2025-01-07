@@ -35,7 +35,7 @@ class PluginAPI {
     if (semver.satisfies(this.version, range, { includePrerelease: true })) return
 
     throw new Error(
-      `Require @vue/cli-service "${range}", but was loaded with "${this.version}".`
+      `Require @mool/cli-service "${range}", but was loaded with "${this.version}".`
     )
   }
 
@@ -89,13 +89,13 @@ class PluginAPI {
 
   /**
    * Register a function that will receive a chainable webpack config
-   * the function is lazy and won't be called until `resolveWebpackConfig` is
+   * the function is lazy and won't be called until `resolveViteConfig` is
    * called
    *
    * @param {function} fn
    */
   chainVite (fn) {
-    this.service.webpackChainFns.push(fn)
+    this.service.viteChainFns.push(fn)
   }
 
   /**
@@ -109,18 +109,18 @@ class PluginAPI {
    * @param {object | function} fn
    */
   configureVite (fn) {
-    this.service.webpackRawConfigFns.push(fn)
+    this.service.viteRawConfigFns.push(fn)
   }
 
-  /**
-   * Register a dev serve config function. It will receive the express `app`
-   * instance of the dev server.
-   *
-   * @param {function} fn
-   */
-  configureDevServer (fn) {
-    this.service.devServerConfigFns.push(fn)
-  }
+  // /**
+  //  * Register a dev serve config function. It will receive the express `app`
+  //  * instance of the dev server.
+  //  *
+  //  * @param {function} fn
+  //  */
+  // configureDevServer (fn) {
+  //   this.service.devServerConfigFns.push(fn)
+  // }
 
   /**
    * Resolve the final raw webpack config, that will be passed to webpack.
@@ -128,8 +128,8 @@ class PluginAPI {
    * @param {ChainableWebpackConfig} [chainableConfig]
    * @return {object} Raw webpack config.
    */
-  resolveWebpackConfig (chainableConfig) {
-    return this.service.resolveWebpackConfig(chainableConfig)
+  resolveViteConfig (chainableConfig) {
+    return this.service.resolveViteConfig(chainableConfig)
   }
 
   /**
@@ -141,8 +141,8 @@ class PluginAPI {
    *
    * @return {ChainableWebpackConfig}
    */
-  resolveChainableWebpackConfig () {
-    return this.service.resolveChainableWebpackConfig()
+  resolveChainableViteConfig () {
+    return this.service.resolveChainableViteConfig()
   }
 
   /**

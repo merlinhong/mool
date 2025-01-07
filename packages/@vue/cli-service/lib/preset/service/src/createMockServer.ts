@@ -8,7 +8,7 @@ import url from "url";
 import fg from "fast-glob";
 import Mock from "mockjs";
 import { pathToRegexp, match } from "path-to-regexp";
-import { isArray, isFunction, sleep, isRegExp, isAbsPath, deepEqual } from "./utils";
+import { isArray, isFunction, sleep, isRegExp, isAbsPath, deepEqual } from "../utils";
 import { IncomingMessage, NextHandleFunction } from "connect";
 import { bundleRequire, GetOutputFile, JS_EXT_RE } from "bundle-require";
 import { createServer, type ResolvedConfig } from "vite";

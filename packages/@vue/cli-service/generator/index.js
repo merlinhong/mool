@@ -7,7 +7,7 @@ module.exports = (api, options) => {
   if (options.vueVersion === '3') {
     api.extendPackage({
       dependencies: {
-        'vue': '^3.2.13'
+        'vue': '^5.3.4'
       }
     })
   } else {
@@ -23,8 +23,8 @@ module.exports = (api, options) => {
 
   api.extendPackage({
     scripts: {
-      'serve': 'vue-cli-service serve',
-      'build': 'vue-cli-service build'
+      'serve': 'mool-cli-service serve',
+      'build': 'mool-cli-service build'
     },
     browserslist: [
       '> 1%',
@@ -38,19 +38,15 @@ module.exports = (api, options) => {
     const deps = {
       sass: {
         sass: '^1.32.7',
-        'sass-loader': '^12.0.0'
       },
       'dart-sass': {
         sass: '^1.32.7',
-        'sass-loader': '^12.0.0'
       },
       less: {
         'less': '^4.0.0',
-        'less-loader': '^8.0.0'
       },
       stylus: {
         'stylus': '^0.55.0',
-        'stylus-loader': '^6.1.0'
       }
     }
 

@@ -1,7 +1,7 @@
 const path = require('path')
 const debug = require('debug')
-const { merge } = require('webpack-merge')
-const Config = require('webpack-chain')
+const { mergeConfig } = require('vite')
+
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
@@ -12,6 +12,7 @@ const { defaults } = require('./options')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
 
+const Config = {};
 // Seems we can't use `instanceof Promise` here (would fail the tests)
 const isPromise = p => p && typeof p.then === 'function'
 module.exports = class Service {
@@ -20,9 +21,9 @@ module.exports = class Service {
     this.initialized = false
     this.context = context
     this.inlineOptions = inlineOptions
-    this.webpackChainFns = []
-    this.webpackRawConfigFns = []
-    this.devServerConfigFns = []
+    this.viteChainFns = []
+    this.viteRawConfigFns = []
+    // this.devServerConfigFns = []
     this.commands = {}
     // Folder containing the target package.json for plugins
     this.pkgContext = context
@@ -84,10 +85,10 @@ module.exports = class Service {
 
       // apply webpack configs from project config file
       if (this.projectOptions.chainVite) {
-        this.webpackChainFns.push(this.projectOptions.chainVite)
+        this.viteChainFns.push(this.projectOptions.chainVite)
       }
       if (this.projectOptions.configureVite) {
-        this.webpackRawConfigFns.push(this.projectOptions.configureVite)
+        this.viteRawConfigFns.push(this.projectOptions.configureVite)
       }
     }
 
@@ -262,33 +263,33 @@ module.exports = class Service {
     return fn(args, rawArgv)
   }
 
-  resolveChainableWebpackConfig () {
-    const chainableConfig = new Config()
+  resolveChainableViteConfig () {
+    const chainableConfig = Object.assign({},Config);
     // apply chains
-    this.webpackChainFns.forEach(fn => fn(chainableConfig))
+    this.viteChainFns.forEach(fn => fn(chainableConfig))
     return chainableConfig
   }
 
-  resolveWebpackConfig (chainableConfig = this.resolveChainableWebpackConfig()) {
+  resolveViteConfig (chainableConfig = this.resolveChainableViteConfig()) {
     if (!this.initialized) {
-      throw new Error('Service must call init() before calling resolveWebpackConfig().')
+      throw new Error('Service must call init() before calling resolveViteConfig().')
     }
     // get raw config
-    let config = chainableConfig.toConfig()
+    let config = chainableConfig;
     const original = config
     // apply raw config fns
-    this.webpackRawConfigFns.forEach(fn => {
+    this.viteRawConfigFns.forEach(fn => {
       if (typeof fn === 'function') {
         // function with optional return value
         const res = fn(config)
-        if (res) config = merge(config, res)
+        if (res) config = mergeConfig(config, res)
       } else if (fn) {
-        // merge literal values
-        config = merge(config, fn)
+        // mergeConfig literal values
+        config = mergeConfig(config, fn)
       }
     })
 
-    // #2206 If config is merged by merge-webpack, it discards the __ruleNames
+    // #2206 If config is merged by mergeConfig-webpack, it discards the __ruleNames
     // information injected by webpack-chain. Restore the info so that
     // vue inspect works properly.
     if (config !== original) {

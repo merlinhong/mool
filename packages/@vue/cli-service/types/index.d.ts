@@ -1,8 +1,6 @@
-import minimist = require('minimist')
-import ChainableConfig = require('vite-chainable')
-import webpack = require('webpack')
-import WebpackDevServer = require('webpack-dev-server')
-import express = require('express') // @types/webpack-dev-server depends on @types/express
+import minimist from 'minimist';
+import ChainableConfig from 'vite-chainable'
+import {InlineConfig} from 'vite';
 import { ProjectOptions, ConfigFunction } from './ProjectOptions'
 
 type RegisterCommandFn = (args: minimist.ParsedArgs, rawArgv: string[]) => any
@@ -16,11 +14,10 @@ type RegisterCommandOpts = Partial<{
   details: string
 }>
 
-type WebpackChainFn = (chainableConfig: ChainableConfig) => void
+type ViteChainFn = (chainableConfig: ChainableConfig) => void
 
-type webpackRawConfigFn = ((config: webpack.Configuration) => webpack.Configuration | void) | webpack.Configuration
+type viteRawConfigFn = ((config: InlineConfig) => InlineConfig | void) | InlineConfig
 
-type DevServerConfigFn = (app: express.Application, server: WebpackDevServer) => void
 
 interface CacheConfig {
   cacheDirectory: string
@@ -73,7 +70,7 @@ declare class PluginAPI {
    *
    * @param fn
    */
-  chainVite(fn: WebpackChainFn): void
+  chainVite(fn: ViteChainFn): void
 
   /**
    * Register
@@ -85,15 +82,15 @@ declare class PluginAPI {
    *
    * @param fn
    */
-  configureVite(fn: webpackRawConfigFn): void
+  configureVite(fn: viteRawConfigFn): void
 
-  /**
-   * Register a dev serve config function. It will receive the express `app`
-   * instance of the dev server.
-   *
-   * @param fn
-   */
-  configureDevServer(fn: DevServerConfigFn): void
+  // /**
+  //  * Register a dev serve config function. It will receive the express `app`
+  //  * instance of the dev server.
+  //  *
+  //  * @param fn
+  //  */
+  // configureDevServer(fn: DevServerConfigFn): void
 
   /**
    * Resolve the final raw webpack config, that will be passed to webpack.
@@ -101,7 +98,7 @@ declare class PluginAPI {
    * @param [chainableConfig]
    * @return Raw webpack config.
    */
-  resolveWebpackConfig(chainableConfig?: ChainableConfig): webpack.Configuration
+  resolveWebpackConfig(chainableConfig?: ChainableConfig): InlineConfig
 
   /**
    * Resolve an intermediate chainable webpack config instance, which can be
@@ -110,9 +107,9 @@ declare class PluginAPI {
    * base webpack config.
    * See https://github.com/mozilla-neutrino/webpack-chain
    *
-   * @return ChainableWebpackConfig
+   * @return ChainableViteConfig
    */
-  resolveChainableWebpackConfig(): ChainableConfig
+  resolveChainableViteConfig(): ChainableConfig
 
   /**
    * Generate a cache identifier from a number of variables
