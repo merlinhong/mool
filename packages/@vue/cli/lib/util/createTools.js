@@ -1,14 +1,8 @@
 exports.getPromptModules = () => {
   return [
-    'vueVersion',
-    'babel',
-    'typescript',
-    'pwa',
-    'router',
-    'vuex',
+    'pinia',
     'cssPreprocessors',
     'linter',
     'unit',
-    'e2e'
   ].map(file => require(`../promptModules/${file}`))
 }

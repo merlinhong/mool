@@ -404,25 +404,26 @@ module.exports = class Creator extends EventEmitter {
       let displayName = name
       // Vue version will be showed as features anyway,
       // so we shouldn't display it twice.
-      if (name === 'Default (Vue 2)' || name === 'Default (Vue 3)') {
-        displayName = 'Default'
+      if (name === 'Web') {
+        displayName = 'Single Web App'
       }
-
+      if(name==='CP'){
+        displayName = 'Cross-Platform App'
+      }
+      if(name==='Desktop'){
+        displayName = 'Desktop App'
+      }
       return {
-        name: `${displayName} (${formatFeatures(preset)})`,
+        name: `${displayName} (${formatFeatures(preset,name)})`,
         value: name
       }
     })
     const presetPrompt = {
       name: 'preset',
       type: 'list',
-      message: `Please pick a preset:`,
+      message: `Please pick mool app template:`,
       choices: [
         ...presetChoices,
-        {
-          name: 'Manually select features',
-          value: '__manual__'
-        }
       ]
     }
     const featurePrompt = {

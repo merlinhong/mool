@@ -1,0 +1,9 @@
+{
+  "name": "mooltest1",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@mool/cli-service": "latest"
+  }
+}

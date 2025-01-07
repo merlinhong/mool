@@ -1,29 +1,39 @@
-const { chalk, toShortPluginId } = require('@vue/cli-shared-utils')
+const { chalk, toShortPluginId } = require("@vue/cli-shared-utils");
 
 exports.getFeatures = (preset) => {
-  const features = []
+  const features = [];
   if (preset.router) {
-    features.push('router')
+    features.push("router");
   }
   if (preset.vuex) {
-    features.push('vuex')
+    features.push("vuex");
   }
   if (preset.cssPreprocessor) {
-    features.push(preset.cssPreprocessor)
+    features.push(preset.cssPreprocessor);
   }
-  const plugins = Object.keys(preset.plugins).filter(dep => {
-    return dep !== '@vue/cli-service'
-  })
-  features.push.apply(features, plugins)
-  return features
-}
+  const plugins = Object.keys(preset.plugins).filter((dep) => {
+    return dep !== "@vue/cli-service";
+  });
+  features.push.apply(features, plugins);
+  return features;
+};
+const opt = {
+  CP: "uni",
+  Desktop: "electron",
+};
+exports.formatFeatures = (preset, name) => {
+  const versionInfo = chalk.yellow(
+    `[Vue 3${opt[name] ? " + " + opt[name] : ""}] typescript, `
+  );
+  const features = exports.getFeatures(preset);
 
-exports.formatFeatures = (preset) => {
-  const versionInfo = chalk.yellow(`[Vue ${preset.vueVersion || 2}] `)
-  const features = exports.getFeatures(preset)
-
-  return versionInfo + features.map(dep => {
-    dep = toShortPluginId(dep)
-    return chalk.yellow(dep)
-  }).join(', ')
-}
+  return (
+    versionInfo +
+    features
+      .map((dep) => {
+        dep = toShortPluginId(dep);
+        return chalk.yellow(dep);
+      })
+      .join(", ")
+  );
+};
