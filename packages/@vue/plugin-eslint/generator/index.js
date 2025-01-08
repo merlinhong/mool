@@ -7,7 +7,7 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 
   const pkg = {
     scripts: {
-      lint: 'vue-cli-service lint'
+      lint: 'mool lint'
     },
     eslintConfig,
     devDependencies

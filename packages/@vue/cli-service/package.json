@@ -5,7 +5,7 @@
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
   "bin": {
-    "vue-cli-service": "bin/mool-cli-service.js"
+    "mool": "bin/mool-cli-service.js"
   },
   "repository": {
     "type": "git",

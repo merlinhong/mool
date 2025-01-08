@@ -1,7 +1,7 @@
 const path = require('path')
-const eslintWebpackPlugin = require('eslint-webpack-plugin')
+const eslintVitePlugin = require('vite-plugin-eslint')
 
-/** @type {import('@vue/cli-service').ServicePlugin} */
+/** @type {import('@mool/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   if (options.lintOnSave) {
     const extensions = require('./eslintOptions').extensions(api)
@@ -23,7 +23,7 @@ module.exports = (api, options) => {
       ['package.json']
     )
 
-    api.chainVite(webpackConfig => {
+    api.chainVite(viteConfig => {
       const { lintOnSave } = options
       const treatAllAsWarnings = lintOnSave === true || lintOnSave === 'warning'
       const treatAllAsErrors = lintOnSave === 'error'
@@ -57,7 +57,7 @@ module.exports = (api, options) => {
         ),
         formatter: 'stylish'
       }
-      webpackConfig.plugin('eslint').use(eslintWebpackPlugin, [eslintWebpackPluginOptions])
+      viteConfig.plugin.push(eslintVitePluginmerge({},options.eslint??{}))
     })
   }
 
