@@ -51,7 +51,7 @@ module.exports = cli => {
 
   cli.onPromptComplete((answers, options) => {
     if (answers.features.includes('linter')) {
-      options.plugins['@vue/cli-plugin-eslint'] = {
+      options.plugins['@mooljs/plugin-eslint'] = {
         config: answers.eslintConfig,
         lintOn: answers.lintOn
       }

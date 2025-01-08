@@ -10,18 +10,15 @@ exports.config = (api, preset, rootOptions = {}) => {
       "plugin:vue/vue3-essential", // 继承 Vue 的基础规则集，适用于 Vue.js 项目
       "plugin:@typescript-eslint/recommended", // 继承 TypeScript 的推荐规则集，适用于 TypeScript 项目
       "plugin:prettier/recommended",
-      "@vue/typescript/recommended"
+      "@vue/typescript/recommended",
     ],
     parserOptions: {
       ecmaVersion: 2020,
     },
+    plugins: ['@typescript-eslint','prettier'],
     rules: {
-      "no-console": makeJSOnlyValue(
-        `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`
-      ),
-      "no-debugger": makeJSOnlyValue(
-        `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`
-      ),
+      "no-console": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
+      "no-debugger": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
     },
   };
 
@@ -33,14 +30,6 @@ exports.config = (api, preset, rootOptions = {}) => {
 
   return config;
 };
-
-// __expression is a special flag that allows us to customize stringification
-// output when extracting configs into standalone files
-function makeJSOnlyValue(str) {
-  const fn = () => {};
-  fn.__expression = str;
-  return fn;
-}
 
 const baseExtensions = [".js", ".jsx", ".vue"];
 exports.extensions = (api) =>

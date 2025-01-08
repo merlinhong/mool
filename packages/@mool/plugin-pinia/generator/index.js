@@ -6,5 +6,5 @@ module.exports = (api, options = {}, rootOptions = {}) => {
       vuex: "^4.0.0",
     },
   });
-  api.render("./template-vue3", {});
+  api.render("./template", {});
 };

@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
   const eslintConfig = require('../eslintOptions').config(api, config, rootOptions)
   const devDependencies = require('../eslintDeps').getDeps(api, config, rootOptions)
@@ -9,22 +6,22 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
     scripts: {
       lint: 'mool lint'
     },
-    eslintConfig,
     devDependencies
   }
 
-  const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
-  if (fs.existsSync(editorConfigTemplatePath)) {
-    if (fs.existsSync(api.resolve('.editorconfig'))) {
-      // Append to existing .editorconfig
-      api.render(files => {
-        const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
-        files['.editorconfig'] += `\n${editorconfig}`
-      })
-    } else {
-      api.render(`./template/${config}`)
-    }
-  }
+  // const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
+  // if (fs.existsSync(editorConfigTemplatePath)) {
+  //   if (fs.existsSync(api.resolve('.editorconfig'))) {
+  //     // Append to existing .editorconfig
+  //     api.render(files => {
+  //       const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
+  //       files['.editorconfig'] += `\n${editorconfig}`
+  //     })
+  //   } else {
+  //     api.render(`./template/${config}`)
+  //   }
+  // }
+  api.render(`./template`)
 
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')

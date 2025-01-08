@@ -11,8 +11,6 @@ const { clearConsole } = require("./util/clearConsole");
 const PromptModuleAPI = require("./PromptModuleAPI");
 const writeFileTree = require("./util/writeFileTree");
 const { formatFeatures } = require("./util/features");
-const loadLocalPreset = require("./util/loadLocalPreset");
-const loadRemotePreset = require("./util/loadRemotePreset");
 const generateReadme = require("./util/generateReadme");
 const { resolvePkg, isOfficialPlugin } = require("@vue/cli-shared-utils");
 
@@ -96,7 +94,7 @@ module.exports = class Creator extends EventEmitter {
     // clone before mutating
     preset = cloneDeep(preset);
     // inject core service
-    preset.plugins["@mool/cli-service"] = Object.assign(
+    preset.plugins["@mooljs/cli-service"] = Object.assign(
       {
         projectName: name,
       },
@@ -145,8 +143,7 @@ module.exports = class Creator extends EventEmitter {
       if (!version) {
         if (
           isOfficialPlugin(dep) ||
-          dep === "@vue/cli-service" ||
-          dep === "@vue/babel-preset-env"
+          dep === "@mooljs/cli-service"
         ) {
           version = isTestOrDebug ? `latest` : `~${latestMinor}`;
         } else {
@@ -206,7 +203,7 @@ module.exports = class Creator extends EventEmitter {
       afterAnyInvokeCbs,
     });
     await generator.generate({
-      extractConfigFiles: preset.useConfigFiles,
+      extractConfigFiles: false,
     });
 
     // install additional deps (injected by generators)
@@ -324,7 +321,7 @@ module.exports = class Creator extends EventEmitter {
   // { id: options } => [{ id, apply, options }]
   async resolvePlugins(rawPlugins, pkg) {
     // ensure cli-service is invoked first
-    rawPlugins = sortObject(rawPlugins, ["@mool/cli-service"], true);
+    rawPlugins = sortObject(rawPlugins, ["@mooljs/cli-service"], true);
     const plugins = [];
     for (const id of Object.keys(rawPlugins)) {
       const apply = loadModule(`${id}/generator`, this.context) || (() => {});
@@ -419,22 +416,6 @@ module.exports = class Creator extends EventEmitter {
     });
 
     const outroPrompts = [
-      {
-        name: "useConfigFiles",
-        when: isManualMode,
-        type: "list",
-        message: "Where do you prefer placing config for ESLint, etc.?",
-        choices: [
-          {
-            name: "In dedicated config files",
-            value: "files",
-          },
-          {
-            name: "In package.json",
-            value: "pkg",
-          },
-        ],
-      },
       {
         name: "packageManager",
         type: "list",

@@ -1,5 +1,5 @@
-# @vue/cli-service
+# @mool/cli-service
 
-> service for vue-cli
+> service for mool
 
-[Full Docs](https://cli.vuejs.org/)
+[Full Docs](https://cli.mooljs.org/)

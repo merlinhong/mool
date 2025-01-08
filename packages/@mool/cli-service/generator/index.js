@@ -1,7 +1,5 @@
 module.exports = (api, options) => {
-  api.render('./template', {
-    doesCompile: api.hasPlugin('babel') || api.hasPlugin('typescript'),
-  })
+  api.render('./template');
 
   api.extendPackage({
     dependencies: {
@@ -10,8 +8,8 @@ module.exports = (api, options) => {
   })
   api.extendPackage({
     scripts: {
-      'serve': 'mool-cli-service serve',
-      'build': 'mool-cli-service build'
+      'serve': 'mool serve',
+      'build': 'mool build'
     },
     browserslist: [
       '> 1%',
@@ -31,9 +29,6 @@ module.exports = (api, options) => {
       },
       less: {
         'less': '^4.0.0',
-      },
-      stylus: {
-        'stylus': '^0.55.0',
       }
     }
 
@@ -49,11 +44,7 @@ module.exports = (api, options) => {
 
   // additional tooling configurations
   if (options.configs) {
+    
     api.extendPackage(options.configs)
-  }
-
-  // Delete jsconfig.json when typescript
-  if (api.hasPlugin('typescript')) {
-    api.render((files) => delete files['jsconfig.json'])
   }
 }

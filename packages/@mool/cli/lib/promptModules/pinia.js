@@ -8,7 +8,7 @@ module.exports = cli => {
 
   cli.onPromptComplete((answers, options) => {
     if (answers.features.includes('pinia')) {
-      options.plugins['@mool/plugin-pinia'] = {}
+      options.plugins['@mooljs/plugin-pinia'] = {}
     }
   })
 }

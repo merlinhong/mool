@@ -1,6 +1,6 @@
 {
   "name": "@mool/cli",
-  "version": "5.0.8",
+  "version": "0.0.1",
   "description": "Command line interface for rapid mool.js development",
   "bin": {
     "mool": "bin/mool.js"
