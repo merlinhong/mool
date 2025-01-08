@@ -1,5 +1,5 @@
 module.exports = cli => {
-  const { chalk, hasGit } = require('@vue/cli-shared-utils')
+  const { chalk, hasGit,semver } = require('@vue/cli-shared-utils')
 
   cli.injectFeature({
     name: 'Linter / Formatter',
@@ -19,24 +19,14 @@ module.exports = cli => {
     description: 'Checking code errors and enforcing an homogeoneous code style is recommended.',
     choices: answers => [
       {
-        name: 'ESLint with error prevention only',
-        value: 'base',
-        short: 'Basic'
+        name: '@antfu/eslint-config' + (chalk.blue('(Preset commonly used ESLint configurations and rules)')+chalk.red('(requires node>18.18.0)')),
+        value: 'antfu',
+        short: 'Antfu'
       },
       {
-        name: 'ESLint + Airbnb config',
-        value: 'airbnb',
-        short: 'Airbnb'
-      },
-      {
-        name: 'ESLint + Standard config',
-        value: 'standard',
-        short: 'Standard'
-      },
-      {
-        name: 'ESLint + Prettier',
-        value: 'prettier',
-        short: 'Prettier'
+        name: 'ESLint + Typescript + Prettier',
+        value: 'eslint',
+        short: 'ESLint'
       }
     ]
   })

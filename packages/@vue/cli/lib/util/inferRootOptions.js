@@ -9,15 +9,12 @@ module.exports = function inferRootOptions (pkg) {
   rootOptions.projectName = pkg.name
 
   if ('vue' in deps) {
-    const vue2Range = new semver.Range('^2.0.0', { includePrerelease: true })
     const vue3Range = new semver.Range('^3.0.0-0', { includePrerelease: true })
 
     const depVueVersion = semver.minVersion(new semver.Range(deps.vue))
 
     if (semver.satisfies(depVueVersion, vue3Range)) {
       rootOptions.vueVersion = '3'
-    } else if (semver.satisfies(depVueVersion, vue2Range)) {
-      rootOptions.vueVersion = '2'
     }
   }
 
@@ -27,19 +24,16 @@ module.exports = function inferRootOptions (pkg) {
   }
 
   // vuex
-  if ('vuex' in deps) {
-    rootOptions.vuex = true
+  if ('pinia' in deps) {
+    rootOptions.pinia = true
   }
 
   // cssPreprocessors
   if ('sass' in deps) {
     rootOptions.cssPreprocessor = 'sass'
-  } else if ('less-loader' in deps) {
+  } else if ('less' in deps) {
     rootOptions.cssPreprocessor = 'less'
-  } else if ('stylus-loader' in deps) {
-    rootOptions.cssPreprocessor = 'stylus'
   }
-
   rootOptions.plugins = Object.keys(deps)
     .filter(isPlugin)
     .reduce((plugins, name) => {
