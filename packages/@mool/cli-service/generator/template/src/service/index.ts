@@ -1,6 +1,6 @@
 // auto generate by cli-service
 import {
-  createService,
+  CreateService,
   type IConfig,
   IRootKeys,
   IUrlConfig,
@@ -15,7 +15,7 @@ const config = {
 export type IApiConfig = IUrlConfig<IRootKeys<typeof config>>;
 
 // 创建服务实例并直接应用类型
-export const service = createServiceWithModules(new createService(config));
+export const service = createServiceWithModules(new CreateService(config));
 
 service.setResponseInterceptor(
   (res) => {

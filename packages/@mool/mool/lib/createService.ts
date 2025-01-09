@@ -1,4 +1,6 @@
 import axios, {
+  GenericAbortSignal,
+  AxiosStatic,
   AxiosRequestConfig,
   AxiosProgressEvent,
   ResponseType,
@@ -185,11 +187,11 @@ interface DEFAULTSETTING<T = any, K = Record<string, any>> {
   /**
    * 取消请求
    */
-  cancelToken?: axios.CancelToken;
+  cancelToken?: AxiosStatic['CancelToken'];
   /**
    * 信号
    */
-  signal?: axios.GenericAbortSignal;
+  signal?: GenericAbortSignal;
 }
 export type IRootKeys<T extends { env: any; default?: any }> = keyof IViteKeys<
   T["env"],
