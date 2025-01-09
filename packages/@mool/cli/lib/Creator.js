@@ -193,7 +193,6 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require("./util/setupDevProject")(context);
     } else {
-      console.log(11111);
       await pm.install();
     }
 
