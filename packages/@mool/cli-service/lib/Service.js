@@ -352,7 +352,7 @@ module.exports = class Service {
 
     return resolveUserConfig({
       inlineOptions: this.inlineOptions,
-      pkgConfig: this.pkg.vue,
+      pkgConfig: this.pkg.mool,
       fileConfig,
       fileConfigPath
     })

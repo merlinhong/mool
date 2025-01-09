@@ -98,7 +98,7 @@ declare class PluginAPI {
    * @param [chainableConfig]
    * @return Raw webpack config.
    */
-  resolveWebpackConfig(chainableConfig?: ChainableConfig): InlineConfig
+  resolveViteConfig(chainableConfig?: ChainableConfig): InlineConfig
 
   /**
    * Resolve an intermediate chainable webpack config instance, which can be

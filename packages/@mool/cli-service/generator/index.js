@@ -18,8 +18,8 @@ module.exports = (api, options) => {
   });
   api.extendPackage({
     scripts: {
-      serve: "mool serve",
-      build: "mool build",
+      serve: "mool-cli-service serve",
+      build: "mool-cli-service build",
     },
     browserslist: ["> 1%", "last 2 versions", "not dead", "not ie 11"],
   });

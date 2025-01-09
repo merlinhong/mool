@@ -38,7 +38,7 @@ module.exports = function resolveUserConfig ({
   if (pkgConfig && typeof pkgConfig !== 'object') {
     throw new Error(
       `Error loading Vue CLI config in ${chalk.bold(`package.json`)}: ` +
-      `the "vue" field should be an object.`
+      `the "mool" field should be an object.`
     )
   }
 
@@ -47,7 +47,7 @@ module.exports = function resolveUserConfig ({
     const configFileName = path.basename(fileConfigPath)
     if (pkgConfig) {
       warn(
-        `"vue" field in package.json ignored ` +
+        `"mool" field in package.json ignored ` +
         `due to presence of ${chalk.bold(configFileName)}.`
       )
       warn(
@@ -59,7 +59,7 @@ module.exports = function resolveUserConfig ({
     resolvedFrom = configFileName
   } else if (pkgConfig) {
     resolved = pkgConfig
-    resolvedFrom = '"vue" field in package.json'
+    resolvedFrom = '"mool" field in package.json'
   } else {
     resolved = inlineOptions || {}
     resolvedFrom = 'inline options'

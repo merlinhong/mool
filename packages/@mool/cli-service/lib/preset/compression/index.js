@@ -1,5 +1,5 @@
-import compressPlugin from "vite-plugin-compression";
-import merge from 'lodash.merge';
+const { merge } = require("lodash.merge");
+const compressPlugin = require("vite-plugin-compression");
 module.exports = (api,options)=>{
     const compressPluginOption = {
         verbose: true, // 是否在控制台中输出压缩结果

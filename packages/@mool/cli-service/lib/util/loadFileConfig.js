@@ -9,9 +9,11 @@ module.exports = function loadFileConfig (context) {
 
   const possibleConfigPaths = [
     process.env.VUE_CLI_SERVICE_CONFIG_PATH,
-    './vue.config.js',
-    './vue.config.cjs',
-    './vue.config.mjs'
+    './moolrc',
+    './mool.config.js',
+    './mool.config.mjs',
+    './mool.config.cjs',
+    './mool.config.ts'
   ]
   for (const p of possibleConfigPaths) {
     const resolvedPath = p && path.resolve(context, p)

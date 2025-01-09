@@ -1,6 +1,6 @@
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
-import merge from 'lodash.merge';
+const AutoImport =require ("unplugin-auto-import/vite");
+const Components =require ("unplugin-vue-components/vite");
+const merge =require ('lodash.merge');
 module.exports = (api,options)=>{
     const autoImportPluginOption = {
         imports: [
