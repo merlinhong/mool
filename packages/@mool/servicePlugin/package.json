@@ -10,11 +10,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "import": "./dist/client.mjs",
-      "require": "./dist/client.cjs"
     }
   },
   "files": [
@@ -33,13 +28,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anncwb/vite-plugin-mock",
+    "url": "https://github.com/merlinhong/mool",
     "directory": "packages/servicePlugin"
   },
   "bugs": {
-    "url": "https://github.com/anncwb/vite-plugin-mock/issues"
+    "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/anncwb/vite-plugin-mock/tree/master/#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/main/#readme",
   "dependencies": {
     "bundle-require": "^4.0.1",
     "chokidar": "^3.5.3",
