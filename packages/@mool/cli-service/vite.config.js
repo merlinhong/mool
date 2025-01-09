@@ -9,4 +9,4 @@ if (!service || process.env.VUE_CLI_API_MODE) {
   service.init(process.env.VUE_CLI_MODE || process.env.NODE_ENV)
 }
 
-module.exports = service.resolveWebpackConfig()
+module.exports = service.resolveViteConfig()

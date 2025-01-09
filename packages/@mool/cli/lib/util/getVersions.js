@@ -72,15 +72,17 @@ module.exports = async function getVersions () {
 // fetch the latest version and save it on disk
 // so that it is available immediately next time
 async function getAndCacheLatestVersion (cached, includePrerelease) {
-  let version = await pm.getRemoteVersion('vue-cli-version-marker', 'latest')
+  let version = await pm.getRemoteVersion('mool-cli-version-marker', 'latest')
 
   if (includePrerelease) {
-    const next = await pm.getRemoteVersion('vue-cli-version-marker', 'next')
+    const next = await pm.getRemoteVersion('mool-cli-version-marker', 'next')
     version = semver.gt(next, version) ? next : version
   }
 
   if (semver.valid(version) && version !== cached) {
     saveOptions({ latestVersion: version, lastChecked: Date.now() })
+  console.log(cached);
+
     return version
   }
   return cached

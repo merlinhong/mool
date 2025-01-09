@@ -1,9 +1,12 @@
 module.exports = (api, options) => {
-  api.render('./template');
+  api.render('./template',{
+    lintOn:options.lintOn
+  });
 
   api.extendPackage({
     dependencies: {
-      'vue': '^3.2.25'
+      'vue': '^3.2.25',
+      'mooljs':'^0.0.1'
     }
   })
   api.extendPackage({
@@ -41,6 +44,7 @@ module.exports = (api, options) => {
   if (options.pinia && !api.hasPlugin('pinia')) {
     require('./pinia')(api, options, options)
   }
+
 
   // additional tooling configurations
   if (options.configs) {

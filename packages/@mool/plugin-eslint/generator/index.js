@@ -21,18 +21,18 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
   //     api.render(`./template/${config}`)
   //   }
   // }
-  api.render(`./template`)
+  if(config=='antfu'){
+    api.render(`./template/antfu`)
+  }else{
+    api.render(`./template/eslint`)
+
+  }
 
   if (typeof lintOn === 'string') {
     lintOn = lintOn.split(',')
   }
 
-  if (!lintOn.includes('save')) {
-    pkg.vue = {
-      lintOnSave: false // eslint-loader configured in runtime plugin
-    }
-  }
-
+  
   if (lintOn.includes('commit')) {
     Object.assign(pkg.devDependencies, {
       'lint-staged': '^11.1.2'
@@ -43,7 +43,7 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
     const extensions = require('../eslintOptions').extensions(api)
       .map(ext => ext.replace(/^\./, '')) // remove the leading `.`
     pkg['lint-staged'] = {
-      [`*.{${extensions.join(',')}}`]: 'vue-cli-service lint'
+      [`*.{${extensions.join(',')}}`]: 'mool lint'
     }
   }
 
@@ -62,41 +62,14 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
 
   // lint & fix after create to ensure files adhere to chosen config
   // for older versions that do not support the `hooks` feature
-  try {
-    api.assertCliVersion('^4.0.0-beta.0')
-  } catch (e) {
-    if (config && config !== 'base') {
-      api.onCreateComplete(async () => {
-        await require('../lint')({ silent: true }, api)
-      })
-    }
-  }
+  // try {
+  //   api.assertCliVersion('^4.0.0-beta.0')
+  // } catch (e) {
+  //   if (config && config !== 'base') {
+  //     api.onCreateComplete(async () => {
+  //       await require('../lint')({ silent: true }, api)
+  //     })
+  //   }
+  // }
 }
 
-// In PNPM v4, due to their implementation of the module resolution mechanism,
-// put require('../lint') in the callback would raise a "Module not found" error,
-// But we cannot cache the file outside the callback,
-// because the node_module layout may change after the "intall additional dependencies"
-// phase, thus making the cached module fail to execute.
-// FIXME: at the moment we have to catch the bug and silently fail. Need to fix later.
-module.exports.hooks = (api) => {
-  // lint & fix after create to ensure files adhere to chosen config
-  api.afterAnyInvoke(async () => {
-    try {
-      await require('../lint')({ silent: true }, api)
-    } catch (e) {}
-  })
-}
-
-// exposed for the typescript plugin
-module.exports.applyTS = api => {
-  api.extendPackage({
-    eslintConfig: {
-      extends: ['@vue/typescript'],
-      parserOptions: {
-        parser: '@typescript-eslint/parser'
-      }
-    },
-    devDependencies: require('../eslintDeps').DEPS_MAP.typescript
-  })
-}

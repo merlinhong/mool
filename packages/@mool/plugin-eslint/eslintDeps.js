@@ -2,11 +2,12 @@ const DEPS_MAP = {
   base: {
     eslint: "^8.56.0",
     "eslint-plugin-vue": "^9.20.1",
-  },
-  prettier: {
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^5.1.3",
     prettier: "^3.2.4",
+  },
+  antfu: {
+    '@antfu/eslint-config': "^1.0.0",
   },
   typescript: {
     "@vue/eslint-config-typescript": "^9.1.0",

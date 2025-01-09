@@ -7,16 +7,7 @@ module.exports = function inferRootOptions (pkg) {
 
   // projectName
   rootOptions.projectName = pkg.name
-
-  if ('vue' in deps) {
-    const vue3Range = new semver.Range('^3.0.0-0', { includePrerelease: true })
-
-    const depVueVersion = semver.minVersion(new semver.Range(deps.vue))
-
-    if (semver.satisfies(depVueVersion, vue3Range)) {
-      rootOptions.vueVersion = '3'
-    }
-  }
+  
 
   // router
   if ('vue-router' in deps) {

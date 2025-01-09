@@ -91,6 +91,9 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
+    // inject core router
+    preset.plugins['@mooljs/plugin-router'] = {};
+
     // clone before mutating
     preset = cloneDeep(preset);
     // inject core service
@@ -101,6 +104,7 @@ module.exports = class Creator extends EventEmitter {
       preset
     );
 
+    
     // // legacy support for vuex
     // if (preset.vuex) {
     //   preset.plugins["@vue/cli-plugin-vuex"] = {};
@@ -189,6 +193,7 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require("./util/setupDevProject")(context);
     } else {
+      console.log(11111);
       await pm.install();
     }
 
@@ -205,7 +210,7 @@ module.exports = class Creator extends EventEmitter {
     await generator.generate({
       extractConfigFiles: false,
     });
-
+    
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`);
     this.emit("creation", { event: "deps-install" });
@@ -309,6 +314,7 @@ module.exports = class Creator extends EventEmitter {
     preset = {
       useConfigFiles: answers.useConfigFiles === "files",
       plugins: {},
+      lintOn:answers.lintOn
     };
     answers.features = answers.features || [];
     // run cb registered by prompt modules to finalize the preset

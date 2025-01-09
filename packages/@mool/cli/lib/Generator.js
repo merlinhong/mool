@@ -216,7 +216,7 @@ module.exports = class Generator {
     const configTransforms = Object.assign({},
       defaultConfigTransforms,
       this.configTransforms,
-      reservedConfigTransforms
+      // reservedConfigTransforms
     )
     const extract = key => {
       if (

@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-eslint",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "description": "eslint plugin for mool-cli",
   "main": "index.js",
   "repository": {
@@ -25,13 +25,11 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "eslint-webpack-plugin": "^3.1.0",
     "globby": "^11.0.2",
-    "webpack": "^5.54.0",
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
-    "@mool/cli-service": "^0.0.1",
+    "@mooljs/cli-service": "^0.0.1",
     "eslint": ">=7.5.0"
   }
 }

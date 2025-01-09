@@ -1,0 +1,11 @@
+{
+  "name": "mool-cli-version-marker",
+  "version": "0.0.9",
+  "description": "version marker for @mool/cli",
+  "author": "Merlin Hong",
+  "license": "MIT",
+  "main": "package.json",
+  "devDependencies": {
+    "@mool/cli": "^0.0.6"
+  }
+}

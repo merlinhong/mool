@@ -1,24 +1,25 @@
 {
-  "name": "@vue/cli-plugin-vuex",
-  "version": "5.0.8",
-  "description": "Vuex plugin for vue-cli",
+  "name": "@mooljs/plugin-pinia",
+  "version": "0.0.1",
+  "description": "pinia plugin for mool-cli",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/vue-cli.git",
-    "directory": "packages/@vue/cli-plugin-vuex"
+    "url": "git+https://github.com/merlinhong/mool.git",
+    "directory": "packages/@mool/plugin-pinia"
   },
   "keywords": [
-    "vue",
+    "vue3",
+    "mool",
     "cli",
-    "vuex"
+    "pinia"
   ],
-  "author": "Evan You",
+  "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/vue-cli/issues"
+    "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-vuex#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/main/packages/@mool/plugin-pinia#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -26,6 +27,6 @@
     "@vue/cli-test-utils": "^5.0.8"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
+    "@mooljs/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
   }
 }

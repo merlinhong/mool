@@ -11,8 +11,6 @@ const presetSchema = createSchema((joi) =>
   joi
     .object()
     .keys({
-      vueVersion: joi.string().valid('2', '3'),
-      bare: joi.boolean(),
       useConfigFiles: joi.boolean(),
       router: joi
         .boolean()
@@ -32,7 +30,7 @@ const presetSchema = createSchema((joi) =>
           'deprecate.error':
             'The {#label} option in preset is deprecated. {#message}'
         }),
-      vuex: joi
+      pinia: joi
         .boolean()
         .warning('deprecate.error', {
           message: 'Please use @vue/cli-plugin-vuex instead.'
@@ -45,7 +43,8 @@ const presetSchema = createSchema((joi) =>
         .string()
         .valid('sass', 'dart-sass', 'less', 'stylus'),
       plugins: joi.object().required(),
-      configs: joi.object()
+      configs: joi.object(),
+      lintOn:joi.array()
     })
 )
 

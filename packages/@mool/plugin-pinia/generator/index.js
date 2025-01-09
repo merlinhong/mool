@@ -3,8 +3,8 @@ module.exports = (api, options = {}, rootOptions = {}) => {
   api.transformScript(api.entryFile, require("./injectUseStore"));
   api.extendPackage({
     dependencies: {
-      vuex: "^4.0.0",
+      "pinia": "^2.1.7",
     },
   });
-  api.render("./template", {});
+  api.render("./template");
 };

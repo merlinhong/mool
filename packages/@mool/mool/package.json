@@ -1,1 +1,44 @@
-{}
+{
+  "name": "mooljs",
+  "version": "0.0.2",
+  "description": "hooks for mool",
+  "main": "lib/index.ts",
+  "module": "lib/index.ts",
+  "exports": {
+    ".": "./lib/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merlinhong/mool.git",
+    "directory": "packages/@mool/plugin-router"
+  },
+  "keywords": [
+    "mool",
+    "service",
+    "hooks"
+  ],
+  "author": "Merlin Hong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/merlinhong/mool/issues"
+  },
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-router#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "qs": "^6.12.1"
+  },
+  "devDependencies": {
+    "@vue/cli-test-utils": "^5.0.8",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "@mool/cli-service": "^0.0.1"
+  }
+}

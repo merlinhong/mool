@@ -10,14 +10,14 @@ const getGlobalInstallCommand = require('./getGlobalInstallCommand')
 
 exports.generateTitle = async function (checkUpdate) {
   const { current, latest, error } = await getVersions()
-  let title = chalk.bold.blue(`Vue CLI v${current}`)
+  let title = chalk.bold.blue(`Mool CLI v${current}`)
 
-  if (process.env.VUE_CLI_TEST) {
-    title += ' ' + chalk.blue.bold('TEST')
-  }
-  if (process.env.VUE_CLI_DEBUG) {
-    title += ' ' + chalk.magenta.bold('DEBUG')
-  }
+  // if (process.env.VUE_CLI_TEST) {
+  //   title += ' ' + chalk.blue.bold('TEST')
+  // }
+  // if (process.env.VUE_CLI_DEBUG) {
+  //   title += ' ' + chalk.magenta.bold('DEBUG')
+  // }
 
   if (error) {
     title += '\n' + chalk.red('Failed to check for updates')

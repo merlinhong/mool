@@ -442,7 +442,7 @@ class GeneratorAPI {
    */
   get entryFile () {
     if (this._entryFile) return this._entryFile
-    return (this._entryFile = fs.existsSync(this.resolve('src/main.ts')) ? 'src/main.ts' : 'src/main.js')
+    return (this._entryFile = 'src/main.ts' )
   }
 
   /**
