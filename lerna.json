@@ -1,22 +1,9 @@
 {
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "version": "5.0.8",
   "packages": [
-    "packages/@vue/babel-preset-app",
-    "packages/@vue/cli*",
-    "packages/vue-cli-version-marker"
-  ],
-  "changelog": {
-    "repo": "vuejs/vue-cli",
-    "labels": {
-      "PR: New Feature": ":rocket: New Features",
-      "PR: Breaking Change": ":boom: Breaking Changes",
-      "PR: Bug Fix": ":bug: Bug Fix",
-      "PR: Documentation": ":memo: Documentation",
-      "PR: Internal": ":house: Internal",
-      "PR: Underlying Tools": ":hammer: Underlying Tools"
-    },
-    "cacheDir": ".changelog"
-  }
+    "packages/@mool/cli*",
+    "packages/mool-cli-version-marker"
+  ]
+ 
 }

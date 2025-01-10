@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // 编译目标
+    "module": "esnext", // 模块系统
+    "moduleResolution": "node", // 模块解析策略
+    "declaration": true, // 生成类型声明文件
+    "declarationDir": "./dist/", // 类型声明文件输出目录
+    "rootDir": "lib", // 源码目录
+    "outDir": "./dist", // 输出目录
+    "strict": false, // 启用所有严格类型检查选项
+    "esModuleInterop": true, // 允许默认导入非 ES 模块
+    "skipLibCheck": true, // 跳过库文件的类型检查
+    "forceConsistentCasingInFileNames": true // 强制文件名一致性
+  },
+  "compileOnSave": true,
+  "include": [
+    "lib/*.ts", // 包含所有 TypeScript 文件
+    "lib/utils/*.ts"
+  ],
+  "exclude": [
+    "node_modules", // 排除 node_modules 目录
+    "dist" // 排除输出目录
+  ]
+}

@@ -1,18 +1,24 @@
 const path = require('path')
 const debug = require('debug')
-const { mergeConfig } = require('vite')
+const { mergeConfig,InlineConfig } = require('vite')
 
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
 const dotenvExpand = require('dotenv-expand')
 const defaultsDeep = require('lodash.defaultsdeep')
-const { warn, error, isPlugin, resolvePluginId, loadModule, resolvePkg, resolveModule, sortPlugins } = require('@vue/cli-shared-utils')
-
+const { warn, error, resolvePluginId, loadModule, resolvePkg, resolveModule, sortPlugins } = require('@vue/cli-shared-utils')
 const { defaults } = require('./options')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
 
-const Config = {};
+/**@type {InlineConfig} */
+const Config = {
+  plugins:[],
+};
+
+const pluginRE = /^(@mooljs\/|mooljs-|@[\w-]+(\.)?[\w-]+\/mooljs-)plugin-/
+const isPlugin = id => pluginRE.test(id);
+
 // Seems we can't use `instanceof Promise` here (would fail the tests)
 const isPromise = p => p && typeof p.then === 'function'
 module.exports = class Service {
@@ -76,7 +82,7 @@ module.exports = class Service {
       this.projectOptions = defaultsDeep(loadedUserOptions, defaults())
 
       debug('vue:project-config')(this.projectOptions)
-
+      
       // apply plugins.
       this.plugins.forEach(({ id, apply }) => {
         if (this.pluginsToSkip.has(id)) return
@@ -177,7 +183,7 @@ module.exports = class Service {
 
     const builtInPlugins = [
       './commands/serve',
-      './commands/build',
+      // './commands/build',
       './commands/inspect',
       './commands/help',
       // config plugins are order sensitive
@@ -217,10 +223,10 @@ module.exports = class Service {
     }
 
     // Local plugins
-    if (this.pkg.vuePlugins && this.pkg.vuePlugins.service) {
-      const files = this.pkg.vuePlugins.service
+    if (this.pkg.moolPlugin && this.pkg.moolPlugin.service) {
+      const files = this.pkg.moolPlugin.service
       if (!Array.isArray(files)) {
-        throw new Error(`Invalid type for option 'vuePlugins.service', expected 'array' but got ${typeof files}.`)
+        throw new Error(`Invalid type for option 'moolPlugin.service', expected 'array' but got ${typeof files}.`)
       }
       plugins = plugins.concat(files.map(file => ({
         id: `local:${file}`,

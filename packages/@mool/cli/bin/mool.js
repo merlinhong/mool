@@ -25,10 +25,11 @@ const slash = require('slash')
 const minimist = require('minimist')
 
 // enter debug mode when creating test repo
+console.log(slash(process.cwd()));
 if (
   slash(process.cwd()).indexOf('/packages/test') > 0 && (
-    fs.existsSync(path.resolve(process.cwd(), '../@vue')) ||
-    fs.existsSync(path.resolve(process.cwd(), '../../@vue'))
+    fs.existsSync(path.resolve(process.cwd(), '../@mool')) ||
+    fs.existsSync(path.resolve(process.cwd(), '../../@mool'))
   )
 ) {
   process.env.VUE_CLI_DEBUG = true
@@ -38,7 +39,7 @@ const program = require('commander')
 const loadCommand = require('../lib/util/loadCommand')
 
 program
-  .version(`@vue/cli ${require('../package').version}`)
+  .version(`@mooljs/cli ${require('../package').version}`)
   .usage('<command> [options]')
 
 program

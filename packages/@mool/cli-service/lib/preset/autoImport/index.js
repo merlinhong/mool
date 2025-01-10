@@ -1,6 +1,6 @@
-const AutoImport =require ("unplugin-auto-import/vite");
-const Components =require ("unplugin-vue-components/vite");
-const merge =require ('lodash.merge');
+const AutoImport = require ("unplugin-auto-import/vite").default;
+const Components = require ("unplugin-vue-components/vite").default;
+const merge = require ('lodash.merge');
 module.exports = (api,options)=>{
     const autoImportPluginOption = {
         imports: [
@@ -14,7 +14,7 @@ module.exports = (api,options)=>{
     };
     const { components = {} } = options.autoImport || {};
     api.chainVite((config)=>{
-       config.plugin.push(
+       config.plugins.push(
         AutoImport(merge(autoImportPluginOption,options.autoImport??{})),
         Components(
             merge(

@@ -8,5 +8,5 @@ if (!service || process.env.VUE_CLI_API_MODE) {
   service = new Service(process.env.VUE_CLI_CONTEXT || process.cwd())
   service.init(process.env.VUE_CLI_MODE || process.env.NODE_ENV)
 }
-
+console.log(444,service.resolveViteConfig());
 module.exports = service.resolveViteConfig()

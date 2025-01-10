@@ -67,6 +67,7 @@ module.exports = class Creator extends EventEmitter {
 
   async create(cliOptions = {}, preset = null) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG;
+    console.log('isTestOrDebug:',isTestOrDebug);
     const { run, name, context, afterInvokeCbs, afterAnyInvokeCbs } = this;
 
     if (!preset) {

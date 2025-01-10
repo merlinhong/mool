@@ -1,6 +1,6 @@
 {
-  "name": "@mool/cli",
-  "version": "0.0.17",
+  "name": "@mooljs/cli",
+  "version": "1.0.1-beta",
   "description": "Command line interface for rapid mool.js development",
   "bin": {
     "mool": "bin/mool.js"
@@ -9,10 +9,11 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@vue/cli"
+    "directory": "packages/@mool/cli"
   },
   "keywords": [
-    "vue",
+    "vue3",
+    "mool",
     "cli"
   ],
   "author": "Merlin Hong",
@@ -20,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/merlinhong/mool.git/issues"
   },
-  "homepage": "https://cli.vuejs.org/",
+  "homepage": "https://cli.mooljs.org/",
   "publishConfig": {
     "access": "public"
   },
@@ -62,7 +63,7 @@
     "yaml-front-matter": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-service": "^5.0.8",
+    "@mooljs/cli-service": "^0.0.20",
     "cmd-shim": "^4.1.0"
   },
   "engines": {

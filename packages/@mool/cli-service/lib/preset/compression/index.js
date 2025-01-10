@@ -1,4 +1,4 @@
-const { merge } = require("lodash.merge");
+const merge  = require("lodash.merge");
 const compressPlugin = require("vite-plugin-compression");
 module.exports = (api,options)=>{
     const compressPluginOption = {
@@ -10,6 +10,6 @@ module.exports = (api,options)=>{
         ext: '.gz' // 生成的压缩文件后缀
       };
     api.chainVite((config)=>{
-       config.plugin.push(compressPlugin(merge(compressPluginOption,options.compression??{})))
+       config.plugins.push(compressPlugin(merge(compressPluginOption,options.compression??{})))
     })
 }

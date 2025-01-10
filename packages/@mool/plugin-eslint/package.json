@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-eslint",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "description": "eslint plugin for mool-cli",
   "main": "index.js",
   "repository": {
@@ -29,7 +29,7 @@
     "yorkie": "^2.0.0"
   },
   "peerDependencies": {
-    "@mooljs/cli-service": "^0.0.1",
+    "@mooljs/cli-service": "^0.0.19",
     "eslint": ">=7.5.0"
   }
 }

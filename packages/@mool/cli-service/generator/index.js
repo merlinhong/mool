@@ -7,13 +7,11 @@ module.exports = (api, options) => {
     dependencies: {
       vue: "^3.2.25",
       mooljs: "^0.0.2",
-      axios: "^1.6.5",
-      qs: "^6.12.1",
     },
     devDependencies:{
       "@types/qs": "^6.9.15",
       "@types/node": "^20.11.6",
-      "ts-node": "^10.9.2"
+      "ts-node": "^10.9.2",
     }
   });
   api.extendPackage({

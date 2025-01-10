@@ -41,7 +41,12 @@ module.exports = (api, options) => {
     // Vite server logic
     const { createServer } = require('vite');
     const finalConfig = api.resolveViteConfig();
-    const viteServer = await createServer(finalConfig)
+    const viteServer = await createServer({
+      ...finalConfig,
+      server:{
+        open:true
+      }
+    })
 
     await viteServer.listen()
 

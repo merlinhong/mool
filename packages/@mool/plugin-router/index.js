@@ -1,5 +1,5 @@
-import pages from "vite-plugin-pages";
-import merge from "lodash.merge";
+const pages = require("vite-plugin-pages");
+const merge = require("lodash.merge");
 module.exports = (api, options) => {
   const pagesPluginOption = {
     dirs: "src/pages", // 需要生成路由的文件目录，默认就是识别src下面的pages文件
@@ -7,7 +7,7 @@ module.exports = (api, options) => {
   };
 
   api.chainVite((config) => {
-    config.plugin.push(
+    config.plugins.push(
       pages(merge(pagesPluginOption, options.route ?? {}))
     );
   });

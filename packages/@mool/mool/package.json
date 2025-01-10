@@ -1,6 +1,6 @@
 {
   "name": "mooljs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "hooks for mool",
   "main": "lib/index.ts",
   "module": "lib/index.ts",
@@ -38,7 +38,6 @@
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@mool/cli-service": "^0.0.1",
     "axios": "^1.6.5",
     "qs": "^6.12.1",
     "@types/qs": "^6.9.15"

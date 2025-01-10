@@ -9,7 +9,7 @@ import {
 
 const config = {
   env: import.meta.env,
-  default: "VITE_APP_BASE_API",
+  default: "VITE_API_BASE_URL",
 } as const satisfies IConfig<ImportMetaEnv>;
 
 export type IApiConfig = IUrlConfig<IRootKeys<typeof config>>;
