@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/cli-service",
-  "version": "1.0.1-beta",
+  "version": "1.0.2",
   "description": "local service for mool projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",

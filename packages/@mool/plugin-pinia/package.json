@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-pinia",
-  "version": "0.0.1",
+  "version": "0.0.2-beta",
   "description": "pinia plugin for mool-cli",
   "main": "index.js",
   "repository": {

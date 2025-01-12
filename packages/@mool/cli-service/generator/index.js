@@ -9,7 +9,6 @@ module.exports = (api, options) => {
       mooljs: "^0.0.2",
     },
     devDependencies:{
-      "@types/qs": "^6.9.15",
       "@types/node": "^20.11.6",
       "ts-node": "^10.9.2",
     }

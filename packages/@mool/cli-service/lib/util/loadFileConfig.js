@@ -8,7 +8,6 @@ module.exports = function loadFileConfig (context) {
   let fileConfig, fileConfigPath
 
   const possibleConfigPaths = [
-    process.env.VUE_CLI_SERVICE_CONFIG_PATH,
     './moolrc',
     './mool.config.js',
     './mool.config.mjs',

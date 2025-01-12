@@ -1,4 +1,4 @@
-const pages = require("vite-plugin-pages");
+const pages = require("vite-plugin-pages").default;
 const merge = require("lodash.merge");
 module.exports = (api, options) => {
   const pagesPluginOption = {
