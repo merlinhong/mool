@@ -3,18 +3,29 @@ const {
   error,
   hasProjectYarn,
   hasProjectPnpm,
-  IpcMessenger
-} = require('@vue/cli-shared-utils')
-const getBaseUrl = require('../util/getBaseUrl')
+  IpcMessenger,
+  loadModule
+} = require('@vue/cli-shared-utils');
+const getBaseUrl = require('../util/getBaseUrl');
+const chokidar = require("chokidar");
+const {execSync} = require('node:child_process');
+const requiredVersion = require('vite/package.json').version
+const colors = require("picocolors");
 
+const server = {
+  port:8080,
+  host:'0.0.0.0'
+}
 const defaults = {
   host: '0.0.0.0',
   port: 8080,
   https: false
-}
+};
+let initialized = false;
 
 /** @type {import('@mooljs/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
+  
   const baseUrl = getBaseUrl(options)
   api.registerCommand('serve', {
     description: 'start development server',
@@ -31,33 +42,67 @@ module.exports = (api, options) => {
       '--skip-plugins': `comma-separated list of plugin names to skip for this run`
     }
   }, async function serve (args) {
-    info('Starting development server...')
+
+    !initialized&&info('Starting development server...')
     const isInContainer = checkInContainer()
     const isProduction = process.env.NODE_ENV === 'production'
-    const { chalk } = require('@vue/cli-shared-utils')
     const prepareURLs = require('../util/prepareURLs')
     const isAbsoluteUrl = require('../util/isAbsoluteUrl')
    
     // Vite server logic
-    const { createServer } = require('vite');
-    const finalConfig = api.resolveViteConfig();
-    const viteServer = await createServer({
-      ...finalConfig,
-      server:{
-        open:true
-      }
-    })
-
-    await viteServer.listen()
-
+    const { createServer,mergeConfig } = (await import('vite'))
+    // let fileConfig = viteConfig;
+    const {base,root,alias,outDir,assetsDir,sourcemap,port,host,open,codeSplitting} = options;
+    const viteServer = await createServer(
+      mergeConfig({base,
+        root,
+        resolve:{
+          alias
+        },
+        server:{
+          open:open&&(!initialized||options.port!=server.port),
+          port:port||defaults.port,
+          host:host||defaults.host
+        },
+        build:{
+          outDir,
+          assetsDir,
+          sourcemap,
+          rollupOptions:{
+            output:{
+              manualChunks:codeSplitting
+            }
+          }
+        }},api.resolveViteConfig())
+      
+    );
+    await viteServer.listen();
     const urls = prepareURLs(
       'http',
-      args.host || defaults.host,
-      args.port || defaults.port,
+      args.host || (options.host??defaults.host),
+      args.port || (options.port??defaults.port),
       isAbsoluteUrl(baseUrl) ? '/' : baseUrl
-    )
+    );
+ 
+    if((options.port&&options.port!=server.port)||(!options.port&&!initialized)){
+      console.log(`
+      ${colors.cyanBright(`vite ${requiredVersion}`)} ${colors.greenBright('dev server running at:')}\n
+      > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
+        `);
+    }
+   
+    server.port = options.port;
+  server.host = options.host;
+    const wat = chokidar.watch(api.resolve('.moolrc.ts'));
+    wat.on('change',async (d)=>{
+      await viteServer.close();
+    });
 
-    console.log(`Vite server running at: ${chalk.blue(urls.localUrlForBrowser)}`)
+
+  
+
+   
+    initialized = true;
 
     return new Promise((resolve) => {
       resolve({

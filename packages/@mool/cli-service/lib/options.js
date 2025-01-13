@@ -4,6 +4,16 @@ const schema = createSchema(joi => joi.object({
   base: joi.string().allow(''),
   outDir: joi.string(),
   root: joi.string(),
+  open:joi.alternatives().try(
+    joi.any().valid(true,false),
+    joi.string().allow('')
+
+  ),
+  route:joi.alternatives().try(
+    joi.object(),
+  ),
+  host:joi.string().allow(''),
+  port:joi.number().allow(),
   assetsDir:joi.string(),
   alias:joi.alternatives().try(
     joi.object(),
@@ -18,7 +28,7 @@ const schema = createSchema(joi => joi.object({
     joi.object(),
     joi.func()
   ),
-  codeSplit:joi.alternatives().try(
+  codeSplitting:joi.alternatives().try(
     joi.object(),
     joi.func()
   ),

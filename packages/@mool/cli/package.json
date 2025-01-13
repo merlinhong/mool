@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/cli",
-  "version": "1.0.2-beta",
+  "version": "1.0.3-beta",
   "description": "Command line interface for rapid mool.js development",
   "bin": {
     "mool": "bin/mool.js"
@@ -29,9 +29,6 @@
     "@types/ejs": "^3.0.6",
     "@types/inquirer": "^8.1.3",
     "@vue/cli-shared-utils": "^5.0.8",
-    "@vue/cli-ui": "^5.0.8",
-    "@vue/cli-ui-addon-webpack": "^5.0.8",
-    "@vue/cli-ui-addon-widgets": "^5.0.8",
     "boxen": "^5.0.0",
     "commander": "^7.1.0",
     "debug": "^4.1.0",
@@ -58,12 +55,12 @@
     "slash": "^3.0.0",
     "strip-ansi": "^6.0.0",
     "validate-npm-package-name": "^3.0.0",
-    "vue": "^2.6.14",
+    "vue": "^3.2.5",
     "vue-codemod": "^0.0.5",
     "yaml-front-matter": "^4.1.0"
   },
   "devDependencies": {
-    "@mooljs/cli-service": "^0.0.20",
+    "@mooljs/cli-service": "^1.0.3-beta",
     "cmd-shim": "^4.1.0"
   },
   "engines": {

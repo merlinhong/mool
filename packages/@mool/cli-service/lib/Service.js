@@ -1,6 +1,8 @@
 const path = require('path')
 const debug = require('debug')
 const { mergeConfig,InlineConfig } = require('vite')
+const fs = require('fs')
+const { bundleRequire, GetOutputFile, JS_EXT_RE } = require("bundle-require") ;
 
 const PluginAPI = require('./PluginAPI')
 const dotenv = require('dotenv')
@@ -10,12 +12,12 @@ const { warn, error, resolvePluginId, loadModule, resolvePkg, resolveModule, sor
 const { defaults } = require('./options')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
+const chokidar = require("chokidar");
 
 /**@type {InlineConfig} */
 const Config = {
   plugins:[],
 };
-
 const pluginRE = /^(@mooljs\/|mooljs-|@[\w-]+(\.)?[\w-]+\/mooljs-)plugin-/
 const isPlugin = id => pluginRE.test(id);
 
@@ -63,9 +65,11 @@ module.exports = class Service {
   }
 
   init (mode = process.env.VUE_CLI_MODE) {
-    if (this.initialized) {
-      return
-    }
+    // if (this.initialized) {
+    //   return
+    // }
+    this.viteChainFns = [];
+    this.viteRawConfigFns = [];
     this.initialized = true
     this.mode = mode
 
@@ -75,10 +79,10 @@ module.exports = class Service {
     }
     // load base .env
     this.loadEnv()
-
     // load user config
-    const userOptions = this.loadUserOptions()
+    const userOptions = this.loadUserOptions();
     const loadedCallback = (loadedUserOptions) => {
+
       this.projectOptions = defaultsDeep(loadedUserOptions, defaults())
 
       debug('vue:project-config')(this.projectOptions)
@@ -270,6 +274,7 @@ module.exports = class Service {
   }
 
   resolveChainableViteConfig () {
+    Config.plugins = [];
     const chainableConfig = Object.assign({},Config);
     // apply chains
     this.viteChainFns.forEach(fn => fn(chainableConfig))
@@ -341,26 +346,45 @@ module.exports = class Service {
   }
 
   // Note: we intentionally make this function synchronous by default
-  // because eslint-import-resolver-webpack does not support async webpack configs.
-  loadUserOptions () {
-    const { fileConfig, fileConfigPath } = loadFileConfig(this.context)
-
-    if (isPromise(fileConfig)) {
-      return fileConfig
+  async loadUserOptions () {
+    let _fileConfig, _fileConfigPath
+    const possibleConfigPaths = [
+      './.moolrc.ts',
+      './mool.config.ts'
+    ]
+    for (const p of possibleConfigPaths) {
+      const resolvedPath = p && path.resolve(this.context, p)
+      if (resolvedPath && fs.existsSync(resolvedPath)) {
+        _fileConfigPath = resolvedPath
+        break
+      }
+    }
+    if(_fileConfigPath){
+      _fileConfig = await bundleRequire({
+        filepath: _fileConfigPath,
+      });
+    }else{
+      const { fileConfig, fileConfigPath } = loadFileConfig(this.context);
+      _fileConfig = fileConfig;
+      _fileConfigPath = fileConfigPath;
+    }
+    
+    if (isPromise(_fileConfig)) {
+      return _fileConfig
         .then(mod => mod.default)
         .then(loadedConfig => resolveUserConfig({
           inlineOptions: this.inlineOptions,
           pkgConfig: this.pkg.vue,
           fileConfig: loadedConfig,
-          fileConfigPath
+          _fileConfig
         }))
     }
 
     return resolveUserConfig({
       inlineOptions: this.inlineOptions,
       pkgConfig: this.pkg.mool,
-      fileConfig,
-      fileConfigPath
+      fileConfig:_fileConfig.mod?.default || _fileConfig.mod || _fileConfig,
+      fileConfigPath:_fileConfigPath
     })
   }
 }

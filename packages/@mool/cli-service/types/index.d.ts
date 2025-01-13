@@ -130,5 +130,5 @@ type ServicePlugin = (
 ) => any
 
 export { ProjectOptions, ServicePlugin, PluginAPI }
-type UserConfig = ProjectOptions | ConfigFunction
+type UserConfig = Partial<ProjectOptions> | ConfigFunction
 export function defineConfig(config: UserConfig): UserConfig

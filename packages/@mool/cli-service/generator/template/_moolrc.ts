@@ -1,5 +1,5 @@
 import {defineConfig} from '@mooljs/cli-service';
-modules.exports = defineConfig({
+export default defineConfig({
     <%_ if (lintOn&&!lintOn.includes('save')) { _%>
 lintOnSave:false
     <%_ } _%> 
