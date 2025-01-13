@@ -1,5 +1,4 @@
 import minimist from 'minimist';
-import ChainableConfig from 'vite-chainable'
 import {InlineConfig} from 'vite';
 import { ProjectOptions, ConfigFunction } from './ProjectOptions'
 
@@ -14,7 +13,7 @@ type RegisterCommandOpts = Partial<{
   details: string
 }>
 
-type ViteChainFn = (chainableConfig: ChainableConfig) => void
+type ViteChainFn = (chainableConfig: InlineConfig) => void
 
 type viteRawConfigFn = ((config: InlineConfig) => InlineConfig | void) | InlineConfig
 
@@ -98,7 +97,7 @@ declare class PluginAPI {
    * @param [chainableConfig]
    * @return Raw webpack config.
    */
-  resolveViteConfig(chainableConfig?: ChainableConfig): InlineConfig
+  resolveViteConfig(chainableConfig?: InlineConfig): InlineConfig
 
   /**
    * Resolve an intermediate chainable webpack config instance, which can be
@@ -109,7 +108,7 @@ declare class PluginAPI {
    *
    * @return ChainableViteConfig
    */
-  resolveChainableViteConfig(): ChainableConfig
+  resolveChainableViteConfig(): InlineConfig
 
   /**
    * Generate a cache identifier from a number of variables

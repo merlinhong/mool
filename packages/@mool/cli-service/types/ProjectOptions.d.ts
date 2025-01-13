@@ -1,4 +1,4 @@
-import { IOpt } from '../lib/preset/service/src/index';
+import { type IOpt } from 'vite-plugin-service';
 import { InlineConfig } from 'vite';
 
 interface ProjectOptions {
