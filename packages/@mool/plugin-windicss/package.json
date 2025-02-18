@@ -1,36 +1,37 @@
 {
-  "name": "@mooljs/plugin-eslint",
-  "version": "0.1.0",
-  "description": "eslint plugin for mool-cli",
+  "name": "@mooljs/plugin-windicss",
+  "version": "0.0.4",
+  "description": "windicss plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-eslint"
+    "directory": "packages/@mool/plugin-windicss"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "eslint"
+    "windicss",
+    "css"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/dev/packages/@mool/plugin-eslint#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-router#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "globby": "^11.0.2",
-    "vite-plugin-eslint": "^1.8.1",
-    "yorkie": "^2.0.0"
+    "vite-plugin-windicss": "^1.9.4",
+    "windicss": "^3.5.6"
+  },
+  "devDependencies": {
   },
   "peerDependencies": {
-    "@mooljs/cli-service": "^0.0.19",
-    "eslint": ">=7.5.0"
+    "@mooljs/cli-service": "^1.0.0-beta"
   }
 }

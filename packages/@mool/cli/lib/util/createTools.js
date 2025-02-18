@@ -4,5 +4,6 @@ exports.getPromptModules = () => {
     'cssPreprocessors',
     'linter',
     'unit',
+    'windicss'
   ].map(file => require(`../promptModules/${file}`))
 }

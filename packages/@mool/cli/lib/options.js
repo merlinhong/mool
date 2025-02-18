@@ -64,7 +64,7 @@ exports.defaultPreset = {
   useConfigFiles: false,
   cssPreprocessor: undefined,
   plugins: {
-    '@vue/cli-plugin-eslint': {
+    '@mooljs/cli-plugin-eslint': {
       config: 'base',
       lintOn: ['save']
     }

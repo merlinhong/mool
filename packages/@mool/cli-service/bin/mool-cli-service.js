@@ -38,7 +38,8 @@ const args = require('minimist')(rawArgv, {
 const command = args._[0]
 const watcher = chokidar.watch(path.resolve(process.cwd(),'.moolrc.ts'));
 watcher.on('change',async (d)=>{
-  log(`${colors.cyanBright('[vite]')} ${colors.greenBright('.moolrc.ts changed, restarting server...')}`)
+  log(`${colors.cyanBright('[vite]')} ${colors.greenBright('.moolrc.ts changed, restarting server...')}`);
+
   setTimeout(() => {
     service.run(command, args, rawArgv).catch(err => {
       error(err)

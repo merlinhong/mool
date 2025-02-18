@@ -1,6 +1,7 @@
 module.exports = (api, options) => {
   api.render("./template", {
     lintOn: options.lintOn,
+    windicss:options.windicss
   });
 
   api.extendPackage({
@@ -15,8 +16,8 @@ module.exports = (api, options) => {
   });
   api.extendPackage({
     scripts: {
-      serve: "mool-cli-service serve",
-      build: "mool-cli-service build",
+      serve: "mool serve",
+      build: "mool build",
     },
     browserslist: ["> 1%", "last 2 versions", "not dead", "not ie 11"],
   });

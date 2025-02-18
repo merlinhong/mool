@@ -64,6 +64,7 @@ module.exports = (api, options) => {
         host,
         open,
         codeSplitting,
+        windicss
       } = options;
       const viteServer = await createServer(
         mergeConfig(

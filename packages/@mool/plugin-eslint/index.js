@@ -1,5 +1,5 @@
 const path = require('path')
-const eslintVitePlugin = require('vite-plugin-eslint')
+const eslintVitePlugin = require('vite-plugin-eslint').default
 
 /** @type {import('@mool/cli-service').ServicePlugin} */
 module.exports = (api, options) => {

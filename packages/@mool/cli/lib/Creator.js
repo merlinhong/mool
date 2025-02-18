@@ -313,7 +313,8 @@ module.exports = class Creator extends EventEmitter {
     preset = {
       useConfigFiles: answers.useConfigFiles === "files",
       plugins: {},
-      lintOn:answers.lintOn
+      lintOn:answers.lintOn,
+      windicss:answers.features.includes('windicss')
     };
     answers.features = answers.features || [];
     // run cb registered by prompt modules to finalize the preset
