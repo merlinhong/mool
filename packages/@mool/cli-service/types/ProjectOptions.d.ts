@@ -35,7 +35,11 @@ interface ProjectOptions {
   assetsDir: string;
 
   /**
-   * Default `{}`;
+   * @default 
+   * {
+   *   '@':resove('src')
+   * }
+   * ; 
    * Alias for file system path
    */
   alias:{};

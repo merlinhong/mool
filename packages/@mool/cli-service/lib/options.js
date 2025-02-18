@@ -12,7 +12,9 @@ const schema = createSchema(joi => joi.object({
   route:joi.alternatives().try(
     joi.object(),
   ),
-  host:joi.string().allow(''),
+  proxy:joi.alternatives().try(
+    joi.object(),
+  ),
   port:joi.number().allow(),
   assetsDir:joi.string(),
   alias:joi.alternatives().try(

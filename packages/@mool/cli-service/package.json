@@ -1,11 +1,11 @@
 {
   "name": "@mooljs/cli-service",
-  "version": "1.0.4-beta",
+  "version": "1.0.5",
   "description": "local service for mool projects",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
   "bin": {
-    "mool-cli-service": "bin/mool-cli-service.js"
+    "mool": "bin/mool-cli-service.js"
   },
   "repository": {
     "type": "git",

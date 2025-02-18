@@ -1,4 +1,4 @@
-import { ServicePlugin } from '@vue/cli-service'
+import { ServicePlugin } from '@mooljs/cli-service'
 
 const servicePlugin: ServicePlugin = (api, options) => {
   const version = api.version
@@ -25,40 +25,22 @@ const servicePlugin: ServicePlugin = (api, options) => {
 
   api.chainVite(webpackConfig => {
     if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-      webpackConfig.devtool('eval-cheap-module-source-map')
-
-      webpackConfig.plugin('hmr').use(require('webpack/lib/HotModuleReplacementPlugin'))
-
-      webpackConfig.output.globalObject(`(typeof self !== 'undefined' ? self : this)`)
+     
     }
   })
 
   api.configureVite(config => {
-    config.output = {
-      path: 'test-dist-2'
-    }
+   
   })
 
   api.configureVite(config => {
-    return {
-      devtool: config.devtool || 'source-map'
-    }
+    
   })
 
-  api.resolveWebpackConfig()
+  api.resolveViteConfig()
 
-  api.resolveWebpackConfig(api.resolveChainableWebpackConfig())
+  api.resolveViteConfig(api.resolveChainableViteConfig())
 
-  const { cacheIdentifier, cacheDirectory } = api.genCacheConfig(
-    'babel-loader',
-    {
-      '@babel/core': require('@babel/core/package.json').version,
-      '@vue/babel-preset-app': require('@vue/babel-preset-app/package.json').version,
-      'babel-loader': require('babel-loader/package.json').version,
-      modern: !!process.env.VUE_CLI_MODERN_BUILD,
-      browserslist: api.service.pkg.browserslist
-    },
-    ['babel.config.js', '.browserslistrc']
-  )
+  
 }
 export = servicePlugin

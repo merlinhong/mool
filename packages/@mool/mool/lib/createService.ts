@@ -214,7 +214,7 @@ export type IEnvKeys<T> = {
 /**
  * 推导接口参数类型
  */
-type ApiParams<T, K extends keyof T> = T[K] extends { data: infer D } ? D : {};
+type ApiParams<T, K extends keyof T> = T[K] extends { data: infer D } ? D : undefined;
 
 export type IConfig<T, G = string, L = CommonResponse> = {
   env: T;
@@ -481,7 +481,7 @@ export type ApiServiceWithModules<
   M extends ServiceModules
 > = CreateService<T, G, IUrlConfig, CommonResponse, M> & {
   [K in keyof M]: {
-    [P in keyof M[K]]: (data: ApiParams<M[K], P>) => Promise<CommonResponse>;
+    [P in keyof M[K]]: ApiParams<M[K], P> extends undefined ?(data?: {}) => Promise<CommonResponse>:(data: ApiParams<M[K], P>) => Promise<CommonResponse>;
   };
 };
 

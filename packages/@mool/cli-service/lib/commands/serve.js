@@ -71,7 +71,10 @@ module.exports = (api, options) => {
             base,
             root,
             resolve: {
-              alias,
+              alias:{
+                '@':api.resolve('src'),
+                ...alias,
+              }
             },
             server: {
               open: open && (!initialized || options.port != server.port),

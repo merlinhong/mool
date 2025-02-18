@@ -58,7 +58,6 @@ module.exports = class Creator extends EventEmitter {
     this.promptCompleteCbs = [];
     this.afterInvokeCbs = [];
     this.afterAnyInvokeCbs = [];
-
     this.run = this.run.bind(this);
 
     const promptAPI = new PromptModuleAPI(this);
