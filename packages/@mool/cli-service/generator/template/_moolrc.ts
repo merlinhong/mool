@@ -3,9 +3,9 @@ console.log(lintOn);
 
 export default defineConfig({
     <%_ if (lintOn&&!lintOn.includes('save')) { _%>
- lintOnSave:false
+ lintOnSave:false,
     <%_ } _%> 
     <%_ if (windicss) { _%>
-        windicss:{}
+ windicss:{}
     <%_ } _%> 
 })

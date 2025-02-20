@@ -44,7 +44,8 @@ const presetSchema = createSchema((joi) =>
         .valid('sass', 'dart-sass', 'less', 'stylus'),
       plugins: joi.object().required(),
       configs: joi.object(),
-      lintOn:joi.array()
+      lintOn:joi.array(),
+      windicss: joi.boolean(), // windicss
     })
 )
 
