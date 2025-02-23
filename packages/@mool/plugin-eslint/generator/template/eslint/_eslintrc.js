@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
   env: {
+    'vue/setup-compiler-macros': true,
     browser: true, // 允许使用浏览器环境中的全局变量，如 window 和 document
     es2021: true, // 支持 ECMAScript 2021 的语法
   },
@@ -9,7 +10,7 @@ module.exports = {
     "plugin:vue/vue3-essential", // 继承 Vue 的基础规则集，适用于 Vue.js 项目
     "plugin:@typescript-eslint/recommended", // 继承 TypeScript 的推荐规则集，适用于 TypeScript 项目
     "plugin:prettier/recommended",
-    "@vue/typescript/recommended",
+    "@vue/typescript/recommended"
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -19,11 +20,30 @@ module.exports = {
     parser: "@typescript-eslint/parser", // 使用 @typescript-eslint/parser 解析 TypeScript 代码
     sourceType: "module", // 指定使用 ES 模块的模块系统
   },
+  globals: {
+    process: true,
+    __dirname: true,
+    require: true,
+    module: true,
+    exports: true,
+    ElMessage: 'readonly',
+    ElMessageBox: 'readonly',
+    ElNotification: 'readonly',
+    ref: 'readonly',
+    reactive:'readonly',
+    computed: 'readonly',
+    toRaw: 'readonly',
+    watch: 'readonly',
+    nextTick: 'readonly',
+    watchEffect: 'readonly',
+    useRoute: 'readonly',
+    useRouter: 'readonly'
+  },
   plugins: ['@typescript-eslint','prettier'],
   rules: {
     "no-console": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
     "no-debugger": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
-    'prettier/prettier': 1,
+    'prettier/prettier': 0,
     // Vue: Recommended rules to be closed or modify
     'vue/require-default-prop': 0,
     'vue/singleline-html-element-content-newline': 0,
@@ -38,16 +58,6 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 0,
     '@typescript-eslint/no-unused-vars': 1,
     '@typescript-eslint/no-empty-function': 1,
-    '@typescript-eslint/no-explicit-any': 0,
-    'import/extensions': [
-      2,
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
+    '@typescript-eslint/no-explicit-any': 0
   },
 };

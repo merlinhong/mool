@@ -50,6 +50,13 @@ interface ProjectOptions {
   windicss:{},
 
   /**
+   * 自动导入组件库的api
+   * @example
+   * autoImport:['ep'、'antd']
+   */
+
+  autoImport:string[],
+  /**
    * Default `false`;
    * Whether to generate a source map file after construction
    */

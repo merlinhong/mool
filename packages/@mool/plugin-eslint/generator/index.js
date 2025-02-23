@@ -1,5 +1,4 @@
 module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
-  const eslintConfig = require('../eslintOptions').config(api, config, rootOptions)
   const devDependencies = require('../eslintDeps').getDeps(api, config, rootOptions)
 
   const pkg = {

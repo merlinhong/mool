@@ -52,8 +52,9 @@ const schema = createSchema(joi => joi.object({
   mock:joi.any().valid(true, false),
   // known runtime options for built-in plugins
   lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
-
-
+  autoImport:joi.alternatives().try(
+    joi.array(),
+  )
 }))
 
 exports.validate = (options, cb) => {

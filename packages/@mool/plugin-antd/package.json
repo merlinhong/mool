@@ -1,36 +1,36 @@
 {
-  "name": "@mooljs/plugin-eslint",
-  "version": "0.2.1",
-  "description": "eslint plugin for mool-cli",
+  "name": "@mooljs/plugin-antd",
+  "version": "0.0.1",
+  "description": "antdesign vue autoImport plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-eslint"
+    "directory": "packages/@mool/plugin-antd"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "eslint"
+    "antdesign vue",
+    "autoImport"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/dev/packages/@mool/plugin-eslint#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-antd#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "globby": "^11.0.2",
-    "vite-plugin-eslint": "^1.8.1",
-    "yorkie": "^2.0.0"
+    "ant-design-vue": "^~4.2.5"
+  },
+  "devDependencies": {
   },
   "peerDependencies": {
-    "@mooljs/cli-service": "^0.0.19",
-    "eslint": ">=7.5.0"
+    "@mooljs/cli-service": "^1.0.0-beta"
   }
 }

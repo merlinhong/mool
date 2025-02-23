@@ -27,15 +27,14 @@ module.exports = async function lint (args = {}, api) {
   const cwd = api.resolve('.')
   const { log, done, exit, chalk, loadModule } = require('@vue/cli-shared-utils')
   const { ESLint } = loadModule('eslint', cwd, true) || require('eslint')
-  const extensions = require('./eslintOptions').extensions(api)
-
+  const extensions = [".ts", ".tsx", ".vue"];
   const argsConfig = normalizeConfig(args)
   const config = Object.assign({
     extensions,
     fix: true,
     cwd
   }, argsConfig)
-
+  
   const noFixWarnings = (argsConfig.fixWarnings === false)
   const noFixWarningsPredicate = (lintResult) => lintResult.severity === 2
   config.fix = config.fix && (noFixWarnings ? noFixWarningsPredicate : true)
