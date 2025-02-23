@@ -69,6 +69,7 @@ module.exports = (api, options) => {
       const viteServer = await createServer(
         mergeConfig(
           {
+            envDir: api.resolve(".env"),
             base,
             root,
             resolve: {

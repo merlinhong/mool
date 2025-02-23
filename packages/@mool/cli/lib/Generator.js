@@ -139,7 +139,7 @@ module.exports = class Generator {
     // load all the other plugins
     this.allPlugins = this.resolveAllPlugins()
 
-    const cliService = plugins.find(p => p.id === '@vue/cli-service')
+    const cliService = plugins.find(p => p.id === '@mooljs/cli-service')
     const rootOptions = cliService
       ? cliService.options
       : inferRootOptions(pkg)
@@ -196,7 +196,6 @@ module.exports = class Generator {
     sortPackageJson = true
   } = {}) {
     await this.initPlugins()
-
     // save the file system before applying plugin for comparison
     const initialFiles = Object.assign({}, this.files)
     // extract configs from package.json into dedicated files.

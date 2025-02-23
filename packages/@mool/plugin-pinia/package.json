@@ -27,6 +27,6 @@
     "@vue/cli-test-utils": "^5.0.8"
   },
   "peerDependencies": {
-    "@mooljs/cli-service": "^3.0.0 || ^4.0.0 || ^5.0.0-0"
+    "@mooljs/cli-service": "^1.2.0"
   }
 }

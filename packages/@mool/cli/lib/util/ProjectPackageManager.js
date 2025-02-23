@@ -1,6 +1,5 @@
 const fs = require('fs-extra')
 const path = require('path')
-
 const ini = require('ini')
 const minimist = require('minimist')
 const LRU = require('lru-cache')
@@ -46,7 +45,7 @@ const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 
 const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'pnpm', 'npm']
 const PACKAGE_MANAGER_PNPM4_CONFIG = {
-  install: ['install', '--reporter', 'silent', '--shamefully-hoist'],
+  install: ['install'],
   add: ['install', '--reporter', 'silent', '--shamefully-hoist'],
   upgrade: ['update', '--reporter', 'silent'],
   remove: ['uninstall', '--reporter', 'silent']
@@ -352,7 +351,8 @@ class PackageManager {
     // the `NODE_ENV` environment variable does no good;
     // it only confuses users by skipping dev deps (when set to `production`).
     delete process.env.NODE_ENV
-
+    console.log(1111,prevNodeEnv,PACKAGE_MANAGER_CONFIG[this.bin][command]);
+    
     await this.setRegistryEnvs()
     await executeCommand(
       this.bin,
@@ -374,12 +374,16 @@ class PackageManager {
     if (this.needsPeerDepsFix) {
       args.push('--legacy-peer-deps')
     }
-
     if (process.env.VUE_CLI_TEST) {
       args.push('--silent', '--no-progress')
     }
-
-    return await this.runCommand('install', args)
+    try {
+      await this.runCommand('install', args)
+      console.log('安装完成');
+    } catch (error) {
+      console.error('安装失败:', error);
+      throw error;
+    }
   }
 
   async add (packageName, {

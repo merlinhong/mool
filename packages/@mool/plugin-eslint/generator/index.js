@@ -36,8 +36,9 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
     Object.assign(pkg.devDependencies, {
       'lint-staged': '^11.1.2'
     })
-    pkg.gitHooks = {
-      'pre-commit': 'lint-staged'
+    pkg.simpleGitHooks = {
+      'pre-commit': 'npx lint-staged',
+      "commit-msg": 'node ./scripts/verify-commit.js'
     }
     const extensions = require('../eslintOptions').extensions(api)
       .map(ext => ext.replace(/^\./, '')) // remove the leading `.`

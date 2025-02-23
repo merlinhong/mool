@@ -1,4 +1,4 @@
-# @mool/cli-service
+# @mooljs/cli-service
 
 > service for mool
 

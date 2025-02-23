@@ -187,12 +187,14 @@ module.exports = class Creator extends EventEmitter {
     // install plugins
     log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`);
     log();
+    
     this.emit("creation", { event: "plugins-install" });
 
     if (isTestOrDebug && !process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       // in development, avoid installation process
       await require("./util/setupDevProject")(context);
     } else {
+      console.log('Installation '); // 添加这行
       await pm.install();
     }
 

@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-router"
+    "directory": "packages/@mool/mool"
   },
   "keywords": [
     "mool",
@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-router#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/mool#readme",
   "publishConfig": {
     "access": "public"
   },

@@ -1,0 +1,10 @@
+{
+  "name": "eee",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@mooljs/plugin-eslint": "latest",
+    "@mooljs/plugin-router": "latest",
+    "@mooljs/cli-service": "~1.2.0"
+  }
+}
