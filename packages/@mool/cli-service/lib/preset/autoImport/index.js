@@ -19,7 +19,7 @@ module.exports = (api, options) => {
         [`${path.join(process.cwd(), "src/service/index")}`]: ["service"],
       },
     ],
-    dts: "auto-imports.d.ts",
+    dts: "types/auto-imports.d.ts",
     resolvers: options.autoImport.map((item) => resolvers[item]),
 
   };

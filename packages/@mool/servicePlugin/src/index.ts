@@ -14,7 +14,7 @@ export interface IOpt {
 
 const getServiceDir = (path?: string) => join(process.cwd(), path ?? "./src/service");
 function generateServiceTypes(opt?: IOpt) {
-  const typesPath = join(process.cwd(), opt?.dts ?? "service.d.ts");
+  const typesPath = join(process.cwd(), opt?.dts ?? "types/service.d.ts");
   const serviceFiles = fs
     .readdirSync(getServiceDir(opt?.path))
     .filter((file) => file.endsWith(".ts") && file !== "index.ts")

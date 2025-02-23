@@ -17,9 +17,16 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-    },
+      "@/*": ["src/*"]
+    }
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue","auto-imports.d.ts", "components.d.ts","service.d.ts"],
+  "exclude": ["node_modules","dist"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts"
+  ]
 }

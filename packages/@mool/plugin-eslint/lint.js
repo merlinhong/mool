@@ -27,7 +27,7 @@ module.exports = async function lint (args = {}, api) {
   const cwd = api.resolve('.')
   const { log, done, exit, chalk, loadModule } = require('@vue/cli-shared-utils')
   const { ESLint } = loadModule('eslint', cwd, true) || require('eslint')
-  const extensions = [".ts", ".tsx", ".vue"];
+  const extensions = require('./eslintOptions').extensions(api)
   const argsConfig = normalizeConfig(args)
   const config = Object.assign({
     extensions,
