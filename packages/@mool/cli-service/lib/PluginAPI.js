@@ -35,7 +35,7 @@ class PluginAPI {
     if (semver.satisfies(this.version, range, { includePrerelease: true })) return
 
     throw new Error(
-      `Require @mool/cli-service "${range}", but was loaded with "${this.version}".`
+      `Require @mooljs/cli-service "${range}", but was loaded with "${this.version}".`
     )
   }
 

@@ -81,7 +81,7 @@ async function getAndCacheLatestVersion (cached, includePrerelease) {
 
   if (semver.valid(version) && version !== cached) {
     saveOptions({ latestVersion: version, lastChecked: Date.now() })
-  console.log(cached);
+  console.log('cached',cached);
 
     return version
   }

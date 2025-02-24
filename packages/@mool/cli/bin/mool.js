@@ -17,7 +17,7 @@ function checkNodeVersion (wanted, id) {
   }
 }
 
-checkNodeVersion(requiredVersion, '@vue/cli')
+checkNodeVersion(requiredVersion, '@mooljs/cli')
 
 const fs = require('fs')
 const path = require('path')

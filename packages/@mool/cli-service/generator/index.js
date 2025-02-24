@@ -7,7 +7,7 @@ module.exports = (api, options) => {
   api.extendPackage({
     dependencies: {
       vue: "^3.2.25",
-      mooljs: "^0.0.2",
+      mooljs: "^0.1.0-beta",
     },
     devDependencies:{
       "@types/node": "^20.11.6",
