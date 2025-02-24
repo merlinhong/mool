@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-router",
-  "version": "0.0.3",
+  "version": "0.1.0-beta",
   "description": "router plugin for mool",
   "main": "index.js",
   "repository": {
@@ -29,8 +29,5 @@
   },
   "devDependencies": {
     "@vue/cli-test-utils": "^5.0.8"
-  },
-  "peerDependencies": {
-    "@mooljs/cli-service": "^1.0.0-beta"
   }
 }

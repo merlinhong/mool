@@ -29,8 +29,5 @@
     "element-plus": "^2.5.3"
   },
   "devDependencies": {
-  },
-  "peerDependencies": {
-    "@mooljs/cli-service": "^1.0.0-beta"
   }
 }

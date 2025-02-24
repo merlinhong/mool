@@ -1,4 +1,4 @@
 packages:
   - "packages/@mool/*"
   - "packages/test/*"
-  - "packages/vue-cli-version-marker"
+  - "packages/mool-cli-version-marker"

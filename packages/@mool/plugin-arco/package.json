@@ -27,8 +27,6 @@
     "@vue/cli-shared-utils": "^5.0.8"
   },
   "devDependencies": {
-  },
-  "peerDependencies": {
-    "@mooljs/cli-service": "^1.0.0-beta"
   }
+
 }
