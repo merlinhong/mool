@@ -167,7 +167,7 @@ module.exports = class Creator extends EventEmitter {
     if (packageManager === "pnpm") {
       const pnpmConfig = hasPnpmVersionOrLater("4.0.0")
         ? // pnpm v7 makes breaking change to set strict-peer-dependencies=true by default, which may cause some problems when installing
-          "shamefully-hoist=true\nstrict-peer-dependencies=false\n"
+          "strict-peer-dependencies=false\n"
         : "shamefully-flatten=true\n";
 
       await writeFileTree(context, {
@@ -194,7 +194,7 @@ module.exports = class Creator extends EventEmitter {
       // in development, avoid installation process
       await require("./util/setupDevProject")(context);
     } else {
-      console.log('Installation '); // 添加这行
+      console.log('正在安装 Installing.... '); // 添加这行
       await pm.install();
     }
 
@@ -221,7 +221,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // run complete cbs if any (injected by generators)
-    log(`⚓  Running completion hooks...`);
+    // log(`⚓  Running completion hooks...`);
     this.emit("creation", { event: "completion-hooks" });
     for (const cb of afterInvokeCbs) {
       await cb();

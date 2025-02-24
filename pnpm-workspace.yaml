@@ -1,4 +1,3 @@
 packages:
   - "packages/@mool/*"
-  - "packages/test/*"
   - "packages/mool-cli-version-marker"

@@ -1,6 +1,6 @@
 {
   "name": "mool-cli-version-marker",
-  "version": "1.3.6",
+  "version": "1.4.10-beta",
   "description": "version marker for @mooljs/cli",
   "author": "Merlin Hong",
   "license": "MIT",

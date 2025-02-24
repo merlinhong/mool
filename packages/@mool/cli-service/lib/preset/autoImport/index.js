@@ -20,7 +20,7 @@ module.exports = (api, options) => {
       },
     ],
     dts: "types/auto-imports.d.ts",
-    resolvers: options.autoImport.map((item) => resolvers[item]),
+    resolvers: options.autoImport?.map((item) => resolvers[item]),
 
   };
   api.chainVite((config) => {
