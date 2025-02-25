@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-eslint",
-  "version": "0.2.11-beta",
+  "version": "0.2.10",
   "description": "eslint plugin for mool-cli",
   "main": "index.js",
   "repository": {

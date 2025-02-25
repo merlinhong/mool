@@ -37,12 +37,13 @@ module.exports = {
     nextTick: 'readonly',
     watchEffect: 'readonly',
     useRoute: 'readonly',
-    useRouter: 'readonly'
+    useRouter: 'readonly',
+    service: 'readonly'
   },
   plugins: ['@typescript-eslint','prettier'],
   rules: {
-    "no-console": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
-    "no-debugger": `process.env.NODE_ENV === 'production' ? 'warn' : 'off'`,
+    "no-console": 1,
+    "no-debugger": 1,
     'prettier/prettier': 0,
     // Vue: Recommended rules to be closed or modify
     'vue/require-default-prop': 0,

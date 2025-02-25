@@ -12,6 +12,7 @@ module.exports = (api, options) => {
     devDependencies:{
       "@types/node": "^20.11.6",
       "ts-node": "^10.9.2",
+      "typescript": "^5.3.3"
     }
   });
   api.extendPackage({

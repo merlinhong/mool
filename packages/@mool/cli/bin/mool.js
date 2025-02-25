@@ -6,7 +6,6 @@
 const { chalk, semver } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
 const leven = require('leven')
-
 function checkNodeVersion (wanted, id) {
   if (!semver.satisfies(process.version, wanted, { includePrerelease: true })) {
     console.log(chalk.red(
@@ -18,14 +17,12 @@ function checkNodeVersion (wanted, id) {
 }
 
 checkNodeVersion(requiredVersion, '@mooljs/cli')
-
 const fs = require('fs')
 const path = require('path')
 const slash = require('slash')
 const minimist = require('minimist')
 
 // enter debug mode when creating test repo
-console.log(slash(process.cwd()));
 if (
   slash(process.cwd()).indexOf('/packages/test') > 0 && (
     fs.existsSync(path.resolve(process.cwd(), '../@mool')) ||

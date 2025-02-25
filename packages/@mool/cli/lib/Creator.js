@@ -66,7 +66,6 @@ module.exports = class Creator extends EventEmitter {
 
   async create(cliOptions = {}, preset = null) {
     const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG;
-    console.log('isTestOrDebug:',isTestOrDebug);
     const { run, name, context, afterInvokeCbs, afterAnyInvokeCbs } = this;
 
     if (!preset) {
@@ -167,7 +166,7 @@ module.exports = class Creator extends EventEmitter {
     if (packageManager === "pnpm") {
       const pnpmConfig = hasPnpmVersionOrLater("4.0.0")
         ? // pnpm v7 makes breaking change to set strict-peer-dependencies=true by default, which may cause some problems when installing
-          "strict-peer-dependencies=false\n"
+          "shamefully-hoist=true\nstrict-peer-dependencies=false\n"
         : "shamefully-flatten=true\n";
 
       await writeFileTree(context, {

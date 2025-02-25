@@ -31,7 +31,6 @@ exports.formatFeatures = (preset, name) => {
     versionInfo +
     features
       .map((dep) => {
-        dep = toShortPluginId(dep);
         return chalk.yellow(dep);
       })
       .join(", ")

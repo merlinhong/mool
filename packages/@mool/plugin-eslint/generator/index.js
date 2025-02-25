@@ -1,62 +1,68 @@
+const {resolve} = require('path');
+const fs = require('fs');
 module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
-  const devDependencies = require('../eslintDeps').getDeps(api, config, rootOptions)
+  const devDependencies = require("../eslintDeps").getDeps(
+    api,
+    config,
+    rootOptions,
+  );
 
   const pkg = {
     scripts: {
-      lint: 'mool lint'
+      lint: "mool lint",
     },
-    devDependencies
+    devDependencies,
+  };
+
+  const editorConfigTemplatePath = resolve(__dirname, `./template/${config}/.editorconfig`);
+  if (fs.existsSync(editorConfigTemplatePath)) {
+    if (fs.existsSync(api.resolve('.editorconfig'))) {
+      // Append to existing .editorconfig
+      api.render(files => {
+        const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
+        files['.editorconfig'] += `\n${editorconfig}`
+      })
+    } else {
+      api.render(`./template/${config}`)
+    }
+  }
+  if (config == "antfu") {
+    api.render(`./template/antfu`);
+  } else {
+    api.render(`./template/eslint`);
   }
 
-  // const editorConfigTemplatePath = path.resolve(__dirname, `./template/${config}/_editorconfig`)
-  // if (fs.existsSync(editorConfigTemplatePath)) {
-  //   if (fs.existsSync(api.resolve('.editorconfig'))) {
-  //     // Append to existing .editorconfig
-  //     api.render(files => {
-  //       const editorconfig = fs.readFileSync(editorConfigTemplatePath, 'utf-8')
-  //       files['.editorconfig'] += `\n${editorconfig}`
-  //     })
-  //   } else {
-  //     api.render(`./template/${config}`)
-  //   }
-  // }
-  if(config=='antfu'){
-    api.render(`./template/antfu`)
-  }else{
-    api.render(`./template/eslint`)
-
+  if (typeof lintOn === "string") {
+    lintOn = lintOn.split(",");
   }
 
-  if (typeof lintOn === 'string') {
-    lintOn = lintOn.split(',')
-  }
-
-  
-  if (lintOn.includes('commit')) {
+  if (lintOn.includes("commit")) {
     Object.assign(pkg.devDependencies, {
-      'lint-staged': '^11.1.2'
-    })
-    pkg.simpleGitHooks = {
-      'pre-commit': 'npx lint-staged',
-      "commit-msg": 'node ./scripts/verify-commit.js'
-    }
-    const extensions = require('../eslintOptions').extensions(api)
-      .map(ext => ext.replace(/^\./, '')) // remove the leading `.`
-    pkg['lint-staged'] = {
-      [`*.{${extensions.join(',')}}`]: 'mool lint'
-    }
+      "lint-staged": "^11.1.2",
+      "simple-git-hooks": "^2.11.1",
+    });
+    pkg["simple-git-hooks"] = {
+      "pre-commit": "npx lint-staged",
+      "commit-msg": "node ./scripts/verify-commit.js",
+    };
+    const extensions = require("../eslintOptions")
+      .extensions(api)
+      .map((ext) => ext.replace(/^\./, "")); // remove the leading `.`
+    pkg["lint-staged"] = {
+      [`*.{${extensions.join(",")}}`]: "mool lint",
+    };
   }
 
-  api.extendPackage(pkg)
+  api.extendPackage(pkg);
 
   // invoking only
   if (invoking) {
-    if (api.hasPlugin('unit-mocha')) {
+    if (api.hasPlugin("unit-mocha")) {
       // eslint-disable-next-line node/no-extraneous-require
-      require('@vue/cli-plugin-unit-mocha/generator').applyESLint(api)
-    } else if (api.hasPlugin('unit-jest')) {
+      require("@vue/cli-plugin-unit-mocha/generator").applyESLint(api);
+    } else if (api.hasPlugin("unit-jest")) {
       // eslint-disable-next-line node/no-extraneous-require
-      require('@vue/cli-plugin-unit-jest/generator').applyESLint(api)
+      require("@vue/cli-plugin-unit-jest/generator").applyESLint(api);
     }
   }
 
@@ -71,5 +77,4 @@ module.exports = (api, { config, lintOn = [] }, rootOptions, invoking) => {
   //     })
   //   }
   // }
-}
-
+};

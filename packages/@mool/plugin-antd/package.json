@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-antd",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "antdesign vue autoImport plugin for mool",
   "main": "index.js",
   "repository": {

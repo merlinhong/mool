@@ -7,7 +7,7 @@ module.exports = (api, options) => {
     config.plugins.push(
       Components({
         resolvers: [AntDesignVueResolver()],
-        dts: "components.d.ts",
+        dts: "types/components.d.ts",
       })
     );
   });
