@@ -79,9 +79,9 @@ module.exports = (api, options) => {
               }
             },
             server: {
-              open: open && (!initialized || options.port != server.port),
-              port: port || defaults.port,
-              host: host || defaults.host,
+              open: (args.open||open )&& (!initialized || options.port != server.port),
+              port: args.port||port || defaults.port,
+              host: args.host||host || defaults.host,
             },
             build: {
               outDir,
@@ -101,7 +101,7 @@ module.exports = (api, options) => {
       const urls = prepareURLs(
         "http",
         args.host || (options.host ?? defaults.host),
-        args.port || (options.port ?? defaults.port),
+        viteServer.config.server.port,
         isAbsoluteUrl(baseUrl) ? "/" : baseUrl
       );
 

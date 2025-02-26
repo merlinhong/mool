@@ -46,7 +46,7 @@ const isTestOrDebug = process.env.VUE_CLI_TEST || process.env.VUE_CLI_DEBUG
 const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'pnpm', 'npm']
 const PACKAGE_MANAGER_PNPM4_CONFIG = {
   install: ['install'],
-  add: ['install', '--reporter', 'info', '--shamefully-hoist'],
+  add: ['add'],
   upgrade: ['update', '--reporter', 'silent'],
   remove: ['uninstall', '--reporter', 'silent']
 }

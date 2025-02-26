@@ -70,7 +70,6 @@ exports.executeCommand = function executeCommand (command, args, cwd) {
         args.push('--json')
       }
     }
-
     const child = execa(command, args, {
       cwd,
       stdio: ['inherit', apiMode ? 'pipe' : 'inherit', !apiMode && command === 'yarn' ? 'pipe' : 'inherit']

@@ -7,9 +7,12 @@ const schema = createSchema(joi => joi.object({
   open:joi.alternatives().try(
     joi.any().valid(true,false),
     joi.string().allow('')
-
   ),
   route:joi.alternatives().try(
+    joi.object(),
+    joi.array()
+  ),
+  layout:joi.alternatives().try(
     joi.object(),
   ),
   proxy:joi.alternatives().try(

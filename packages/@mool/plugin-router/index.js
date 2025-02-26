@@ -1,4 +1,5 @@
 const pages = require("vite-plugin-pages").default;
+const layout = require("vite-plugin-vue-layouts").default;
 const merge = require("lodash.merge");
 module.exports = (api, options) => {
   const pagesPluginOption = {
@@ -7,8 +8,14 @@ module.exports = (api, options) => {
   };
 
   api.chainVite((config) => {
+    if (Array.isArray(options.route)) {
+      pagesPluginOption.onRoutesGenerated = ()=>{
+        return options.route
+      }
+    }
     config.plugins.push(
-      pages(merge(pagesPluginOption, options.route ?? {}))
+      pages(merge(pagesPluginOption, options.route ?? {})),
+      layout(options.layout??{}),
     );
   });
 };

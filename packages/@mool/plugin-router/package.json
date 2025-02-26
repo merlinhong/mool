@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-router",
-  "version": "0.1.0-beta",
+  "version": "0.2.0",
   "description": "router plugin for mool",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "vite-plugin-pages": "^0.32.4"
+    "vite-plugin-pages": "^0.32.4",
+    "vite-plugin-vue-layouts": "^0.11.0"
   },
   "devDependencies": {
     "@vue/cli-test-utils": "^5.0.8"

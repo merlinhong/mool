@@ -6,12 +6,9 @@ const {
   error,
   logWithSpinner,
   stopSpinner,
-
-  resolvePluginId,
-
   loadModule
 } = require('@vue/cli-shared-utils')
-
+const { resolvePluginId } = require("./util/resolvePlugin");
 const Generator = require('./Generator')
 
 const confirmIfGitDirty = require('./util/confirmIfGitDirty')
@@ -32,8 +29,9 @@ async function invoke (pluginName, options = {}, context = process.cwd()) {
   const findPlugin = deps => {
     if (!deps) return
     let name
+    console.log(deps[(name = `@mooljs/plugin-${pluginName}`)]);
     // official
-    if (deps[(name = `@vue/cli-plugin-${pluginName}`)]) {
+    if (deps[(name = `@mooljs/plugin-${pluginName}`)]) {
       return name
     }
     // full id, scoped short, or default short

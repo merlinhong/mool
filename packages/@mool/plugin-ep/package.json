@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-ep",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "element-plus autoImport plugin for mool",
   "main": "index.js",
   "repository": {

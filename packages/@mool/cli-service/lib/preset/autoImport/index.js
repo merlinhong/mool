@@ -16,7 +16,7 @@ module.exports = (api, options) => {
       "vue",
       "vue-router",
       {
-        [`${path.join(process.cwd(), "src/service/index")}`]: ["service"],
+        [`/src/service/index`]: ["service"],
       },
     ],
     dts: "types/auto-imports.d.ts",

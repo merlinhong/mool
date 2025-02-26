@@ -11,3 +11,8 @@ declare module "~pages" {
   const routes: RouteRecordRaw[] = [];
   export default routes;
 }
+declare module "virtual:generated-layouts" {
+  import { RouteRecordRaw } from "vue-router";
+  const routes = (arg: RouteRecordRaw[]): RouteRecordRaw[] => [];
+  export default routes;
+}
