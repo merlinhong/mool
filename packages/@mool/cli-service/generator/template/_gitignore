@@ -15,4 +15,5 @@ pnpm-debug.log*
 # Editor directories and files
 .idea
 .vscode
-
+types/auto-import.d.ts
+types/components.d.ts

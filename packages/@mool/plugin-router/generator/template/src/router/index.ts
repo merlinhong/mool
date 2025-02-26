@@ -4,7 +4,7 @@ import { setupLayouts } from 'virtual:generated-layouts'
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes:setupLayouts(routes)
+  routes: setupLayouts(routes)
 })
 
 export default router
