@@ -34,7 +34,7 @@ const SIGN_DATE_REG: RegExp = /([YyMDdHhmsiWw])(\1*)/g;
  */
 const DEFAULT_PATTERN: string = "YYYY-MM-DD hh:mm:ss:iii";
 
-class MyDate extends Date {
+export class MyDate extends Date {
   /**
    * 定义静态方法，解析成拓展的日期对象
    * @param {string} dateString 日期字符串
@@ -270,4 +270,3 @@ class MyDate extends Date {
   }
 }
 
-export default MyDate;

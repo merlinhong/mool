@@ -1,6 +1,6 @@
 import store from "store";
 
-export default {
+export const store =  {
 	// 后缀标识
 	suffix: "_deadtime",
 

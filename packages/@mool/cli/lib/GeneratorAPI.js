@@ -80,7 +80,7 @@ class GeneratorAPI {
   _injectFileMiddleware (middleware) {
     this.generator.fileMiddlewares.push(middleware)
   }
-
+  
   /**
    * Normalize absolute path, Windows-style path
    * to the relative path used as index in this.files

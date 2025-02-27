@@ -1,5 +1,5 @@
 import { isPlainObject } from ".";
-export function deepMerge<T extends Object>(...objs: (T | undefined)[]): T {
+export function deepMerge<T extends Object>(...objs: (Object)[]): T {
     const result: { [key: string]: any } = {};
   
     for (const obj of objs.filter(isPlainObject) as T[]) {

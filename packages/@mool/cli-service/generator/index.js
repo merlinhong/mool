@@ -3,7 +3,7 @@ module.exports = (api, options) => {
     lintOn: options.lintOn,
     windicss:options.windicss
   });
-
+  
   api.extendPackage({
     dependencies: {
       vue: "^3.2.25",

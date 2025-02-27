@@ -8,7 +8,7 @@
  *  深度优化遍历的深拷贝
  * @param {<T>} x
  */
-function deepClone(x: { [k in string]: any }, cache: boolean = false) {
+export function cloneDeep(x: { [k in string]: any }, cache: boolean = false) {
   const root = {} as typeof x;
 
   // 初始条件，循环的初始条件为一个节点栈，栈中存放当前需要执行操作的对象，这里是深克隆
@@ -54,4 +54,3 @@ function deepClone(x: { [k in string]: any }, cache: boolean = false) {
   }
   return root;
 }
-export default deepClone;
