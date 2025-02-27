@@ -12,8 +12,6 @@ const config = {
   default: "VITE_API_BASE_URL",
 } as const satisfies IConfig<ImportMetaEnv>;
 
-export type IApiConfig = IUrlConfig<IRootKeys<typeof config>>;
-
 // 创建服务实例并直接应用类型
 export const service = createServiceWithModules(new CreateService(config));
 
@@ -26,3 +24,6 @@ service.setResponseInterceptor(
     return err;
   }
 );
+declare global{
+  type IApiConfig = IUrlConfig<IRootKeys<typeof config>>;
+}

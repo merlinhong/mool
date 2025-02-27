@@ -1,7 +1,7 @@
 {
   "name": "mooljs",
-  "version": "0.1.2",
-  "description": "hooks for mool",
+  "version": "0.2.2",
+  "description": "function tool library for mooljs",
   "main": "lib/index.ts",
   "module": "lib/index.ts",
   "exports": {
@@ -33,11 +33,14 @@
   "dependencies": {
     "axios": "^1.6.5",
     "qs": "^6.12.1",
-    "@types/qs": "^6.9.15"
+    "@types/qs": "^6.9.15",
+    "store": "^2.0.12"
   },
   "devDependencies": {
     "@vue/cli-test-utils": "^5.0.8",
     "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.25"
   }
-
 }
