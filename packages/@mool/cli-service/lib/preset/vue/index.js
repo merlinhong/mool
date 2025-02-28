@@ -3,7 +3,7 @@ const vueJsx = require("@vitejs/plugin-vue-jsx").default;
 const vue = require("@vitejs/plugin-vue").default;
 const {createHtmlPlugin} = require( 'vite-plugin-html');
 const path = require("path");
-const {injectImport} = require('../../util/injectImport')
+const {injectImport} = require('@mooljs/cli-service/lib/util/injectImport');
 module.exports = (api, options) => {
   if(options.windicss){
     injectImport('../../main.js', `import 'virtual:windi.css';`);
@@ -13,7 +13,7 @@ module.exports = (api, options) => {
       vue(merge({}, options.vue ?? {})),
       vueJsx(merge({}, options.vueJsx ?? {})),
       createHtmlPlugin({
-        entry:path.resolve(__dirname, '../../../main.js'),
+        entry:path.relative(process.cwd(),path.resolve(__dirname, '../../../main.js')),
         template: path.resolve(__dirname, '../../../index.html')
       })
     );
