@@ -7,11 +7,6 @@ const relative = (_path,relative)=>{
     path.resolve(relative?process.cwd():__dirname, _path),
   )
 };
-const generateLocale = (code,options)=>{
-  const imports = 'import setupI18n from "@mooljs/cli-service/lib/preset/app/i18n.js"';
-  const setupI18n = `setupI18n(app,${options.locale??'{}'})`;
-  return existsSync(relative("./src/locale",true)) ? code.replace('// import-i18n',imports).replace('// setup-i18n',setupI18n) : code;
-}
 module.exports =  function virtual(options){
     const virtualModuleIds = ["virturl:app-mount"];
     return {
@@ -42,24 +37,20 @@ module.exports =  function virtual(options){
         if (id == "\0virturl:app-mount") {
             try {
               accessSync(relative("./src/app.tsx",true),constants.F_OK|constants.R_OK);
-                return generateLocale(` // import-i18n
-                         import  *  as module  from '/src/app.tsx';
+                return ` import  *  as module  from '/src/app.tsx';
                          export default function (createApp,App,router){
                          const GlobalApp = module.default?.(App)??App;
                          module.onRouterGuard?.(router);
                          const app = createApp(GlobalApp);
                          app.use(router);
-                         return app;
-                }
-                `,options);
+                         return app
+                         }`;
               } catch (error) {
-                return generateLocale(`
-                // import-i18n
-                export default function (createApp,App,router,){
+                return `export default function (createApp,App,router,){
                 const app = createApp(App);
                 app.use(router);
                 return app
-                }`,options);
+                }`;
               }
         }
       },

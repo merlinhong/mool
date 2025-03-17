@@ -1,11 +1,11 @@
 const { createHtmlPlugin } = require("vite-plugin-html");
 const path = require("path");
-const fs = require("fs").promises;
+const {existsSync,readFileSync} = require("fs");
 const viteRestart = require("vite-plugin-restart").default;
 const {
   injectWindicssImport,
 } = require("@mooljs/cli-service/lib/util/injectWindicssImport");
-const virtual = require("@mooljs/cli-service/lib/preset/app/plugins/mount.js");
+const virtual = require("@mooljs/cli-service/lib/preset/app/plugins/mount");
 const relative = (_path,relative)=>{
   return path.relative(
     process.cwd(),
@@ -19,6 +19,7 @@ module.exports = (api, options) => {
     options,
   );
 
+  
   api.chainVite((config) => {
     config.plugins.push(
       {
@@ -26,15 +27,28 @@ module.exports = (api, options) => {
         enforce: "pre",
         async transform(code, id, _options) {
           if (id.includes('router/index.js')) {
-            return options.history == 'browser' ? await fs.readFile(relative("./router/index.tmpl"), "utf-8") : code;
+            return options.history == 'browser' ? readFileSync(relative("./router/index.tmpl"), "utf-8") : code;
+          }
+          if (id.includes('main.js')) {
+            if(existsSync(relative("./src/locale",true))){
+              const lines = code.split("\n");
+              lines.splice(0, 0, `import setupI18n from "./i18n.js";`);
+              const targetIndex = lines.findIndex((line) => line.includes("app.mount"));
+              lines.splice(targetIndex, 0, `setupI18n(app,${options.locale??'{}'});`);
+              return {
+                code: lines.join("\n"),
+                map: null,
+              };
+            }
+            
           }
           return code
         },
       },
       virtual(options),
       viteRestart({
-        reload: ["src/app.tsx"],
-        restart:["src/app.tsx"],
+        reload:['src/app.tsx'],
+        restart: ["src/app.tsx"],
       }),
       createHtmlPlugin({
         // template:'index.html',
