@@ -11,7 +11,6 @@ const chokidar = require("chokidar");
 const { execSync } = require("node:child_process");
 const requiredVersion = require("vite/package.json").version;
 const colors = require("picocolors");
-
 const server = {
   port: 8080,
   host: "0.0.0.0",
@@ -22,6 +21,9 @@ const defaults = {
   https: false,
 };
 let initialized = false;
+let devServer;
+
+
 
 /** @type {import('@mooljs/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
@@ -44,6 +46,7 @@ module.exports = (api, options) => {
       },
     },
     async function serve(args) {
+
       !initialized && info("Starting development server...");
       const isInContainer = checkInContainer();
       const isProduction = process.env.NODE_ENV === "production";
@@ -64,24 +67,26 @@ module.exports = (api, options) => {
         host,
         open,
         codeSplitting,
-        windicss
       } = options;
-      const viteServer = await createServer(
+      viteServer = await createServer(
         mergeConfig(
           {
             envDir: api.resolve(".env"),
             base,
             root,
             resolve: {
-              alias:{
-                '@':api.resolve('src'),
+              alias: {
+                '@': api.resolve('src'),
                 ...alias,
               }
             },
+            optimizeDeps: {
+              include: ['vue', 'vue-router']
+            },
             server: {
-              open: (args.open||open )&& (!initialized || options.port != server.port),
-              port: args.port||port || defaults.port,
-              host: args.host||host || defaults.host,
+              open: (args.open || open) && (!initialized || options.port != server.port),
+              port: args.port || port || defaults.port,
+              host: args.host || host || defaults.host,
             },
             build: {
               outDir,
@@ -94,7 +99,8 @@ module.exports = (api, options) => {
               },
             },
           },
-          api.resolveViteConfig()
+          api.resolveViteConfig(),
+
         )
       );
       await viteServer.listen();
@@ -116,16 +122,9 @@ module.exports = (api, options) => {
       > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
         `);
       }
-
       server.port = options.port;
       server.host = options.host;
-      const wat = chokidar.watch(api.resolve(".moolrc.ts"));
-      wat.on("change", async (d) => {
-        await viteServer.close();
-      });
-
       initialized = true;
-
       return new Promise((resolve) => {
         resolve({
           server: viteServer,

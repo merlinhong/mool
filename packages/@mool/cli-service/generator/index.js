@@ -1,19 +1,21 @@
 module.exports = (api, options) => {
   api.render("./template", {
     lintOn: options.lintOn,
-    windicss:options.windicss
+    windicss: options.windicss,
+    title: "<%= title %>",
+    entry: "<%= entry %>",
   });
-  
+
   api.extendPackage({
     dependencies: {
       vue: "^3.2.25",
-      mooljs: "^0.2.2",
+      mooljs: "^0.4.2",
     },
-    devDependencies:{
+    devDependencies: {
       "@types/node": "^20.11.6",
       "ts-node": "^10.9.2",
-      "typescript": "^5.3.3"
-    }
+      typescript: "^5.3.3",
+    },
   });
   api.extendPackage({
     scripts: {

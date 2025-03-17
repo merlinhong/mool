@@ -195,7 +195,8 @@ module.exports = class Service {
       './preset/compression/index',
       './preset/service/index',
       './preset/svg/index',
-      './preset/vue/index'
+      './preset/vue/index',
+      './preset/app/index'
     ].map((id) => idToPlugin(id))
 
     if (inlinePlugins) {

@@ -5,6 +5,15 @@ import { OutputOptions } from "rollup";
 import {type UserOptions as layoutOpt} from "vite-plugin-vue-layouts";
 interface ProjectOptions {
   /**
+   * route mode
+   * @default `hash`
+   */
+  history:'browser'|'hash'|'memory';
+  /**
+   * page title
+   */
+  title:string;
+  /**
    * Option configuration for vite-plugin-pages
    * @default dirs: ['src/pages'],
    */

@@ -16,3 +16,8 @@ declare module "virtual:generated-layouts" {
  export const setupLayouts = (arg: RouteRecordRaw[]): RouteRecordRaw[] => [];
 
 }
+declare namespace JSX{
+  interface IntrinsicElements{
+    [elemName:string]:any;
+  }
+}

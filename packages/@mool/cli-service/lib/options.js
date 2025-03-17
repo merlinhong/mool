@@ -1,6 +1,8 @@
 const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
+  history:joi.string().valid('browser','hash','memory'),
+  title:joi.string().allow(''),
   base: joi.string().allow(''),
   outDir: joi.string(),
   root: joi.string(),
