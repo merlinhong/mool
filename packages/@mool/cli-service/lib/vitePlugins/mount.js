@@ -1,12 +1,5 @@
-
-const path = require("path");
-const {accessSync,existsSync,constants} = require("fs");
-const relative = (_path,relative)=>{
-  return path.relative(
-    process.cwd(),
-    path.resolve(relative?process.cwd():__dirname, _path),
-  )
-};
+const relative = require("@mooljs/cli-service/lib/util/getRelativeUrl");
+const {accessSync,constants} = require("fs");
 module.exports =  function virtual(options){
     const virtualModuleIds = ["virturl:app-mount"];
     return {
