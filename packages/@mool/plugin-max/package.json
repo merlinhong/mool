@@ -1,0 +1,38 @@
+{
+    "name": "@mooljs/plugin-max",
+    "version": "0.1.0-beta",
+    "description": "built in many plugins in common use fro enterprise level app",
+    "main": "index.js",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/merlinhong/mool.git",
+      "directory": "packages/@mool/plugin-max"
+    },
+    "keywords": [
+      "vue3",
+      "mooljs",
+      "max",
+      "plugins"
+    ],
+    "author": "Merlin Hong",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/merlinhong/mool/issues"
+    },
+    "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-max#readme",
+    "publishConfig": {
+      "access": "public"
+    },
+    "dependencies": {
+      "@vue/cli-shared-utils": "^5.0.8",
+      "vite-plugin-vue-layouts": "^0.11.0",
+      "element-plus": "^2.5.3",
+      "vue-i18n": "^11.1.2",
+      "vite-plugin-windicss": "^1.9.4",
+      "windicss": "^3.5.6"
+    },
+    "devDependencies": {
+      "@vue/cli-test-utils": "^5.0.8"
+    }
+  }
+  

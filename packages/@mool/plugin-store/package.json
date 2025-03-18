@@ -1,27 +1,30 @@
 {
-  "name": "@mooljs/plugin-pinia",
-  "version": "0.0.2-beta",
-  "description": "pinia plugin for mool-cli",
+  "name": "@mooljs/plugin-store",
+  "version": "0.3.0",
+  "description": "store plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-pinia"
+    "directory": "packages/@mool/plugin-store"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "pinia"
+    "store"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/main/packages/@mool/plugin-pinia#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-store#readme",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@vue/cli-shared-utils": "^5.0.8"
   },
   "devDependencies": {
     "@vue/cli-test-utils": "^5.0.8"
