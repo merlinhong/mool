@@ -25,21 +25,7 @@ module.exports = (api, options) => {
     browserslist: ["> 1%", "last 2 versions", "not dead", "not ie 11"],
   });
 
-  const deps = {
-    sass: {
-      sass: "^1.32.7",
-    },
-    "dart-sass": {
-      sass: "^1.32.7",
-    },
-    less: {
-      less: "^4.0.0",
-    },
-  };
 
-  api.extendPackage({
-    devDependencies: deps[options.cssPreprocessor],
-  });
 
  
   // additional tooling configurations

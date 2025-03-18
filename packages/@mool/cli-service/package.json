@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/cli-service",
-  "version": "2.5.3-beta",
+  "version": "2.6.1-beta",
   "description": "app frame upgrade for mool service",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -62,6 +62,8 @@
     "picocolors": "^1.1.1",
     "portfinder": "^1.0.26",
     "postcss": "^8.2.6",
+    "sass": "^1.32.7",
+    "less": "^4.0.0",
     "qs": "^6.12.1",
     "ssri": "^8.0.1",
     "ts-node": "^10.9.2",

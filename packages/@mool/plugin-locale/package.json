@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-locale",
-  "version": "0.3.0",
+  "version": "0.1.0",
   "description": "i18n plugin for mool",
   "main": "index.js",
   "repository": {

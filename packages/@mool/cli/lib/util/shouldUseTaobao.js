@@ -10,7 +10,7 @@ const registries = require('./registries')
 const { loadOptions, saveOptions } = require('../options')
 
 async function ping (registry) {
-  await request.get(`${registry}/vue-cli-version-marker/latest`)
+  await request.get(`${registry}/mool-cli-version-marker/latest`)
   return registry
 }
 

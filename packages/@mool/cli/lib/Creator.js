@@ -103,7 +103,6 @@ module.exports = class Creator extends EventEmitter {
       },
       preset,
     );
-    console.log(33, preset);
 
     if (preset.answers.preset == "__max__") {
       preset.plugins["@mooljs/plugin-max"] = {};
@@ -150,7 +149,7 @@ module.exports = class Creator extends EventEmitter {
 
       if (!version) {
         if (isOfficialPlugin(dep) || dep === "@mooljs/cli-service") {
-          version = isTestOrDebug ? `latest` : `~${latestMinor}`;
+          version = isTestOrDebug ? `latest` : `${latestMinor}`;
         } else {
           version = "latest";
         }

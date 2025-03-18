@@ -416,7 +416,7 @@ class PackageManager {
       const realname = stripVersion(packname)
       if (
         isTestOrDebug &&
-        (packname === '@vue/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
+        (packname === '@mooljs/cli-service' || isOfficialPlugin(resolvePluginId(realname)))
       ) {
         // link packages in current repo for test
         const src = path.resolve(__dirname, `../../../../${realname}`)
