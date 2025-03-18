@@ -1,4 +1,4 @@
-#!/usr/bin/env node --module-type=commonjs
+#!/usr/bin/env node
 
 const { semver, error,log } = require('@vue/cli-shared-utils')
 const requiredVersion = require('../package.json').engines.node
@@ -50,7 +50,7 @@ async function start(){
     res =  await service.run(command, args, rawArgv);
     res.server.restart();
    } catch (error) {
-       error(err)
+       console.log(error);
        process.exit(1)
    }
 }

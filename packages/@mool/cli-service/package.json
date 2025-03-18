@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/cli-service",
-  "version": "2.3.0-beta",
+  "version": "2.5.2-beta",
   "description": "app frame upgrade for mool service",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",

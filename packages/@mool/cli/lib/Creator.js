@@ -41,7 +41,8 @@ const {
   loadModule,
 } = require("@vue/cli-shared-utils");
 
-const isManualMode = (answers) => answers.preset === "__manual__";
+const isManualMode = (answers) =>
+  answers.preset === "__manual__" || answers.preset === "__max__";
 
 module.exports = class Creator extends EventEmitter {
   constructor(name, context, promptModules) {
@@ -81,7 +82,7 @@ module.exports = class Creator extends EventEmitter {
           preset = JSON.parse(cliOptions.inlinePreset);
         } catch (e) {
           error(
-            `CLI inline preset is not valid JSON: ${cliOptions.inlinePreset}`
+            `CLI inline preset is not valid JSON: ${cliOptions.inlinePreset}`,
           );
           exit(1);
         }
@@ -91,7 +92,7 @@ module.exports = class Creator extends EventEmitter {
     }
 
     // inject core router
-    preset.plugins['@mooljs/plugin-router'] = {};
+    preset.plugins["@mooljs/plugin-router"] = {};
 
     // clone before mutating
     preset = cloneDeep(preset);
@@ -100,10 +101,14 @@ module.exports = class Creator extends EventEmitter {
       {
         projectName: name,
       },
-      preset
+      preset,
     );
+    console.log(33, preset);
 
-    
+    if (preset.answers.preset == "__max__") {
+      preset.plugins["@mooljs/plugin-max"] = {};
+    }
+
     // // legacy support for vuex
     // if (preset.vuex) {
     //   preset.plugins["@vue/cli-plugin-vuex"] = {};
@@ -144,10 +149,7 @@ module.exports = class Creator extends EventEmitter {
       let { version } = preset.plugins[dep];
 
       if (!version) {
-        if (
-          isOfficialPlugin(dep) ||
-          dep === "@mooljs/cli-service"
-        ) {
+        if (isOfficialPlugin(dep) || dep === "@mooljs/cli-service") {
           version = isTestOrDebug ? `latest` : `~${latestMinor}`;
         } else {
           version = "latest";
@@ -186,14 +188,14 @@ module.exports = class Creator extends EventEmitter {
     // install plugins
     log(`⚙\u{fe0f}  Installing CLI plugins. This might take a while...`);
     log();
-    
+
     this.emit("creation", { event: "plugins-install" });
 
     if (isTestOrDebug && !process.env.VUE_CLI_TEST_DO_INSTALL_PLUGIN) {
       // in development, avoid installation process
       await require("./util/setupDevProject")(context);
     } else {
-      console.log('正在安装 Installing.... '); // 添加这行
+      console.log("正在安装 Installing.... "); // 添加这行
       await pm.install();
     }
 
@@ -210,7 +212,7 @@ module.exports = class Creator extends EventEmitter {
     await generator.generate({
       extractConfigFiles: false,
     });
-    
+
     // install additional deps (injected by generators)
     log(`📦  Installing additional dependencies...`);
     this.emit("creation", { event: "deps-install" });
@@ -269,10 +271,10 @@ module.exports = class Creator extends EventEmitter {
               packageManager === "yarn"
                 ? "yarn serve"
                 : packageManager === "pnpm"
-                ? "pnpm run serve"
-                : "npm run serve"
-            }`
-          )
+                  ? "pnpm run serve"
+                  : "npm run serve"
+            }`,
+          ),
       );
     }
     log();
@@ -314,8 +316,8 @@ module.exports = class Creator extends EventEmitter {
     preset = {
       useConfigFiles: answers.useConfigFiles === "files",
       plugins: {},
-      lintOn:answers.lintOn,
-      windicss:answers.features.includes('windicss')
+      lintOn: answers.lintOn,
+      answers,
     };
     answers.features = answers.features || [];
     // run cb registered by prompt modules to finalize the preset
@@ -369,24 +371,30 @@ module.exports = class Creator extends EventEmitter {
       let displayName = name;
       // Vue version will be showed as features anyway,
       // so we shouldn't display it twice.
-      if (name === "Web") {
-        displayName = "Single Web App";
+      let opt = {
+        Single: "__manual__",
+        Max: "__max__",
+        "Cross Platform": "__cp__",
+      };
+      if (name === "Single") {
+        displayName = "Single App";
       }
-      if (name === "CP") {
+      if (name === "Max") {
+        displayName = "Max App";
+      }
+      if (name === "Cross Platform") {
         displayName = "Cross-Platform App";
       }
-      if (name === "Desktop") {
-        displayName = "Desktop App";
-      }
+
       return {
         name: `${displayName} (${formatFeatures(preset, name)})`,
-        value: "__manual__",
+        value: opt[name],
       };
     });
     const presetPrompt = {
       name: "preset",
       type: "list",
-      message: `Please pick mool app template:`,
+      message: `Please pick mooljs app template:`,
       choices: [...presetChoices],
     };
     const featurePrompt = {

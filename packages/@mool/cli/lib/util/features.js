@@ -18,12 +18,14 @@ exports.getFeatures = (preset) => {
   return features;
 };
 const opt = {
-  CP: "uni",
-  Desktop: "electron",
+  "Cross Platform": "uni/electron",
+  Max: "built in many plugins in common use for enterprise level app",
 };
 exports.formatFeatures = (preset, name) => {
   const versionInfo = chalk.yellow(
-    `[Vue 3${opt[name] ? " + " + opt[name] : ""}] typescript, `
+    name == "Max"
+      ? opt[name]
+      : `[Vue 3${opt[name] ? " + " + opt[name] : ""}] typescript, `,
   );
   const features = exports.getFeatures(preset);
 

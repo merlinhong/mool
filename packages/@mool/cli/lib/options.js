@@ -45,6 +45,7 @@ const presetSchema = createSchema((joi) =>
       plugins: joi.object().required(),
       configs: joi.object(),
       lintOn:joi.array(),
+      answers:joi.object(),
       windicss: joi.boolean(), // windicss
     })
 )
@@ -79,9 +80,9 @@ exports.defaults = {
   packageManager: undefined,
   useTaobaoRegistry: undefined,
   presets: {
-    'Web': Object.assign(exports.defaultPreset),
-    'CP': Object.assign(exports.defaultPreset),
-    'Desktop': Object.assign(exports.defaultPreset),
+    'Single': Object.assign(exports.defaultPreset),
+    'Max': Object.assign(exports.defaultPreset),
+    'Cross Platform': Object.assign(exports.defaultPreset),
   }
 }
 
