@@ -32,8 +32,8 @@ export default function (app, options)  {
         legacy: false,
         allowComposition: true,
         messages: {
-          'en-US': modules.en,
-          'zh-CN': modules.cn,
+          'en-US': modules['en-US'],
+          'zh-CN': modules['zh-CN'],
         },
         ...options,
       }))

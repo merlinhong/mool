@@ -1,6 +1,6 @@
 const relative = require("@mooljs/cli-service/lib/util/getRelativeUrl");
 const {accessSync,constants} = require("fs");
-module.exports =  function virtual(options){
+module.exports =  function virtual(api,options){
     const virtualModuleIds = ["virturl:app-mount"];
     return {
       name: "vite-mooljs-virtual",
@@ -29,7 +29,7 @@ module.exports =  function virtual(options){
       async load(id) {
         if (id == "\0virturl:app-mount") {
             try {
-              accessSync(relative("./src/app.tsx",true),constants.F_OK|constants.R_OK);
+              accessSync(api.resolve("src/app.tsx"),constants.F_OK|constants.R_OK);
                 return ` import  *  as module  from '/src/app.tsx';
                          export default function (createApp,App,router){
                          const GlobalApp = module.default?.(App)??App;

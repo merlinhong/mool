@@ -1,6 +1,15 @@
 const { existsSync, readFileSync } = require("fs");
-const relative = require("@mooljs/cli-service/lib/util/getRelativeUrl");
-module.exports = function tranform(options) {
+const browserCode = 
+` import { createRouter, createWebHistory,RouterView} from 'vue-router';
+  import routes from '~pages';
+  const router = createRouter({
+      history: createWebHistory(),
+      routes,
+  });
+  export default router;
+  export {RouterView}
+`
+module.exports = function tranform(api,options) {
   return {
     name: "vite-mooljs-plugin-router",
     enforce: "pre",
@@ -8,17 +17,17 @@ module.exports = function tranform(options) {
       if (id.includes("router/index.js")) {
         code =
           options.history == "browser"
-            ? readFileSync(relative("./router/index.tmpl"), "utf-8")
+            ? browserCode
             : code;
         const lines = code.split("\n");
-        if (existsSync(relative("./src/layouts", true))) {
+        if (existsSync(api.resolve("src/layouts"))) {
           lines.splice(
             0,
             0,
             `import { setupLayouts } from 'virtual:generated-layouts'`,
           );
           const targetIndex = lines.findIndex((line) =>
-            line.includes("routes:routes"),
+            line.includes("routes,"),
           );
           lines.splice(targetIndex, 1, `routes: setupLayouts(routes)`);
           return {

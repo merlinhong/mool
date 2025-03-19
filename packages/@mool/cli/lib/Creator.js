@@ -149,7 +149,7 @@ module.exports = class Creator extends EventEmitter {
 
       if (!version) {
         if (isOfficialPlugin(dep) || dep === "@mooljs/cli-service") {
-          version = isTestOrDebug ? `latest` : `${latestMinor}`;
+          version = isTestOrDebug ? `latest` : `~${latestMinor}`;
         } else {
           version = "latest";
         }

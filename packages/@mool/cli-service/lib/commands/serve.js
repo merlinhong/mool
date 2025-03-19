@@ -10,6 +10,7 @@ const getBaseUrl = require("../util/getBaseUrl");
 const chokidar = require("chokidar");
 const { execSync } = require("node:child_process");
 const requiredVersion = require("vite/package.json").version;
+const {existsSync,readFileSync} = require("fs");
 const colors = require("picocolors");
 const server = {
   port: 8080,
@@ -68,6 +69,10 @@ module.exports = (api, options) => {
         open,
         codeSplitting,
       } = options;
+      const optimizeDepsIncludes = ['vue','vue-router'];
+      if(existsSync(api.resolve("src/locale"))){
+        optimizeDepsIncludes.push('vue-i18n');
+      }
       viteServer = await createServer(
         mergeConfig(
           {
@@ -81,7 +86,7 @@ module.exports = (api, options) => {
               }
             },
             optimizeDeps: {
-              include: ['vue', 'vue-router']
+              include:optimizeDepsIncludes
             },
             server: {
               open: (args.open || open) && (!initialized || options.port != server.port),
