@@ -22,7 +22,7 @@ export const LOCALE_OPTIONS = [
   { label: '中文', value: 'zh-CN' },
   { label: 'English', value: 'en-US' },
 ];
-const defaultLocale = localStorage.getItem('arco-locale') || 'zh-CN';
+const defaultLocale = localStorage.getItem('mooljs-locale') || 'zh-CN';
 
 
 export default function (app, options)  {

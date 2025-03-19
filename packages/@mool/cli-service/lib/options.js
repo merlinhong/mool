@@ -1,6 +1,9 @@
 const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
+  locale:joi.alternatives().try(
+    joi.object(),
+  ),
   history:joi.string().valid('browser','hash','memory'),
   title:joi.string().allow(''),
   base: joi.string().allow(''),
@@ -98,11 +101,15 @@ exports.defaults = () => ({
   souremap: true,
 
   // Automatically open the application in the browser when the development server starts up. When the value is a string, it will be used as the path name for the URL
-  open: '',
+  open: true,
 
   // Specify which IP address the server should listen to
   host: 'localhost',
 
   // This option allows you to create custom public chunks. When the value is in object form, each attribute represents a chunk. When the value of this option is in the form of a function, each parsed module will be processed by this function. If the function returns a string, then the module and all its dependencies will be added to a custom chunk named after the return string
   codeSplit:{},
+
+  route:{
+    extensions:['vue','tsx']
+  }
 })

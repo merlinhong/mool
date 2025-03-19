@@ -3,7 +3,13 @@ import { type UserOptions, VueRoute } from "vite-plugin-pages";
 import { InlineConfig, ProxyOptions } from "vite";
 import { OutputOptions } from "rollup";
 import {type UserOptions as layoutOpt} from "vite-plugin-vue-layouts";
+import { I18nOptions } from 'vue-i18n';
+
 interface ProjectOptions {
+  /**
+   * Multilingual configuration options
+   */
+  locale:I18nOptions;
   /**
    * route mode
    * @default `hash`

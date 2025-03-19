@@ -6,16 +6,7 @@ declare module "*.vue" {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
-declare module "~pages" {
-  import { RouteRecordRaw } from "vue-router";
-  const routes: RouteRecordRaw[] = [];
-  export default routes;
-}
-declare module "virtual:generated-layouts" {
-  import { RouteRecordRaw } from "vue-router";
- export const setupLayouts = (arg: RouteRecordRaw[]): RouteRecordRaw[] => [];
 
-}
 declare namespace JSX{
   interface IntrinsicElements{
     [elemName:string]:any;
