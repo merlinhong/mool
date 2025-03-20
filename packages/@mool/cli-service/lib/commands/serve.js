@@ -1,17 +1,11 @@
 const {
   info,
-  error,
-  hasProjectYarn,
-  hasProjectPnpm,
-  IpcMessenger,
-  loadModule,
 } = require("@vue/cli-shared-utils");
 const getBaseUrl = require("../util/getBaseUrl");
-const chokidar = require("chokidar");
-const { execSync } = require("node:child_process");
-const requiredVersion = require("vite/package.json").version;
-const {existsSync,readFileSync} = require("fs");
+const { existsSync, accessSync, readdirSync, constants } = require("fs");
+const vitePluginConfigHMR = require("@mooljs/cli-service/lib/vitePlugins/config-hmr");
 const colors = require("picocolors");
+
 const server = {
   port: 8080,
   host: "0.0.0.0",
@@ -21,11 +15,7 @@ const defaults = {
   port: 8080,
   https: false,
 };
-let initialized = false;
-let devServer;
-
-
-
+let initialized;
 /** @type {import('@mooljs/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const baseUrl = getBaseUrl(options);
@@ -67,75 +57,104 @@ module.exports = (api, options) => {
         port,
         host,
         open,
+        proxy,
         codeSplitting,
       } = options;
-      const optimizeDepsIncludes = ['vue','vue-router'];
-      if(existsSync(api.resolve("src/locale"))){
+      const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs'];
+      if (existsSync(api.resolve("src/locale"))) {
         optimizeDepsIncludes.push('vue-i18n');
       }
-      viteServer = await createServer(
-        mergeConfig(
-          {
-            envDir: api.resolve(".env"),
-            base,
-            root,
-            resolve: {
-              alias: {
-                '@': api.resolve('src'),
-                ...alias,
-              }
-            },
-            optimizeDeps: {
-              include:optimizeDepsIncludes
-            },
-            server: {
-              open: (args.open || open) && (!initialized || options.port != server.port),
-              port: args.port || port || defaults.port,
-              host: args.host || host || defaults.host,
-            },
-            build: {
-              outDir,
-              assetsDir,
-              sourcemap,
-              rollupOptions: {
-                output: {
-                  manualChunks: codeSplitting,
+      try {
+        require.resolve('element-plus');
+        optimizeDepsIncludes.push("element-plus", "@element-plus/icons-vue", "element-plus/es");
+        readdirSync("node_modules/element-plus/es/components").map((dirname) => {
+          try {
+            accessSync(`node_modules/element-plus/es/components/${dirname}/style/css.mjs`, constants.R_OK | constants.W_OK);
+            let path = `element-plus/es/components/${dirname}/style/css`;
+            optimizeDepsIncludes.push(path);
+          } catch (error) {
+          }
+        })
+      } catch (error) {
+      }
+      const _createViteDevServer = async () => {
+        const viteServer = await createServer(
+          mergeConfig(
+            {
+              envDir: api.resolve("env"),
+              base,
+              root,
+              plugins: [
+                vitePluginConfigHMR('.moolrc.ts', async () => {
+                  api.loadConfig();
+                  // 先销毁服务器实例
+                  await viteServer.close()
+                  // 再重新执行服务器初始化的流程
+                  await _createViteDevServer()
+                })
+              ],
+              resolve: {
+                alias: {
+                  '@': api.resolve('src'),
+                  ...alias,
+                }
+              },
+              optimizeDeps: {
+                include: optimizeDepsIncludes
+              },
+              server: {
+                open: (args.open || open) && (!initialized || options.port != server.port),
+                port: args.port || port || defaults.port,
+                host: args.host || host || defaults.host,
+                warmup: {
+                  clientFiles: ['/src/components/*.vue', '/src/service/*.ts', '/src/store/*.ts', '/src/utils/*.ts'],
+                },
+                proxy
+              },
+              build: {
+                outDir,
+                assetsDir,
+                sourcemap,
+                rollupOptions: {
+                  output: {
+                    manualChunks: codeSplitting,
+                  },
                 },
               },
             },
-          },
-          api.resolveViteConfig(),
+            api.resolveViteConfig(),
 
-        )
-      );
-      await viteServer.listen();
-      const urls = prepareURLs(
-        "http",
-        args.host || (options.host ?? defaults.host),
-        viteServer.config.server.port,
-        isAbsoluteUrl(baseUrl) ? "/" : baseUrl
-      );
-
-      if (
-        (options.port && options.port != server.port) ||
-        (!options.port && !initialized)
-      ) {
-        console.log(`
-      ${colors.cyanBright(`vite ${requiredVersion}`)} ${colors.greenBright(
-          "dev server running at:"
-        )}\n
-      > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
-        `);
+          )
+        );
+        await viteServer.listen();
+        const urls = prepareURLs(
+          "http",
+          args.host || (options.host ?? defaults.host),
+          viteServer.config.server.port,
+          isAbsoluteUrl(baseUrl) ? "/" : baseUrl
+        );
+        if (
+          (options.port && options.port != server.port) ||
+          (!options.port && !initialized)
+        ) {
+          console.log(`
+        ${colors.cyanBright(`vite`)} ${colors.greenBright(
+            "dev server running at:"
+          )}\n
+        > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
+          `);
+        }
+        server.port = options.port;
+        server.host = options.host;
+        initialized = true;
       }
-      server.port = options.port;
-      server.host = options.host;
-      initialized = true;
-      return new Promise((resolve) => {
-        resolve({
-          server: viteServer,
-          url: urls.localUrlForBrowser,
-        });
-      });
+      await _createViteDevServer();
+      // return new Promise((resolve) => {
+      //   resolve({
+      //     server: viteServer,
+      //     // url: urls.localUrlForBrowser,
+      //   });
+      // });
     }
   );
 };

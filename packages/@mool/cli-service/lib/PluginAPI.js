@@ -46,6 +46,12 @@ class PluginAPI {
     return this.service.context
   }
 
+  
+  loadConfig (key, defaultValue) {
+    return this.service.init('',['built-in:commands/serve']);
+  }
+
+
   /**
    * Resolve path for a project.
    *

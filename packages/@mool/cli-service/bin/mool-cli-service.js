@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
-const { semver, error, log } = require("@vue/cli-shared-utils");
+const { semver, error } = require("@vue/cli-shared-utils");
 const requiredVersion = require("../package.json").engines.node;
-const path = require("node:path");
-const chokidar = require("chokidar");
-const colors = require("picocolors");
+
 if (
   !semver.satisfies(process.version, requiredVersion, {
     includePrerelease: true,
@@ -12,7 +10,7 @@ if (
 ) {
   error(
     `You are using Node ${process.version}, but mool-cli-service ` +
-      `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`,
+    `requires Node ${requiredVersion}.\nPlease upgrade your Node version.`,
   );
   process.exit(1);
 }
@@ -39,21 +37,9 @@ const args = require("minimist")(rawArgv, {
   ],
 });
 const command = args._[0];
-const watcher = chokidar.watch(path.resolve(process.cwd(), ".moolrc.ts"));
-let res;
-watcher.on("change", async (d) => {
-  // await emitter.emit("update", );
-  await res.server.close();
-  log(
-    `${colors.cyanBright("[vite]")} ${colors.greenBright(".moolrc.ts changed, restarting server...")}`,
-  );
-  setTimeout(() => start(true), 100);
-});
-
 async function start(restart) {
   try {
-    res = await service.run(command, args, rawArgv);
-    restart && res.server.restart();
+    await service.run(command, args, rawArgv)
   } catch (error) {
     console.log(error);
     process.exit(1);
