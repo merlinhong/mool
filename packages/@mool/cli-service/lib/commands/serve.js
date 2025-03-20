@@ -37,9 +37,7 @@ module.exports = (api, options) => {
       },
     },
     async function serve(args) {
-
       !initialized && info("Starting development server...");
-      const isInContainer = checkInContainer();
       const isProduction = process.env.NODE_ENV === "production";
       const prepareURLs = require("../util/prepareURLs");
       const isAbsoluteUrl = require("../util/isAbsoluteUrl");
@@ -77,84 +75,81 @@ module.exports = (api, options) => {
         })
       } catch (error) {
       }
-      const _createViteDevServer = async () => {
-        const viteServer = await createServer(
-          mergeConfig(
-            {
-              envDir: api.resolve("env"),
-              base,
-              root,
-              plugins: [
-                vitePluginConfigHMR('.moolrc.ts', async () => {
-                  api.loadConfig();
-                  // 先销毁服务器实例
-                  await viteServer.close()
-                  // 再重新执行服务器初始化的流程
-                  await _createViteDevServer()
-                })
-              ],
-              resolve: {
-                alias: {
-                  '@': api.resolve('src'),
-                  ...alias,
-                }
+      const viteServer = await createServer(
+        mergeConfig(
+          {
+            envDir: api.resolve("env"),
+            base,
+            root,
+            plugins: [
+              vitePluginConfigHMR('.moolrc.ts', async () => {
+                // 先销毁服务器实例
+                await viteServer.close();
+                // 再重新执行服务器初始化的流程
+                // await _createViteDevServer(true)
+                api.run();
+              })
+            ],
+            resolve: {
+              alias: {
+                '@': api.resolve('src'),
+                ...alias,
+              }
+            },
+            optimizeDeps: {
+              include: optimizeDepsIncludes
+            },
+            server: {
+              open: (args.open || open) && (!initialized || options.port != server.port),
+              port: args.port || port || defaults.port,
+              host: args.host || host || defaults.host,
+              warmup: {
+                clientFiles: ['/src/components/*.vue', '/src/service/*.ts', '/src/store/*.ts', '/src/utils/*.ts'],
               },
-              optimizeDeps: {
-                include: optimizeDepsIncludes
-              },
-              server: {
-                open: (args.open || open) && (!initialized || options.port != server.port),
-                port: args.port || port || defaults.port,
-                host: args.host || host || defaults.host,
-                warmup: {
-                  clientFiles: ['/src/components/*.vue', '/src/service/*.ts', '/src/store/*.ts', '/src/utils/*.ts'],
-                },
-                proxy
-              },
-              build: {
-                outDir,
-                assetsDir,
-                sourcemap,
-                rollupOptions: {
-                  output: {
-                    manualChunks: codeSplitting,
-                  },
+              proxy
+            },
+            build: {
+              outDir,
+              assetsDir,
+              sourcemap,
+              rollupOptions: {
+                output: {
+                  manualChunks: codeSplitting,
                 },
               },
             },
-            api.resolveViteConfig(),
+          },
+          api.resolveViteConfig(),
 
-          )
-        );
-        await viteServer.listen();
-        const urls = prepareURLs(
-          "http",
-          args.host || (options.host ?? defaults.host),
-          viteServer.config.server.port,
-          isAbsoluteUrl(baseUrl) ? "/" : baseUrl
-        );
-        if (
-          (options.port && options.port != server.port) ||
-          (!options.port && !initialized)
-        ) {
-          console.log(`
-        ${colors.cyanBright(`vite`)} ${colors.greenBright(
-            "dev server running at:"
-          )}\n
-        > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
-          `);
-        }
-        server.port = options.port;
-        server.host = options.host;
-        initialized = true;
+        )
+      );
+      await viteServer.listen();
+      const urls = prepareURLs(
+        "http",
+        args.host || (options.host ?? defaults.host),
+        viteServer.config.server.port,
+        isAbsoluteUrl(baseUrl) ? "/" : baseUrl
+      );
+      if (
+        (options.port && options.port != server.port) ||
+        (!options.port && !initialized)
+      ) {
+        console.log(`
+      ${colors.cyanBright(`vite`)} ${colors.greenBright(
+          "dev server running at:"
+        )}\n
+      > Local: ${colors.cyanBright(urls.localUrlForBrowser)}
+        `);
       }
-      await _createViteDevServer();
-      // return new Promise((resolve) => {
-      //   resolve({
-      //     server: viteServer,
-      //     // url: urls.localUrlForBrowser,
-      //   });
-      // });
+      server.port = options.port;
+      server.host = options.host;
+      initialized = true;
+      return new Promise((resolve) => {
+        resolve({
+          // server: viteServer,
+          // url: urls.localUrlForBrowser,
+        });
+      });
     }
   );
 };

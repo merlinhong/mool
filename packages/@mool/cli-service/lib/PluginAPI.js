@@ -46,9 +46,12 @@ class PluginAPI {
     return this.service.context
   }
 
-  
-  loadConfig (key, defaultValue) {
-    return this.service.init('',['built-in:commands/serve']);
+  /**
+   * 
+   * provide a methods to run serve command
+   */
+  run (key, defaultValue) {
+    return this.service.run('serve');
   }
 
 
