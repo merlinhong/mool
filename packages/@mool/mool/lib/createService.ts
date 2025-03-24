@@ -16,42 +16,6 @@ import qs from "qs";
 import { isPlainObject } from "./utils/index";
 import { IncomingMessage, ServerResponse } from "http";
 
-function capitalize<T extends keyof HttpMethodMap>(str: T) {
-  if (typeof str !== "string") {
-    return str; // 如果不是字符串，直接返回原字符串
-  }
-  const firstLetter = str.charAt(0).toUpperCase(); // 首字母大写
-  const restOfString = str.slice(1).toLowerCase(); // 其余部分小写
-  return (firstLetter + restOfString) as CapitalizeHttpMethod<T>; // 拼接并返回
-}
-type CapitalizeHttpMethod<T extends keyof HttpMethodMap> =
-  T extends keyof HttpMethodMap ? HttpMethodMap[T] : never;
-
-type CommonResponse<T = any> = {
-  code: number;
-  data: T;
-  msg: string;
-};
-type HttpMethodMap = {
-  get: "Get";
-  GET: "Get";
-  delete: "Delete";
-  DELETE: "Delete";
-  head: "Head";
-  HEAD: "Head";
-  options: "Options";
-  OPTIONS: "Options";
-  post: "Post";
-  POST: "Post";
-  put: "Put";
-  PUT: "Put";
-  patch: "Patch";
-  PATCH: "Patch";
-  link: "Link";
-  LINK: "Link";
-  unlink: "Unlink";
-  UNLINK: "Unlink";
-};
 
 export enum StateEnum {
   OK = 200,

@@ -57,7 +57,10 @@ const schema = createSchema(joi => joi.object({
   compression:joi.alternatives().try(
     joi.object(),
   ),
-  mock:joi.any().valid(true, false),
+  mock:joi.alternatives().try(
+    joi.any().valid(true, false),
+    joi.object()
+  ),
   // known runtime options for built-in plugins
   lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   autoImport:joi.alternatives().try(

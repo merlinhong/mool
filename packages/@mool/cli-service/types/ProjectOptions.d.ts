@@ -128,7 +128,7 @@ interface ProjectOptions {
    * Default `false`
    * if enable the mock service
    */
-  mock: boolean;
+  mock: boolean|IOpt['mock'];
 
   /**
    * 

@@ -35,6 +35,7 @@ module.exports =  function virtual(api,options){
                          const GlobalApp = module.default?.(App)??App;
                          module.onRouterGuard?.(router);
                          const app = createApp(GlobalApp);
+                         module.onSetupPlugins?.(app);
                          app.use(router);
                          return app
                          }`;
