@@ -1,4 +1,9 @@
-import type { ViteMockOptions, MockMethod, Recordable, RespThisType } from "./types";
+import type {
+  ViteMockOptions,
+  MockMethod,
+  Recordable,
+  RespThisType,
+} from "./types";
 
 import path from "node:path";
 import fs from "node:fs";
@@ -8,12 +13,18 @@ import url from "url";
 import fg from "fast-glob";
 import Mock from "mockjs";
 import { pathToRegexp, match } from "path-to-regexp";
-import { isArray, isFunction, sleep, isRegExp, isAbsPath, deepEqual } from "./utils";
+import {
+  isArray,
+  isFunction,
+  sleep,
+  isRegExp,
+  isAbsPath,
+  deepEqual,
+} from "./utils";
 import { IncomingMessage, NextHandleFunction } from "connect";
 import { bundleRequire, GetOutputFile, JS_EXT_RE } from "bundle-require";
 import { createServer, type ResolvedConfig } from "vite";
 import emitter from "./mitt";
-import { log } from "node:console";
 
 export let mockData: MockMethod[] = [];
 
@@ -31,17 +42,22 @@ export async function createMockServer(
   };
 
   if (mockData.length > 0) return;
-  fs.mkdirSync(path.resolve(config.root, "node_modules/.api"), { recursive: true });
+  fs.mkdirSync(path.resolve(config.root, "node_modules/.api"), {
+    recursive: true,
+  });
   const data = await getMockConfig(opt, config);
   data.forEach((item) => {
     mockData.push(...Object.values(item));
   });
-  mockData = mockData.map((item) => {
-    return {
-      ...item,
-      ...item.mock,
-    };
-  });
+  if (opt.enable) {
+    mockData = mockData.map((item) => {
+      return {
+        ...item,
+        ...item.mock,
+      };
+    });
+  }
+
   await createWatch(opt, config);
 }
 
@@ -74,11 +90,11 @@ export async function requestMiddleware(opt: ViteMockOptions) {
 
     if (matchRequest) {
       const isGet = req.method && req.method.toUpperCase() === "GET";
-      if(!matchRequest.mock){
+      if (!matchRequest.mock) {
         loggerOutput("No found Mock", req.url!);
         res.setHeader("Content-Type", "text/plain");
         res.statusCode = 404;
-        return res.end('No found Mock')
+        return res.end("No found Mock");
       }
       const {
         mock: { response, rawResponse, timeout, statusCode },
@@ -103,19 +119,31 @@ export async function requestMiddleware(opt: ViteMockOptions) {
         }
       }
 
-      const self: RespThisType = { req, res, parseJson: parseJson.bind(null, req) };
+      const self: RespThisType = {
+        req,
+        res,
+        parseJson: parseJson.bind(null, req),
+      };
       if (isFunction(rawResponse)) {
         await rawResponse?.bind(self)(req, res);
       } else {
         const body = await parseJson(req);
         res.setHeader("Content-Type", "application/json");
         if (opt) {
-          res.setHeader("Access-Control-Allow-Credentials", 'true');
-          res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+          res.setHeader("Access-Control-Allow-Credentials", "true");
+          res.setHeader(
+            "Access-Control-Allow-Origin",
+            req.headers.origin || "*",
+          );
         }
         res.statusCode = statusCode || 200;
         const mockResponse = isFunction(response)
-          ? response.bind(self)({ url: req.url as any, body, query, headers: req.headers })
+          ? response.bind(self)({
+              url: req.url as any,
+              body,
+              query,
+              headers: req.headers,
+            })
           : response;
         res.end(JSON.stringify(Mock.mock(mockResponse)));
       }
@@ -137,7 +165,7 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
   }
 
   const { absConfigPath, absMockPath } = getPath(opt);
-  
+
   if (process.env.VITE_DISABLED_WATCH_MOCK === "true") {
     return;
   }
@@ -145,7 +173,9 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
   const watchDir = [];
   const exitsConfigPath = fs.existsSync(absConfigPath);
 
-  exitsConfigPath && configPath ? watchDir.push(absConfigPath) : watchDir.push(absMockPath);
+  exitsConfigPath && configPath
+    ? watchDir.push(absConfigPath)
+    : watchDir.push(absMockPath);
 
   const watcher = chokidar.watch(watchDir, {
     ignoreInitial: true,
@@ -162,7 +192,10 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
       newMockData.push(...Object.values(item));
     });
     mockData = newMockData.map((item, index) => {
-      if ((item.mock || mockData[index].mock) && !deepEqual(mockData[index].mock, item.mock)) {
+      if (
+        (item.mock || mockData[index].mock) &&
+        !deepEqual(mockData[index].mock, item.mock)
+      ) {
         mockUpdate = true;
       }
       return {
@@ -170,7 +203,8 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
         ...item.mock,
       };
     });
-    mockUpdate && emitter.emit("update", loggerOutput("mockdata updated", file));
+    mockUpdate &&
+      emitter.emit("update", loggerOutput("mockdata updated", file));
     mockUpdate = false;
   });
 }
@@ -242,14 +276,16 @@ async function getMockConfig(opt: ViteMockOptions, config: ResolvedConfig) {
       }
       return true;
     });
- 
+
   try {
     ret = [];
     const resolveModulePromiseList = [];
 
     for (let index = 0; index < mockFiles.length; index++) {
       const mockFile = mockFiles[index];
-      resolveModulePromiseList.push(resolveModule(path.join(absMockPath, mockFile), config));
+      resolveModulePromiseList.push(
+        resolveModule(path.join(absMockPath, mockFile), config),
+      );
     }
 
     const loadAllResult = await Promise.all(resolveModulePromiseList);
@@ -292,7 +328,11 @@ async function resolveModule(p: string, config: ResolvedConfig): Promise<any> {
   let mod = mockData.mod.default || mockData.mod;
 
   if (isFunction(mod)) {
-    mod = await mod({ env: config.env, mode: config.mode, command: config.command });
+    mod = await mod({
+      env: config.env,
+      mode: config.mode,
+      command: config.command,
+    });
   }
 
   return mod;
@@ -301,11 +341,13 @@ async function resolveModule(p: string, config: ResolvedConfig): Promise<any> {
 // get custom config file path and mock dir path
 function getPath(opt: ViteMockOptions) {
   const { mockPath, configPath } = opt;
-  if(!mockPath){
-    throw new Error('Not Found mock file')
+  if (!mockPath) {
+    throw new Error("Not Found mock file");
   }
   const cwd = process.cwd();
-  const absMockPath = isAbsPath(mockPath) ? mockPath! : path.join(cwd, mockPath || "");
+  const absMockPath = isAbsPath(mockPath)
+    ? mockPath!
+    : path.join(cwd, mockPath || "");
   const absConfigPath = path.join(cwd, configPath || "");
   return {
     absMockPath,
@@ -313,7 +355,16 @@ function getPath(opt: ViteMockOptions) {
   };
 }
 
-function loggerOutput(title: string, msg: string, type: "info" | "error" = "info") {
-  const tag = type === "info" ? colors.cyan(`[vite:mock]`) : colors.red(`[vite:mock-server]`);
-  return console.log(`${colors.dim(new Date().toLocaleTimeString())} ${tag} ${colors.green(title)} ${colors.dim(msg)}`);
+function loggerOutput(
+  title: string,
+  msg: string,
+  type: "info" | "error" = "info",
+) {
+  const tag =
+    type === "info"
+      ? colors.cyan(`[vite:mock]`)
+      : colors.red(`[vite:mock-server]`);
+  return console.log(
+    `${colors.dim(new Date().toLocaleTimeString())} ${tag} ${colors.green(title)} ${colors.dim(msg)}`,
+  );
 }
