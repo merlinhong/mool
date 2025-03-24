@@ -39,7 +39,7 @@ export async function createMockServer(
   mockData = mockData.map((item) => {
     return {
       ...item,
-      ...item.mock,
+      ...item.mock??{},
     };
   });
   await createWatch(opt, config);
@@ -162,12 +162,12 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
       newMockData.push(...Object.values(item));
     });
     mockData = newMockData.map((item, index) => {
-      if ((item.mock || mockData[index].mock) && !deepEqual(mockData[index].mock, item.mock)) {
+      if ((item.mock || mockData[index]?.mock) && !deepEqual(mockData[index]?.mock, item.mock)) {
         mockUpdate = true;
       }
       return {
         ...item,
-        ...item.mock,
+        ...item.mock??{},
       };
     });
     mockUpdate && emitter.emit("update", loggerOutput("mockdata updated", file));
