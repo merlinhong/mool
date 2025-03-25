@@ -49,15 +49,12 @@ export async function createMockServer(
   data.forEach((item) => {
     mockData.push(...Object.values(item));
   });
-  if (opt.enable) {
-    mockData = mockData.map((item) => {
-      return {
-        ...item,
-        ...item.mock,
-      };
-    });
-  }
-
+  mockData = mockData.map((item) => {
+    return {
+      ...item,
+      ...item.mock??{},
+    };
+  });
   await createWatch(opt, config);
 }
 
@@ -192,15 +189,12 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
       newMockData.push(...Object.values(item));
     });
     mockData = newMockData.map((item, index) => {
-      if (
-        (item.mock || mockData[index].mock) &&
-        !deepEqual(mockData[index].mock, item.mock)
-      ) {
+      if ((item.mock || mockData[index]?.mock) && !deepEqual(mockData[index]?.mock, item.mock)) {
         mockUpdate = true;
       }
       return {
         ...item,
-        ...item.mock,
+        ...item.mock??{},
       };
     });
     mockUpdate &&
