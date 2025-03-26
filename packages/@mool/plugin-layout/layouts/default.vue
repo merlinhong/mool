@@ -45,15 +45,10 @@
 import { ref } from 'vue'
 import ProLayout from '@/components/layout/ProLayout/index.vue'
 import { 
-  HomeFilled, 
-  Document, 
-  Setting, 
-  User, 
   Search, 
   QuestionFilled 
 } from '@element-plus/icons-vue'
 import { routes } from '@mooljs/cli-service/lib/preset/app/main.jsx';
-console.log(routes);
 // 状态
 const collapsed = ref(false)
 const pageTitle = ref('仪表盘')
@@ -69,7 +64,9 @@ const links = ref([
 ])
 
 // 菜单数据
-const menuData = ref(routes)
+const menuData = ref(routes.map(_=>{
+  return _.children
+}).flat());
 </script>
 
 <style scoped>
