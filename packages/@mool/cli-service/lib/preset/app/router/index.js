@@ -5,4 +5,4 @@ const router = createRouter({
   routes,
 })
 export default router
-export {RouterView}
+export {RouterView,routes}

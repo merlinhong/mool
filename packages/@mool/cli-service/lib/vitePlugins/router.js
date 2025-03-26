@@ -7,7 +7,7 @@ const browserCode =
       routes,
   });
   export default router;
-  export {RouterView}
+  export {RouterView,routes}
 `
 module.exports = function tranform(api,options) {
   return {
@@ -30,6 +30,8 @@ module.exports = function tranform(api,options) {
             line.includes("routes,"),
           );
           lines.splice(targetIndex, 1, `routes: setupLayouts(routes)`);
+          lines.pop();
+          lines.push(`const _routes_ = setupLayouts(routes);\n export {_routes_ as routes ,RouterView}`);
           return {
             code: lines.join("\n"),
             map: null,
