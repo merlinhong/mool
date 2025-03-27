@@ -82,7 +82,7 @@ module.exports = (api, options) => {
             base,
             root,
             plugins: [
-              vitePluginConfigHMR('.moolrc.ts', async () => {
+              vitePluginConfigHMR(['.moolrc.ts','src/app.tsx'], async () => {
                 // 先销毁服务器实例
                 await viteServer.close();
                 // 再重新执行服务器初始化的流程

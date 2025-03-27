@@ -81,10 +81,11 @@ module.exports = class Service {
     this.loadEnv()
     // load user config
     const userOptions = this.loadUserOptions();
-    const loadedCallback = (loadedUserOptions) => {
-
-      this.projectOptions = defaultsDeep(loadedUserOptions, defaults())
-
+    const loadedCallback = async (loadedUserOptions) => {
+      const config = (await bundleRequire({
+        filepath: path.resolve(process.cwd(), 'src/app.tsx'),
+      })).mod;
+      this.projectOptions = defaultsDeep(loadedUserOptions, defaults(),{routes:config.routes})
       debug('vue:project-config')(this.projectOptions)
       
       // apply plugins.

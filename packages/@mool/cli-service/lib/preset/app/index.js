@@ -8,8 +8,8 @@ module.exports = (api, options) => {
     config.plugins.push(
       virtual(api,options),
       viteRestart({
-        reload:['src/app.tsx','src/locale'],
-        restart: ["src/app.tsx",'src/locale'],
+        reload:['src/locale'],
+        restart: ['src/locale'],
       }),
       createHtmlPlugin({
         // template:'index.html',

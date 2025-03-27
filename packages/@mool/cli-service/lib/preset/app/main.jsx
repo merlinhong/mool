@@ -26,5 +26,3 @@ const App = defineComponent({
 });
 const app = appMount(createApp, App, router);
 app.mount('#app');
-
-export {routes};
