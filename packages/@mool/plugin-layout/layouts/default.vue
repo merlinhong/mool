@@ -54,7 +54,9 @@ import {
 } from '@element-plus/icons-vue'
 import { routes } from '/src/app.tsx';
 import {useMenuFromRoutes} from './useMenu';
-const {menuData} = useMenuFromRoutes(routes);
+import {useAccess} from 'mooljs';
+const access = useAccess();
+const {menuData} = useMenuFromRoutes(routes,{},access);
 // 状态
 const collapsed = ref(false)
 const pageTitle = ref('仪表盘')

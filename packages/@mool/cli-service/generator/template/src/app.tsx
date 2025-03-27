@@ -77,3 +77,11 @@ export const routes = [
     ],
   },
 ];
+export const layout = {
+
+}
+export function getInitialState (){
+    return {
+        userName:'merlinhong'
+    }
+}

@@ -1,3 +1,5 @@
+
+
 /**
  * 从路由配置中提取菜单标题
  */
@@ -26,8 +28,8 @@ function getMenuTitle(route) {
 /**
  * 判断路由是否应该在菜单中隐藏
  */
-function shouldHideInMenu(route) {
-    return route.meta && route.meta.hideInMenu;
+function shouldHideInMenu(route,access) {
+    return route.meta && route.meta.hideInMenu||(route.meta.access&&!access[route.meta.access]);
 }
 
 /**
@@ -60,7 +62,7 @@ function getMenuIcon(route) {
 /**
  * 将路由转换为ProLayout菜单数据
  */
-export function useMenuFromRoutes(routes, options) {
+export function useMenuFromRoutes(routes, options,access) {
     // 默认配置
     const defaultOptions = {
         rootPath: "/",
@@ -75,7 +77,7 @@ export function useMenuFromRoutes(routes, options) {
     const transformRouteToMenu = (route, parentPath = "") => {
         // 跳过不应该显示在菜单中的路由
         if (
-            shouldHideInMenu(route) ||
+            shouldHideInMenu(route,access) ||
             mergedOptions.ignorePaths.includes(route.path) ||
             (route.name && mergedOptions.ignoreNames.includes(route.name)) ||
             mergedOptions.ignorePathsStartsWith.some((prefix) =>
