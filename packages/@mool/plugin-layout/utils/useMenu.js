@@ -11,7 +11,7 @@ function getMenuTitle(route) {
 
     // 其次使用 name
     if (route.name) {
-        const name = String(route.name);
+        const name = route.name;
         return name
             .replace(/[-_](\w)/g, (_, c) => " " + c.toUpperCase())
             .replace(/^\w/, (c) => c.toUpperCase());
@@ -29,7 +29,7 @@ function getMenuTitle(route) {
  * 判断路由是否应该在菜单中隐藏
  */
 function shouldHideInMenu(route,access) {
-    return route.meta && route.meta.hideInMenu||(route.meta.access&&!access[route.meta.access]);
+    return route.meta && route.meta.hideInMenu||(access&&route.meta.access&&!access[route.meta.access]);
 }
 
 /**
@@ -95,6 +95,7 @@ export function useMenuFromRoutes(routes, options,access) {
         // 基本菜单项
         const menuItem = {
             path: fullPath,
+            component:route.component,
             meta: {
                 title: getMenuTitle(route),
                 icon: getMenuIcon(route),

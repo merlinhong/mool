@@ -91,8 +91,7 @@ module.exports = class Creator extends EventEmitter {
       }
     }
 
-    // inject core router
-    preset.plugins["@mooljs/plugin-router"] = {};
+
 
     // clone before mutating
     preset = cloneDeep(preset);
@@ -106,6 +105,11 @@ module.exports = class Creator extends EventEmitter {
 
     if (preset.answers.preset == "__max__") {
       preset.plugins["@mooljs/plugin-max"] = {};
+      // inject core layout
+      preset.plugins["@mooljs/plugin-layout"] = {};
+    } else {
+      // inject core router
+      preset.plugins["@mooljs/plugin-router"] = {};
     }
 
     // // legacy support for vuex
@@ -167,7 +171,7 @@ module.exports = class Creator extends EventEmitter {
     if (packageManager === "pnpm") {
       const pnpmConfig = hasPnpmVersionOrLater("4.0.0")
         ? // pnpm v7 makes breaking change to set strict-peer-dependencies=true by default, which may cause some problems when installing
-          "shamefully-hoist=true\nstrict-peer-dependencies=false\n"
+        "shamefully-hoist=true\nstrict-peer-dependencies=false\n"
         : "shamefully-flatten=true\n";
 
       await writeFileTree(context, {
@@ -262,18 +266,17 @@ module.exports = class Creator extends EventEmitter {
     if (!cliOptions.skipGetStarted) {
       log(
         `👉  Get started with the following commands:\n\n` +
-          (this.context === process.cwd()
-            ? ``
-            : chalk.cyan(` ${chalk.gray("$")} cd ${name}\n`)) +
-          chalk.cyan(
-            ` ${chalk.gray("$")} ${
-              packageManager === "yarn"
-                ? "yarn serve"
-                : packageManager === "pnpm"
-                  ? "pnpm run serve"
-                  : "npm run serve"
-            }`,
-          ),
+        (this.context === process.cwd()
+          ? ``
+          : chalk.cyan(` ${chalk.gray("$")} cd ${name}\n`)) +
+        chalk.cyan(
+          ` ${chalk.gray("$")} ${packageManager === "yarn"
+            ? "yarn serve"
+            : packageManager === "pnpm"
+              ? "pnpm run serve"
+              : "npm run serve"
+          }`,
+        ),
       );
     }
     log();
@@ -332,7 +335,7 @@ module.exports = class Creator extends EventEmitter {
     rawPlugins = sortObject(rawPlugins, ["@mooljs/cli-service"], true);
     const plugins = [];
     for (const id of Object.keys(rawPlugins)) {
-      const apply = loadModule(`${id}/generator`, this.context) || (() => {});
+      const apply = loadModule(`${id}/generator`, this.context) || (() => { });
       let options = rawPlugins[id] || {};
 
       if (options.prompts) {

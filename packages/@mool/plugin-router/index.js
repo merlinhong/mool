@@ -8,13 +8,7 @@ const pagesPluginOption = {
 module.exports = async (api, options) => {
   if (options.routes && Array.isArray(options.routes)) {
     pagesPluginOption.onRoutesGenerated = () => {
-      return options.routes?.map(_ => {
-        if (_.routes) {
-          return [_, ..._.routes]
-        } else {
-          return _
-        }
-      }).flat()
+      return options.routes
     }
   }
   api.chainVite((config) => {

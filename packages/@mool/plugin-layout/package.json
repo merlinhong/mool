@@ -1,0 +1,41 @@
+{
+  "name": "@mooljs/plugin-layout",
+  "version": "0.0.2-beta",
+  "description": "pro layout for mooljs",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merlinhong/mool.git",
+    "directory": "packages/@mool/plugin-layout"
+  },
+  "keywords": [
+    "layout",
+    "ProLayout",
+    "mooljs",
+    "element-plus"
+  ],
+  "author": "Merlin Hong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/merlinhong/mool/issues"
+  },
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-layout#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "vite-plugin-pages": "^0.32.4"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.25",
+    "element-plus": "^2.5.3",
+    "mooljs":"^0.4.4"
+  }
+}

@@ -59,6 +59,10 @@ module.exports = (api, options) => {
         codeSplitting,
       } = options;
       const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs'];
+      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx'];
+      if(options.access){
+        HMR_INCLUDES.push('src/access.ts')
+      }
       if (existsSync(api.resolve("src/locale"))) {
         optimizeDepsIncludes.push('vue-i18n');
       }
@@ -82,7 +86,8 @@ module.exports = (api, options) => {
             base,
             root,
             plugins: [
-              vitePluginConfigHMR(['.moolrc.ts','src/app.tsx'], async () => {
+              vitePluginConfigHMR(HMR_INCLUDES, async (restart=false) => {
+                if(restart) return viteServer.restart();
                 // 先销毁服务器实例
                 await viteServer.close();
                 // 再重新执行服务器初始化的流程

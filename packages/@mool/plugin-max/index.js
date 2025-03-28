@@ -11,7 +11,9 @@ module.exports = (api, options) => {
     config.plugins.push(
       TranformPlugin(api,options),
       RouterPlugin(api,options),
-      Layout(options.layout ?? {}),
+      Layout(options.layout ?? {
+        layoutsDir: path.resolve(__dirname,"../plugin-layout/layouts"),
+      }),
       Components({
         resolvers: [ElementPlusResolver()],
         dts: "types/components.d.ts",

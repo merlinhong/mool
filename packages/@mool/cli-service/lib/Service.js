@@ -82,10 +82,14 @@ module.exports = class Service {
     // load user config
     const userOptions = this.loadUserOptions();
     const loadedCallback = async (loadedUserOptions) => {
-      const config = (await bundleRequire({
+      const appconfig = (await bundleRequire({
         filepath: path.resolve(process.cwd(), 'src/app.tsx'),
       })).mod;
-      this.projectOptions = defaultsDeep(loadedUserOptions, defaults(),{routes:config.routes})
+      const accessConfig = (await bundleRequire({
+        filepath: path.resolve(process.cwd(), 'src/access.ts'),
+      })).mod;
+      const access = accessConfig.default?.(appconfig.getInitialState?.()??{});
+      this.projectOptions = defaultsDeep(loadedUserOptions, defaults(),{routes:appconfig.routes,access:access??{}})
       debug('vue:project-config')(this.projectOptions)
       
       // apply plugins.
