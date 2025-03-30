@@ -2,7 +2,7 @@
 /**
  * 判断路由是否应该在菜单中隐藏
  */
-function shouldHideInMenu(route, access) {
+function shouldClosePermision(route, access) {
     return access && route.meta?.access && !access[route.meta?.access];
 }
 
@@ -15,9 +15,12 @@ exports.transformRoutes = function (routes, access) {
     const filterRouteByAcccess = (route) => {
         // 跳过不应该显示在菜单中的路由
         if (
-            shouldHideInMenu(route, access)
+            shouldClosePermision(route, access)
         ) {
-            return null;
+            return {
+                ...route,
+                component:'/src/404.vue'
+            };
         }
         // 基本菜单项
 

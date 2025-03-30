@@ -53,10 +53,17 @@ module.exports = function virtual(api, options) {
             );
             lines.splice(targetIndex, 0, ` 
           const accessConfig = access.default?.(module.getInitialState?.()??{});
-          app.use(useProvider,{access:accessConfig,router});
+          app.use(useProvider,{access:accessConfig,router,globalConfig:module});
           `);
             return lines.join("\n")
           } else {
+            lines.splice(
+              lines.length - 1,
+              0,
+             `
+              app.use(useProvider,{globalConfig:module});
+             `
+            );
             return DEFAULT_CODE
           }
         } catch (error) {

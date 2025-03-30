@@ -164,8 +164,11 @@
 </template>
 
 <script setup lang="ts">
+import {ref,computed,watch,onMounted} from 'vue';
 import { Fold, Expand } from "@element-plus/icons-vue";
-
+import {ElContainer,ElBreadcrumb,ElBreadcrumbItem,ElFooter,ElMenu,ElSubMenu,ElMenuItem,ElIcon,ElScrollbar,ElAside,ElButton,ElHeader,ElMain} from 'element-plus';
+import 'element-plus/dist/index.css';
+import {useRoute} from 'vue-router';
 const props = defineProps({
   // 布局配置
   title: {

@@ -1,62 +1,34 @@
 <template>
-  <pro-layout
-    v-model:collapsed="collapsed"
-    title="Admin Pro"
-    :logo="logo"
-    :menu-data="menuData"
-    :page-title="pageTitle"
-    :page-sub-title="pageSubTitle"
-    :breadcrumb="true"
-    :copyright="copyright"
-    :links="links"
-  >
+  <pro-layout v-model:collapsed="collapsed" title="Admin Pro" :logo="logo" :menu-data="menuData" :page-title="pageTitle"
+    :page-sub-title="pageSubTitle" :breadcrumb="true" :copyright="copyright" :links="links">
     <template #rightContentRender>
-      <div class="right-content">
-        <el-tooltip content="搜索" placement="bottom">
-          <el-button type="text">
-            <el-icon><Search /></el-icon>
-          </el-button>
-        </el-tooltip>
-        <el-tooltip content="帮助" placement="bottom">
-          <el-button type="text">
-            <el-icon><QuestionFilled /></el-icon>
-          </el-button>
-        </el-tooltip>
-        <el-dropdown>
-          <span class="user-dropdown">
-            <el-avatar :size="32" src="https://joeschmoe.io/api/v1/random" />
-            <span class="username">管理员</span>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>个人中心</el-dropdown-item>
-              <el-dropdown-item>设置</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
+      <RightContent />
     </template>
-    <RouterView/>
+    <RouterView />
   </pro-layout>
 </template>
 
-<script setup>
+<script setup lang="tsx">
 import { ref } from 'vue'
-import ProLayout from '@/components/layout/ProLayout/index.vue'
-import { 
-  HomeFilled, 
-  Document, 
-  Setting, 
-  User, 
-  Search, 
-  QuestionFilled 
-} from '@element-plus/icons-vue'
-import { routes } from '/src/app.tsx';
-import {useMenuFromRoutes} from './useMenu';
-import {useAccess} from 'mooljs';
-const access = useAccess();
-const {menuData} = useMenuFromRoutes(routes,{},access);
+import ProLayout from '../components/ProLayout/index.vue'
+import {
+  HomeFilled,
+  Document,
+  Setting,
+  User,
+  Search,
+  QuestionFilled
+} from '@element-plus/icons-vue';
+import { ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem, ElTooltip, ElButton, ElAvatar } from 'element-plus';
+import { useMenuFromRoutes } from '../utils/useMenu';
+import { useAccess,getAppConfig } from 'mooljs';
+
+const access = useAccess(); 
+const {routes=[],layout={}} = getAppConfig();
+
+
+const { menuData } = useMenuFromRoutes(routes, {}, access);
+
 // 状态
 const collapsed = ref(false)
 const pageTitle = ref('仪表盘')
@@ -73,9 +45,44 @@ const links = ref([
 
 // 菜单数据
 // const menuData = ref(routes);
+const RightContent = layout.rightContent??(() => {
+  return (
+    <div className="right-content">
+      <ElTooltip content="搜索" placement="bottom">
+        <ElButton type="text">
+          <ElIcon><Search /></ElIcon>
+        </ElButton>
+      </ElTooltip>
+      <ElTooltip content="帮助" placement="bottom">
+        <ElButton type="text">
+          <ElIcon><QuestionFilled /></ElIcon>
+        </ElButton>
+      </ElTooltip>
+      <ElDropdown v-slots={
+        {
+          dropdown: () => {
+            return (
+              <ElDropdownMenu>
+                <ElDropdownItem>个人中心</ElDropdownItem>
+                <ElDropdownItem>设置</ElDropdownItem>
+                <ElDropdownItem divided>退出登录</ElDropdownItem>
+              </ElDropdownMenu>
+            )
+          },
+        }
+      }>
+        <div class="user-dropdown">
+          <ElAvatar size={32} src="https://joeschmoe.io/api/v1/random" />
+          <span class="username">管理员</span>
+        </div>
+
+      </ElDropdown>
+    </div >
+  )
+})
 </script>
 
-<style scoped>
+<style>
 .right-content {
   display: flex;
   align-items: center;
