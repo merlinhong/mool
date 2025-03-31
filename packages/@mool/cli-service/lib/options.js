@@ -1,6 +1,9 @@
 const { createSchema, validate } = require('@vue/cli-shared-utils')
 
 const schema = createSchema(joi => joi.object({
+  access: joi.alternatives().try(
+    joi.object(),
+  ),
   locale:joi.alternatives().try(
     joi.object(),
   ),

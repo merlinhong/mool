@@ -5,16 +5,25 @@ const windicss = require("vite-plugin-windicss").default;
 const {
   ElementPlusResolver,
 } = require("unplugin-vue-components/resolvers");
+const merge = require("lodash.merge");
+
 const Components = require("unplugin-vue-components/vite").default;
 
 module.exports = (api, options) => {
+  const layoutOptions = (layout)=>{
+    if(layout){
+      return {
+        layoutsDirs:api.resolve('node_modules/@mooljs/plugin-layout/layouts')
+      }
+    }else{
+      return {}
+    }
+  }
   api.chainVite((config) => {
     config.plugins.push(
       TranformPlugin(api,options),
       RouterPlugin(api,options),
-      Layout(options.layout ?? {
-        layoutsDirs: api.resolve('node_modules/@mooljs/plugin-layout/layouts'),
-      }),
+      Layout(merge(layoutOptions(options.layout),options.layout??{})),
       Components({
         resolvers: [ElementPlusResolver()],
         dts: "types/components.d.ts",

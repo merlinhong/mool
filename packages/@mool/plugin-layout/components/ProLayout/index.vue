@@ -114,9 +114,11 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-
-        <div class="header-right">
+        <div class="header-center">
           <slot name="headerContent"></slot>
+
+        </div>
+        <div class="header-right">
           <slot name="rightContentRender"></slot>
         </div>
       </el-header>
@@ -144,19 +146,6 @@
         class="pro-layout-footer"
       >
         <slot name="footerContent">
-          <div class="default-footer">
-            <div>{{ copyright || "Copyright © 2023 ProLayout" }}</div>
-            <div v-if="links && links.length">
-              <a
-                v-for="(link, index) in links"
-                :key="index"
-                :href="link.href"
-                target="_blank"
-              >
-                {{ link.title }}
-              </a>
-            </div>
-          </div>
         </slot>
       </el-footer>
     </el-container>
@@ -403,23 +392,6 @@ onMounted(() => {
   padding: 24px;
   text-align: center;
   background-color: #f0f2f5;
-}
-
-.default-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
-}
-
-.default-footer a {
-  color: rgba(0, 0, 0, 0.45);
-  margin: 0 8px;
-}
-
-.default-footer a:hover {
-  color: #1890ff;
 }
 
 @media screen and (max-width: 768px) {

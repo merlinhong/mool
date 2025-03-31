@@ -7,6 +7,10 @@ import { I18nOptions } from 'vue-i18n';
 
 interface ProjectOptions {
   /**
+   * enable access plugin
+   */
+  access:{},
+  /**
    * Multilingual configuration options
    */
   locale:I18nOptions;

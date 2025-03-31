@@ -1,6 +1,11 @@
 import { Router } from "vue-router";
-export const onRouterGuard = (router: Router) => {
-  console.log(router.getRoutes());
+import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import { App } from "vue";
+export const onRouterGuard = (router: Router) => {};
+export const onSetupPlugins = (app: App) => {
+  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component);
+  }
 };
 export const routes = [
   {

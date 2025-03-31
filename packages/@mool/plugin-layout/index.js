@@ -8,12 +8,17 @@ const pagesPluginOption = {
 
 module.exports = async (api, options) => {
   if (options.routes && Array.isArray(options.routes)) {
-    const routes = transformRoutes(options.routes,{},options.access);
+    const routes = transformRoutes(options.routes,options.access);
     pagesPluginOption.onRoutesGenerated = () => {
       return routes?.map(_ => {
-        if (_.routes) {
+        if (_.routes&&_.meta.layout!==false) {
           return [_, ..._.routes]
-        } else {
+        } else if(_.meta.layout===false&&_.routes){
+          return {
+            ..._,
+            children:_.routes
+          }
+        }else{
           return _
         }
       }).flat()
