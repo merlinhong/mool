@@ -1,6 +1,6 @@
 {
     "name": "@mooljs/plugin-max",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "built in many plugins in common use fro enterprise level app",
     "main": "index.js",
     "repository": {

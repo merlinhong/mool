@@ -82,9 +82,16 @@ export const routes = [
     ],
   },
 ];
-export const layout = {
-
-}
+export const layout = () => {
+  return {
+    menu: {
+      request: async () => {
+        const { data } = (await service.test.getRoutes({})) as { data: any[] };
+        return data;
+      },
+    },
+  };
+};
 export function getInitialState (){
     return {
         userName:'merlinhong'
