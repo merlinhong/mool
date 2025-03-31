@@ -6,6 +6,12 @@ const ACCESS_KEY = Symbol('access-context');
 const APP_CONFIG = Symbol('app-config');
 // function checkUserPermission(topath){
 
+function checkPermision(options: { to: Record<string, any>; routes: any[]; access: {}; exclude?: string[] }) {
+    const { to, routes = [], access = {}, exclude = ['/user/login'] } = options;
+    // 假设我们有一个函数来检查用户是否有权限访问某个路由
+    const hasNoPermission = !routes?.find(_ => _.path === to.path) && !exclude.includes(to.path);
+    return (hasNoPermission || to.meta.access && !access[to.meta.access as string]) && to.path !== '/403'
+}
 // }
 export const useProvider = async (app: App, options: { access?: Record<string, any>, router?: Router, globalConfig: Record<string, any> }) => {
     const { access = {}, router, globalConfig = {} } = options ?? {};
@@ -17,15 +23,11 @@ export const useProvider = async (app: App, options: { access?: Record<string, a
 
     const layoutConfig = typeof layout === 'function' ? layout(getInitialState) : layout;
 
-    const _routes = await layoutConfig.menu.request?.();
+    const _routes = await layoutConfig.menu?.request?.() ?? routes;
     // // 路由系统集成
     router?.beforeEach((to, from, next) => {
-        console.log(to);
-        
-        // 假设我们有一个函数来检查用户是否有权限访问某个路由
-        const hasNoPermission = !_routes.find(_=>_.path===to.path)&&to.path!='/user/login';
 
-        if (hasNoPermission&&to.path!=='/403') {
+        if (checkPermision({ to, routes: _routes, access })) {
             // 如果没有权限访问根路径，则重定向到 /403 页面
             next('/403'); // 只有在需要重定向时才调用 next(newLocation)
         } else {
