@@ -50,12 +50,13 @@ export function Service(opt?: IOpt): Plugin[] {
   let isDev = false;
   let config: ResolvedConfig;
   let timer: number | undefined = undefined;
+  const delay = process.platform === 'win32' ? 1500 : 800;
   function clear() {
     clearTimeout(timer);
   }
   function schedule(fn: () => void) {
     clear();
-    timer = setTimeout(fn, 500) as any;
+    timer = setTimeout(fn, delay) as any;
   }
   
   return [
@@ -74,9 +75,12 @@ export function Service(opt?: IOpt): Plugin[] {
       },
 
       async configureServer(server) {
-        emitter.on("update", ()=> {
-          schedule(() => {
-            server.restart();
+        emitter.on("update", async ()=> {
+          await server.close();
+          schedule(async () => {
+            watcher.close();
+            server.restart()
+            
           });
         });
         // 监听 service 目录

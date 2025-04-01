@@ -182,6 +182,7 @@ function createWatch(opt: ViteMockOptions, config: ResolvedConfig) {
   });
   let mockUpdate = false;
   watcher.on("all", async (event, file) => {
+    if(!opt.enable) return
     logger && loggerOutput(`mock file ${event}`, file);
     const data = await getMockConfig(opt, config);
     const newMockData: any[] = [];
