@@ -1,14 +1,13 @@
 <template>
   <div class="pro-layout" :class="{ 'is-collapsed': collapsed }">
     <!-- 侧边栏 -->
-    <el-aside width="10%" class="pro-layout-sider">
+    <el-aside width="10%" class="pro-layout-sider" v-if="menuRender">
       <div class="logo-container">
         <router-link to="/">
           <img v-if="logo" :src="logo" class="logo" alt="logo" />
           <h1 v-if="!collapsed || !logo" class="title">{{ title }}</h1>
         </router-link>
       </div>
-
       <el-scrollbar>
         <el-menu
           :default-active="activeMenu"
@@ -87,7 +86,6 @@
         </el-menu>
       </el-scrollbar>
     </el-aside>
-
     <el-container class="pro-layout-container">
       <!-- 头部 -->
       <el-header
@@ -95,7 +93,7 @@
         height="64px"
         class="pro-layout-header"
       >
-        <div class="header-left">
+        <div class="header-left" v-if="menuRender">
           <el-button type="text" class="toggle-button" @click="toggleCollapse">
             <el-icon>
               <Fold v-if="!collapsed" />
@@ -200,7 +198,10 @@ const props = defineProps({
     type: [Boolean, Function],
     default: true,
   },
-
+  // menuRender:{
+  //   type:Boolean,
+  //   default:true
+  // },
   // 内容配置
   pageTitle: {
     type: String,
@@ -228,6 +229,7 @@ const emit = defineEmits(["update:collapsed", "collapsedChange"]);
 
 // 响应式状态
 const isCollapsed = ref(props.collapsed);
+const menuRender = ref(true);
 const route = useRoute();
 
 // 计算属性
@@ -275,6 +277,9 @@ watch(
     isCollapsed.value = newVal;
   }
 );
+watch(()=>route.meta,(newval)=>{
+    menuRender.value = newval.menuRender!==false;
+},{immediate:true});
 
 // 生命周期钩子
 onMounted(() => {

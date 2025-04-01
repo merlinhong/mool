@@ -27,8 +27,7 @@ module.exports = function virtual(api, options) {
     },
     async load(id) {
       const DEFAULT_CODE = ` 
-                import  *  as module  from '/src/app.tsx';
-                export default function (createApp,App,router){
+                export default async function (createApp,App,router){
              const GlobalApp = module.default?.(App)??App;
              module.onRouterGuard?.(router);
              const app = createApp(GlobalApp);
@@ -40,27 +39,38 @@ module.exports = function virtual(api, options) {
       if (id == "\0virturl:app-mount") {
         try {
           accessSync(api.resolve("src/app.tsx"), constants.F_OK | constants.R_OK);
+          lines.splice(
+            0,
+            0,
+            
+            `import { useProvider } from 'mooljs';
+             import  *  as module  from '/src/app.tsx';
+            `,
+          );
           if (options.access && existsSync('src/access.ts')) {
             lines.splice(
               0,
               0,
-              `import  *  as access  from '/src/access.ts';
-               import { useProvider } from 'mooljs';
-              `,
+              `import  *  as access  from '/src/access.ts';`,
             );
             const targetIndex = lines.findIndex((line) =>
               line.includes("app.use(router);"),
             );
             lines.splice(targetIndex, 0, ` 
-          const accessConfig = access.default?.(module.getInitialState?.()??{});
-          app.use(useProvider,{access:accessConfig,router,globalConfig:module});
+            const accessConfig = access.default?.(await module.getInitialState?.()??{});
+            const { routes = [], layout = {}, getInitialState } = module;
+            const layoutConfig = typeof layout === 'function' ? layout(await getInitialState?.()) : layout;
+            const menuRoutes = await layoutConfig.menu?.request?.() ?? routes;
+            app.use(useProvider,{globalConfig:{
+              layout:layoutConfig,menuRoutes,access:accessConfig
+            },router});
           `);
             return lines.join("\n")
           } else {
             lines.splice(
               lines.length - 1,
               0,
-             `
+              `
               app.use(useProvider,{globalConfig:module});
              `
             );

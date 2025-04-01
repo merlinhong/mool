@@ -1,14 +1,14 @@
 <template>
   <pro-layout v-model:collapsed="collapsed" title="Admin Pro" :logo="logo" :menu-data="menuData" :page-title="pageTitle"
-    :page-sub-title="pageSubTitle" :breadcrumb="true" :copyright="copyright" :links="links">
+    :page-sub-title="pageSubTitle" :breadcrumb="true" :copyright="copyright" :links="links" >
     <template #rightContentRender>
-      <RightContent />
+      <RightRender />
     </template>
     <template #footerContent>
-      <FooterContent />
+      <FooterRender />
     </template>
     <template #headerContent>
-      <HeaderContent />
+      <HeaderRender />
     </template>
     <RouterView />
   </pro-layout>
@@ -27,23 +27,18 @@ import {
 } from '@element-plus/icons-vue';
 import { ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem, ElTooltip, ElButton, ElAvatar } from 'element-plus';
 import { useMenuFromRoutes } from '../utils/useMenu';
-import { useAccess, getAppConfig } from 'mooljs';
+import { useAccess, useLayout,useMenuRoutes } from 'mooljs';
 import { onMounted } from 'vue';
 
 const access = useAccess();
-const { routes = [], layout = {}, getInitialState = () => ({}) } = getAppConfig();
+const layout = useLayout();
+const routes = useMenuRoutes();
 
-const layoutConfig = typeof layout === 'function' ? layout(getInitialState) : layout;
+const {menuData} = useMenuFromRoutes(routes, {}, access);
 
-const menuData = ref([]);
-
-const renderMenu = async () => {
-    const _routes = await layoutConfig.menu.request?.();
-    menuData.value = unref(useMenuFromRoutes(layoutConfig.menu?_routes:routes, {}, access).menuData);
-}
-onMounted(()=>{
-  renderMenu();
-})
+// onMounted(()=>{
+//   renderMenu();
+// })
 // 状态
 const collapsed = ref(false)
 const pageTitle = ref('仪表盘')
@@ -56,8 +51,9 @@ const links = ref([
   { title: '帮助', href: 'https://example.com/help' },
   { title: '隐私', href: 'https://example.com/privacy' },
   { title: '条款', href: 'https://example.com/terms' }
-])
-const FooterContent = layout.footerContent ?? (() => {
+]);
+
+const FooterRender = layout.footerRender ?? (() => {
   return (
     <div class="default-footer">
       <div>{copyright.value || "Copyright © 2023 ProLayout"}</div>
@@ -75,10 +71,9 @@ const FooterContent = layout.footerContent ?? (() => {
     </div>
   )
 })
-const HeaderContent = layout.headerContent ?? (() => { })
-// 菜单数据
-// const menuData = ref(routes);
-const RightContent = layout.rightContent ?? (() => {
+const HeaderRender = layout.headerRender ?? (() => { })
+
+const RightRender = layout.rightRender ?? (() => {
   return (
     <div className="right-content">
       <ElTooltip content="搜索" placement="bottom">

@@ -24,14 +24,12 @@ function getMenuTitle(route) {
         .replace(/[-_](\w)/g, (_, c) => " " + c.toUpperCase())
         .replace(/^\w/, (c) => c.toUpperCase());
 }
-
 /**
  * 判断路由是否应该在菜单中隐藏
  */
 function shouldHideInMenu(route,access) {
-    return route.meta && route.meta.hideInMenu||(access&&route.meta.access&&!access[route.meta.access]);
+    return (route.meta && route.meta.hideInMenu||(access&&route.meta.access&&!access[route.meta.access]))||route.meta.layout===false;
 }
-
 /**
  * 判断是否应该隐藏子菜单
  */
