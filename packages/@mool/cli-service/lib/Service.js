@@ -90,7 +90,7 @@ module.exports = class Service {
         const appconfig = (await bundleRequire({
           filepath: path.resolve(process.cwd(), `src/${file}`),
         })).mod;
-        config.routes = appconfig;
+        config.routes = appconfig.routes;
       }
       if(await checkFiles(['src/access.ts'])){
         const accessConfig = (await bundleRequire({
