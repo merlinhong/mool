@@ -12,9 +12,6 @@ module.exports = function tranform(api,options){
               lines.splice(targetIndex, 0, `setupI18n(app,${JSON.stringify(options.locale??{})});`);
               
             }
-            if(options.windicss){
-              lines.splice(0, 0, `import 'virtual:windi.css';`);
-            }
             return {
               code: lines.join("\n"),
               map: null,

@@ -8,7 +8,6 @@ module.exports = (api, options) => {
   api.extendPackage({
     dependencies: {
       vue: "^3.2.25",
-      mooljs: "^0.6.3",
       "vue-router": "^4.0.3",
     },
     devDependencies: {

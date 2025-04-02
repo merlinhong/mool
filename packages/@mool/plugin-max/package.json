@@ -1,6 +1,6 @@
 {
     "name": "@mooljs/plugin-max",
-    "version": "0.2.2",
+    "version": "0.3.0",
     "description": "built in many plugins in common use fro enterprise level app",
     "main": "index.js",
     "repository": {
@@ -29,7 +29,8 @@
       "element-plus": "^2.5.3",
       "vue-i18n": "^11.1.2",
       "vite-plugin-windicss": "^1.9.4",
-      "windicss": "^3.5.6"
+      "windicss": "^3.5.6",
+      "vite-plugin-service": "^0.0.8"
     },
     "devDependencies": {
       "@vue/cli-test-utils": "^5.0.8"

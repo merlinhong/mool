@@ -12,6 +12,7 @@ const { warn, error, resolvePluginId, loadModule, resolvePkg, resolveModule, sor
 const { defaults } = require('./options')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
+const {checkFiles} = require('./util/checkFile');
 const chokidar = require("chokidar");
 
 /**@type {InlineConfig} */
@@ -82,14 +83,24 @@ module.exports = class Service {
     // load user config
     const userOptions = this.loadUserOptions();
     const loadedCallback = async (loadedUserOptions) => {
-      const appconfig = (await bundleRequire({
-        filepath: path.resolve(process.cwd(), 'src/app.tsx'),
-      })).mod;
-      const accessConfig = (await bundleRequire({
-        filepath: path.resolve(process.cwd(), 'src/access.ts'),
-      })).mod;
-      const access = accessConfig.default?.(appconfig.getInitialState?.()??{});
-      this.projectOptions = defaultsDeep(loadedUserOptions, defaults(),{routes:appconfig.routes,access:access??{}})
+      this.projectOptions = defaultsDeep(loadedUserOptions, defaults());
+      const file = await checkFiles();
+      const config = {};
+      if(file){
+        const appconfig = (await bundleRequire({
+          filepath: path.resolve(process.cwd(), `src/${file}`),
+        })).mod;
+        config.routes = appconfig;
+      }
+      if(await checkFiles(['src/access.ts'])){
+        const accessConfig = (await bundleRequire({
+          filepath: path.resolve(process.cwd(), 'src/access.ts'),
+        })).mod;
+        const access = accessConfig.default?.(appconfig.getInitialState?.()??{});
+        config.access = access;
+      }
+      this.projectOptions = defaultsDeep(this.projectOptions,config)
+
       debug('vue:project-config')(this.projectOptions)
       
       // apply plugins.
@@ -198,7 +209,6 @@ module.exports = class Service {
       // config plugins are order sensitive
       './preset/autoImport/index',
       './preset/compression/index',
-      './preset/service/index',
       './preset/svg/index',
       './preset/vue/index',
       './preset/app/index'

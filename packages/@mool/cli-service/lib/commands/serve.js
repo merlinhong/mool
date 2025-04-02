@@ -3,7 +3,7 @@ const {
 } = require("@vue/cli-shared-utils");
 const getBaseUrl = require("../util/getBaseUrl");
 const { existsSync, accessSync, readdirSync, constants } = require("fs");
-const vitePluginConfigHMR = require("@mooljs/cli-service/lib/vitePlugins/config-hmr");
+const vitePluginConfigHMR = require("../vitePlugins/config-hmr");
 const colors = require("picocolors");
 
 const server = {
@@ -59,7 +59,7 @@ module.exports = (api, options) => {
         codeSplitting,
       } = options;
       const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs'];
-      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx'];
+      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx','src/app.ts'];
       if(options.access){
         HMR_INCLUDES.push('src/access.ts')
       }

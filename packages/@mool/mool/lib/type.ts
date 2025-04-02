@@ -4,9 +4,9 @@ import { App, DefineComponent, VNode } from "vue";
 type GetInitialStateReturnType<T> = T extends () => infer R ? R : never;
 
 // 定义全局配置接口
-export interface GlobalConfig {
+export interface RuntimeConfig {
     routes?: IMenuRoutes[];
-    layout?: ILayout | ((option: GetInitialStateReturnType<GlobalConfig['getInitialState']>) => LayoutConfig);
+    layout?: ILayout | ((option: GetInitialStateReturnType<RuntimeConfig['getInitialState']>) => LayoutConfig);
     getInitialState?: () => (Record<string, any> | Promise<Record<string, any>>);
 }
 
@@ -92,6 +92,6 @@ export interface CheckPermissionOptions {
 
 // 定义useProvider函数的参数类型
 export interface UseProviderOptions {
-    globalConfig: { layout: LayoutConfig, menuRoutes: IMenuRoutes[], access?: Record<string, any> };
+    globalConfig: { layout: LayoutConfig,initialState?:Record<string, any>, menuRoutes: IMenuRoutes[], access?: Record<string, any> };
     router?: Router;
 }

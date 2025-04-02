@@ -1,6 +1,6 @@
 import { App, inject } from "vue";
-import { GlobalConfig, UseProviderOptions, CheckPermissionOptions, IMenuRoutes, LayoutConfig } from 'mooljs/lib/type.ts'; // 假设type.ts和hooks文件在同一目录
-
+import { UseProviderOptions, CheckPermissionOptions, IMenuRoutes, LayoutConfig } from './type'; // 假设type.ts和hooks文件在同一目录
+import {createStore} from './useStore';
 // core/access-provider.ts
 const ACCESS_KEY = Symbol('access-context');
 const APP_CONFIG = Symbol('app-config');
@@ -40,17 +40,22 @@ function checkPermision(options: CheckPermissionOptions) {
 }
 
 export const useProvider = async (app: App, options: UseProviderOptions) => {
-    const {router, globalConfig} = options ?? {};
-    const { access = [], layout = {}, menuRoutes=[] } = globalConfig;
+    const { router, globalConfig } = options ?? {};
+    const { access = [], layout = {}, menuRoutes = [],initialState={} } = globalConfig;
     app.config.globalProperties.$access = access;
     app.provide(ACCESS_KEY, access);
     app.provide(APP_CONFIG, globalConfig);
     app.provide(LAYOUT_CONFIG, layout);
     app.provide(MENU_ROUTES, menuRoutes);
-        router?.addRoute({
-            path:'/403',
-            component:layout.unAccessible??(()=>import('@mooljs/plugin-layout/layouts/403.vue'))
-        });
+    /**
+     * 注入全局store
+     */
+    createStore('@@initialState',initialState);
+
+    router?.addRoute({
+        path: '/403',
+        component: layout.unAccessible ?? (() => import('@mooljs/plugin-layout/layouts/403.vue'))
+    });
     router?.beforeEach((to, from, next) => {
         const exclude = menuRoutes.filter(_ => _.meta?.layout === false)?.map(_ => _.path);
         if (checkPermision({ to, routes: menuRoutes, access, exclude })) {
