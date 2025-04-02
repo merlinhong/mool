@@ -25,14 +25,36 @@ module.exports = function virtual(api, options) {
       }
     },
     async load(id) {
+
+      const DEFAULT_CODE = `
+                export default async function (createApp,App,router){
+                const GlobalApp = config.default?.(App)??App;
+                config.onRouterGuard?.(router);
+                const app = createApp(GlobalApp);
+                config.onSetupPlugins?.(app);
+                app.use(router);
+                return app
+            }
+          `;
+      const lines = DEFAULT_CODE.split("\n");
+
       if (id == "\0virturl:app-mount") {
+        const filepath = await checkFiles();
+        if (filepath) {
+          lines.splice(
+            0,
+            0,
+            `import  *  as config  from '/src/${filepath}';`,
+          );
+          return lines.join("\n");
+        } else {
           return `export default function (createApp,App,router,){
             const app = createApp(App);
             app.use(router);
             return app
             }`;
-
+        }
       }
     },
   };
-}
+};

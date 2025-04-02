@@ -1,6 +1,6 @@
 {
   "name": "mooljs",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "function tool library for mooljs",
   "main": "lib/index.ts",
   "module": "lib/index.ts",

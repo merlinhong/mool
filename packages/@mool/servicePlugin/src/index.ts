@@ -80,7 +80,6 @@ export function Service(opt?: IOpt): Plugin[] {
           schedule(async () => {
             watcher.close();
             server.restart()
-            
           });
         });
         // 监听 service 目录

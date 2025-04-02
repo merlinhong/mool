@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/cli-service",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "description": "app frame upgrade for mool service",
   "main": "lib/Service.js",
   "typings": "types/index.d.ts",
@@ -74,16 +74,13 @@
     "vite": "^5.3.4",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-seo-prerender": "^0.5.0",
-    "vite-plugin-service": "^0.0.8",
     "vite-plugin-restart": "^0.4.2",
     "vite-plugin-html": "^3.2.2",
     "vite-svg-loader": "^5.1.0"
   },
   "devDependencies": {
-    "sass": "^1.32.7",
     "vue": "^3.2.25",
-    "vue-router": "^4.2.5",
-    "pinia": "^2.1.7"
+    "vue-router": "^4.2.5"
   },
   "publishConfig": {
     "access": "public"

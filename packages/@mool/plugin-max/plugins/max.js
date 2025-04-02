@@ -1,4 +1,4 @@
-const { access, constants, existsSync } = require("fs");
+const { existsSync } = require("fs");
 const {checkFiles} = require('@mooljs/cli-service/lib/util/checkFile');
 
 module.exports = function virtual(api, options) {
