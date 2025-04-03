@@ -1,80 +1,91 @@
 import { App, inject } from "vue";
-import { UseProviderOptions, CheckPermissionOptions, IMenuRoutes, LayoutConfig } from './type'; // 假设type.ts和hooks文件在同一目录
-import {createStore} from './useStore';
-// core/access-provider.ts
-const ACCESS_KEY = Symbol('access-context');
-const APP_CONFIG = Symbol('app-config');
-const LAYOUT_CONFIG = Symbol('layout-config');
-const MENU_ROUTES = Symbol('menu-config');
+import { UseProviderOptions, IMenuRoutes, LayoutConfig } from "./type"; // 假设type.ts和hooks文件在同一目录
+import { type } from "./utils/type";
+const LAYOUT_CONFIG = Symbol("layout-config");
+const MENU_ROUTES = Symbol("menu-config");
 
-function findRouteByPath(routes: IMenuRoutes[], targetPath: string): [IMenuRoutes | null, IMenuRoutes] | null {
-    for (const route of routes) {
-        if (route.path === targetPath) {
-            return [null, route];
-        }
-        if (route.routes && route.routes.length > 0) {
-            const foundRoute = findRouteByPath(route.routes, targetPath);
-            if (foundRoute) {
-                return [route, foundRoute[1]];
-            }
-        }
-    }
-    return null;
+let ACCESS_KEY: symbol;
+
+function convertToArray(value: any) {
+  // 如果已经是数组，则直接返回
+  if (Array.isArray(value)) {
+    return value;
+  }
+  // 否则，将非数组值包装在数组中,确保最终返回数组
+  return [];
+}
+function convertToObject(value) {
+  // 如果value已经是对象，并且不是null
+  if (type(value) === "object") {
+    return value;
+  }
+  // 对于基本类型或null/undefined，将其作为值放入一个新对象的属性中
+  return {};
+}
+export const getAppConfig = async (options: UseProviderOptions) => {
+  const { config, access = { default: () => ({}) } } = options;
+  const { routes = [], layout = {}, getInitialState } = config ?? {};
+
+  const initialState = (await getInitialState?.()) ?? {};
+  const accessConfig = access.default?.(initialState);
+
+  const layoutConfig =
+    typeof layout === "function" ? layout(initialState) : layout;
+
+  const menuRoutes =
+    (await (layoutConfig as LayoutConfig).menu?.request?.()) ?? routes;
+
+  return {
+    routes: convertToArray(menuRoutes),
+    access: convertToObject(accessConfig),
+    layout: convertToObject(layoutConfig),
+  };
 };
-function checkPermision(options: CheckPermissionOptions) {
-    const { to, routes = [], access = {}, exclude = ['/user'] } = options;
-    // 递归函数，用于深度查询路由
+export const useProvider = (
+  app: App,
+  options: {
+    accessInjectKey: symbol;
+    routes: IMenuRoutes[];
+    layout: LayoutConfig;
+  },
+) => {
+  // const { accessInjectKey, routesInjectKey } = options;
+  const { routes, accessInjectKey, layout } = options;
 
-    const hasNoPermision = (access: Record<string, any>, currAccess?: string) => {
-        return currAccess && !access[currAccess];
-    }
-    const res = findRouteByPath(routes, to.path);
+  /**
+   * 注入菜单路由
+   */
+  app.provide(MENU_ROUTES, routes);
 
-    if (res) {
-        const [parentRoutes, route] = res;
-        const noPermission = (hasNoPermision(access, parentRoutes?.meta?.access) || hasNoPermision(access, route.meta?.access)) && !exclude.some(_ => to.path.includes(_));
-        return noPermission && to.path !== '/403'
-    } else {
-        return false
-    }
-}
+  /**
+   * 注入布局配置
+   */
 
-export const useProvider = async (app: App, options: UseProviderOptions) => {
-    const { router, globalConfig } = options ?? {};
-    const { access = [], layout = {}, menuRoutes = [],initialState={} } = globalConfig;
-    app.config.globalProperties.$access = access;
-    app.provide(ACCESS_KEY, access);
-    app.provide(APP_CONFIG, globalConfig);
-    app.provide(LAYOUT_CONFIG, layout);
-    app.provide(MENU_ROUTES, menuRoutes);
-    /**
-     * 注入全局store
-     */
-    createStore('@@initialState',initialState);
+  app.provide(LAYOUT_CONFIG, layout);
 
-    router?.addRoute({
-        path: '/403',
-        component: layout.unAccessible ?? (() => import('@mooljs/plugin-layout/layouts/403.vue'))
-    });
-    router?.beforeEach((to, from, next) => {
-        const exclude = menuRoutes.filter(_ => _.meta?.layout === false)?.map(_ => _.path);
-        if (checkPermision({ to, routes: menuRoutes, access, exclude })) {
-            next('/403');
-        } else {
-            next();
-        }
-    });
-}
+  /**
+   * 获取插件的注入key
+   */
+  ACCESS_KEY = accessInjectKey;
+
+  /**
+   * 注入全局store
+   */
+  // createStore('@@initialState',initialState);
+};
 
 export const useAccess = () => {
-    return inject(ACCESS_KEY) as UseProviderOptions['globalConfig']['access']
-}
-export const getAppConfig = () => {
-    return inject(APP_CONFIG) as UseProviderOptions['globalConfig']
-}
+  return ACCESS_KEY
+    ? (inject(ACCESS_KEY) as ReturnType<
+        (typeof import("src/access"))["default"]
+      >)
+    : {};
+};
+
 export const useMenuRoutes = () => {
-    return inject(MENU_ROUTES) as UseProviderOptions['globalConfig']['menuRoutes']
-}
+  return inject(MENU_ROUTES) as IMenuRoutes;
+};
+
 export const useLayout = () => {
-    return inject(LAYOUT_CONFIG) as UseProviderOptions['globalConfig']['layout']
-}
+  return inject(LAYOUT_CONFIG) as LayoutConfig;
+};

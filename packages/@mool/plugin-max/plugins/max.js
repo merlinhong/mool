@@ -1,8 +1,7 @@
-const { existsSync } = require("fs");
+const { existsSync,readFileSync } = require("fs");
 const {checkFiles} = require('@mooljs/cli-service/lib/util/checkFile');
-
 module.exports = function virtual(api, options) {
-  const virtualModuleIds = ["virturl:app-mount"];
+  const virtualModuleIds = ['virturl:access',"virturl:app-mount"];
   return {
     name: "vite-mooljs-virtual",
     enforce: "pre",
@@ -28,7 +27,14 @@ module.exports = function virtual(api, options) {
       }
     },
     async load(id) {
+      // try {
+      //   require.resolve('@mooljs/plugin-access');
+
+      // } catch (error) { 
+      // }
       const DEFAULT_CODE = ` 
+                import {ACCESS_KEY,useAccess} from 'virturl:access';
+                
                 export default async function (createApp,App,router){
                 const GlobalApp = config.default?.(App)??App;
                 config.onRouterGuard?.(router);
@@ -38,15 +44,19 @@ module.exports = function virtual(api, options) {
                 return app
         }`;
         const SETUP_FUNC = `async function setupProvider(app,options){
-          const {config={},access={},router} = options;
-          const { routes = [], layout = {}, getInitialState } = config;
-          const initialState = await getInitialState?.()??{};
-          const accessConfig = access.default?.(initialState);
-          const layoutConfig = typeof layout === 'function' ? layout(initialState) : layout;
-          const menuRoutes = await layoutConfig.menu?.request?.() ?? routes;
-          app.use(useProvider,{globalConfig:{
-            layout:layoutConfig,menuRoutes,access:accessConfig,initialState
-          },router});
+          const {router,...opt} = options;
+          const {routes=[],access={},layout={}} = await getAppConfig(opt??{});
+          app.use(useAccess,{
+            access,
+            routes,
+            router,
+            layout
+          });
+          app.use(useProvider,{
+            accessInjectKey:ACCESS_KEY,
+            routes,
+            layout
+          })
         }`
       const lines = DEFAULT_CODE.split("\n");
       if (id == "\0virturl:app-mount") {
@@ -64,7 +74,7 @@ module.exports = function virtual(api, options) {
             0,
             0,
 
-            `import { useProvider } from 'mooljs';
+            `import { useProvider,getAppConfig } from 'mooljs';
              import  *  as config  from '/src/${filepath}';
             `,
           );
@@ -72,10 +82,10 @@ module.exports = function virtual(api, options) {
           lines.splice(
             0,
             0,
-            existsSync('src/access.ts') ? `import  *  as access  from '/src/access.ts';` : `const access = {};`,
+            existsSync('src/access.ts') ? `import  *  as access  from '/src/access.ts';` : `const access = {default:()=>({})};`,
           );
 
-
+          
           const targetIndex = lines.findIndex((line) =>
             line.includes("app.use(router);"),
           );
@@ -85,8 +95,9 @@ module.exports = function virtual(api, options) {
           return lines.join("\n");
         } else {
           return `
-          import { createStore } from 'mooljs';
+          // import { createStore } from 'mooljs';
           import { useProvider } from 'mooljs';
+          const getAppConfig = {};
           ${SETUP_FUNC}
           export default async function (createApp,App,router,){
           const app = createApp(App);

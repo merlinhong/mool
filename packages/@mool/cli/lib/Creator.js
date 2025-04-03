@@ -107,6 +107,7 @@ module.exports = class Creator extends EventEmitter {
       preset.plugins["@mooljs/plugin-max"] = {};
       // inject core layout
       preset.plugins["@mooljs/plugin-layout"] = {};
+      preset.plugins["@mooljs/plugin-access"] = {};
     } else {
       // inject core router
       preset.plugins["@mooljs/plugin-router"] = {};

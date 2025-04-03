@@ -1,24 +1,25 @@
 {
-  "name": "@mooljs/plugin-store",
+  "name": "@mooljs/plugin-access",
   "version": "0.1.0",
-  "description": " global data store for mooljs",
-  "main": "dist/access.mjs",
+  "description": "pro layout access for mooljs",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-store"
+    "directory": "packages/@mool/plugin-access"
   },
   "keywords": [
     "layout",
+    "ProLayout",
     "mooljs",
-    "store"
+    "access"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-store#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-access#readme",
   "publishConfig": {
     "access": "public"
   },

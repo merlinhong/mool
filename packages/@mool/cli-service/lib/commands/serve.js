@@ -16,6 +16,16 @@ const defaults = {
   https: false,
 };
 let initialized;
+
+let timer = undefined;
+const delay = process.platform === 'win32' ? 1500 : 800;
+function clear() {
+  clearTimeout(timer);
+}
+function schedule(fn) {
+  clear();
+  timer = setTimeout(fn, delay);
+}
 /** @type {import('@mooljs/cli-service').ServicePlugin} */
 module.exports = (api, options) => {
   const baseUrl = getBaseUrl(options);
@@ -59,7 +69,7 @@ module.exports = (api, options) => {
         codeSplitting,
       } = options;
       const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs'];
-      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx','src/app.ts'];
+      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx'];
       if(options.access){
         HMR_INCLUDES.push('src/access.ts')
       }
@@ -92,7 +102,9 @@ module.exports = (api, options) => {
                 await viteServer.close();
                 // 再重新执行服务器初始化的流程
                 // await _createViteDevServer(true)
-                api.run();
+                schedule(() => {
+                  api.run();
+                });
               })
             ],
             resolve: {
@@ -151,7 +163,7 @@ module.exports = (api, options) => {
       initialized = true;
       return new Promise((resolve) => {
         resolve({
-          // server: viteServer,
+          server: viteServer,
           // url: urls.localUrlForBrowser,
         });
       });

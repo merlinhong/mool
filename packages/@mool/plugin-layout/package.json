@@ -2,7 +2,7 @@
   "name": "@mooljs/plugin-layout",
   "version": "0.2.0",
   "description": "pro layout for mooljs",
-  "main": "index.js",
+  "main": "dist/access.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
@@ -25,16 +25,17 @@
   },
   "sideEffects": false,
   "scripts": {
-    "build": "tsc"
+    "build": "vite build"
   },
   "dependencies": {
     "vite-plugin-pages": "^0.32.4"
   },
   "devDependencies": {
-    "typescript": "^4.9.5"
+    "vite": "^5.3.4"
   },
   "peerDependencies": {
     "vue": "^3.2.25",
+    "vue-router": "^4.0.3",
     "element-plus": "^2.5.3",
     "mooljs":"^0.4.4"
   }
