@@ -13,12 +13,15 @@ const { defaults } = require('./options')
 const loadFileConfig = require('./util/loadFileConfig')
 const resolveUserConfig = require('./util/resolveUserConfig')
 const {checkFiles} = require('./util/checkFile');
-const chokidar = require("chokidar");
+const VirtualModuleGenerator = require("./VirtualGenerator");
 
 /**@type {InlineConfig} */
 const Config = {
   plugins:[],
 };
+const Max = {
+  plugins:[]
+}
 const pluginRE = /^(@mooljs\/|mooljs-|@[\w-]+(\.)?[\w-]+\/mooljs-)plugin-/
 const isPlugin = id => pluginRE.test(id);
 
@@ -50,7 +53,9 @@ module.exports = class Service {
     // so we can get the information without actually applying the plugin.
     this.modes = this.plugins.reduce((modes, { apply: { defaultModes } }) => {
       return Object.assign(modes, defaultModes)
-    }, {})
+    }, {});
+    this.maxPlugins = [];
+
   }
 
   resolvePkg (inlinePkg, context = this.context) {
@@ -69,6 +74,7 @@ module.exports = class Service {
     // if (this.initialized) {
     //   return
     // }
+    this.maxPlugins = [];
     this.viteChainFns = [];
     this.viteRawConfigFns = [];
     this.initialized = true
@@ -287,6 +293,13 @@ module.exports = class Service {
     }
     const { fn } = command
     return fn(args, rawArgv)
+  }
+
+  resolveMaxPlugins(){
+    Max.plugins = [];
+    const chainableConfig = Object.assign({},Max);
+    this.maxPlugins.forEach(fn=>fn(chainableConfig));
+    return new VirtualModuleGenerator(chainableConfig.plugins);
   }
 
   resolveChainableViteConfig () {

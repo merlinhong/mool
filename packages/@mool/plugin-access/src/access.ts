@@ -35,12 +35,13 @@ function checkPermision(options: CheckPermissionOptions) {
     }
 }
 export const useAccess = (app:App,options:UseProviderOptions)=>{
-    const { access = {}, layout = {}, routes = [],router} = options;
+    const { access = {}, layout = {}, routes = [],router} = options??{};
     
     app.config.globalProperties.$access = access;
 
+    app.provide('@@access-key',ACCESS_KEY);
+    
     app.provide(ACCESS_KEY, access);
-
     router?.addRoute({
         path: '/403',
         component:layout.unAccessible ?? (() => import('@mooljs/plugin-layout/layouts/403.vue')),

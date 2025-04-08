@@ -97,7 +97,21 @@ class PluginAPI {
   }
 
   /**
-   * Register a function that will receive a chainable webpack config
+   * Register a function that will receive a chainable max Plugins
+   * the function is lazy and won't be called until `resolveMaxConfig` is
+   * called
+   * @param {function} fn 
+   */
+  applyPlugins(fn){
+    this.service.maxPlugins.push(fn);
+  }
+
+  resolveMaxPlugins () {
+    return this.service.resolveMaxPlugins()
+  }
+
+  /**
+   * Register a function that will receive a chainable vite config
    * the function is lazy and won't be called until `resolveViteConfig` is
    * called
    *
@@ -109,9 +123,9 @@ class PluginAPI {
 
   /**
    * Register
-   * - a webpack configuration object that will be merged into the config
+   * - a vite configuration object that will be merged into the config
    * OR
-   * - a function that will receive the raw webpack config.
+   * - a function that will receive the raw vite config.
    *   the function can either mutate the config directly or return an object
    *   that will be merged into the config.
    *
@@ -132,21 +146,21 @@ class PluginAPI {
   // }
 
   /**
-   * Resolve the final raw webpack config, that will be passed to webpack.
+   * Resolve the final raw vite config, that will be passed to vite.
    *
    * @param {ChainableWebpackConfig} [chainableConfig]
-   * @return {object} Raw webpack config.
+   * @return {object} Raw vite config.
    */
   resolveViteConfig (chainableConfig) {
     return this.service.resolveViteConfig(chainableConfig)
   }
 
   /**
-   * Resolve an intermediate chainable webpack config instance, which can be
-   * further tweaked before generating the final raw webpack config.
+   * Resolve an intermediate chainable vite config instance, which can be
+   * further tweaked before generating the final raw vite config.
    * You can call this multiple times to generate different branches of the
-   * base webpack config.
-   * See https://github.com/mozilla-neutrino/webpack-chain
+   * base vite config.
+   * See https://github.com/mozilla-neutrino/vite-chain
    *
    * @return {ChainableWebpackConfig}
    */

@@ -27,7 +27,7 @@ module.exports = function virtual(api, options) {
     },
     async load(id) {
       if(id=="\0virturl:access"){
-        return readFileSync(api.resolve('node_modules/@mooljs/plugin-access/dist/access.mjs'),'utf-8');
+        return readFileSync(api.resolve('node_modules/@mooljs/plugin-access/dist/access'),'utf-8');
       }
     },
   };

@@ -1,3 +1,4 @@
+const { readFileSync,existsSync } = require('node:fs');
 const pages = require("vite-plugin-pages").default;
 const merge = require("lodash.merge");
 const pagesPluginOption = {
@@ -9,14 +10,14 @@ module.exports = async (api, options) => {
   if (options.routes && Array.isArray(options.routes)) {
     pagesPluginOption.onRoutesGenerated = () => {
       return options.routes?.map(_ => {
-        if (_.routes&&_.meta.layout!==false) {
+        if (_.routes && _.meta.layout !== false) {
           return [_, ..._.routes]
-        } else if(_.meta.layout===false&&_.routes){
+        } else if (_.meta.layout === false && _.routes) {
           return {
             ..._,
-            children:_.routes
+            children: _.routes
           }
-        }else{
+        } else {
           return _
         }
       }).flat()
@@ -27,5 +28,31 @@ module.exports = async (api, options) => {
       pages(merge(pagesPluginOption, options.route ?? {})),
     );
   });
-
+  api.applyPlugins((config) => {
+    config.plugins.push(
+      {
+        name: '@mooljs/plugin-layout',
+        after:[],
+        injectImports: (opt) => {
+        
+          return [ `import { useLayout, getAppConfig} from 'virtual:layout'; 
+          ${existsSync('src/access.ts') ? `import  *  as accessConfig  from '/src/access.ts';` : `const accessConfig = {default:()=>({})};`}
+          `];
+        },
+        // 运行时逻辑
+        runtime: (ctx) => `
+          const {routes,access,layout} = await getAppConfig({config,access:accessConfig});
+          app.use(useLayout,{
+            routes,
+            layout
+          });
+        `,
+        // 虚拟模块定义
+        virtualModule: () => ({
+          id: 'virtual:layout',
+          content: readFileSync(api.resolve('node_modules/@mooljs/plugin-layout/dist/layout.mjs'), 'utf-8')
+        }),
+      }
+    );
+  });
 };
