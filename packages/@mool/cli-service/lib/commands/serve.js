@@ -68,7 +68,7 @@ module.exports = (api, options) => {
         proxy,
         codeSplitting,
       } = options;
-      const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs'];
+      const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs','axios'];
       const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx'];
       if(options.access){
         HMR_INCLUDES.push('src/access.ts')

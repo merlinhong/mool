@@ -44,7 +44,7 @@ export const useAccess = (app:App,options:UseProviderOptions)=>{
     app.provide(ACCESS_KEY, access);
     router?.addRoute({
         path: '/403',
-        component:layout.unAccessible ?? (() => import('@mooljs/plugin-layout/layouts/403.vue')),
+        component:layout.unAccessible ?? (() => import('@mooljs/plugin-layout/src/layouts/403.vue')),
     });
     router?.beforeEach((to, from, next) => {
         const exclude = routes.filter(_ => _.meta?.layout === false)?.map(_ => _.path);

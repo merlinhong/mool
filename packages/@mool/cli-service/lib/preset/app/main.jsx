@@ -1,5 +1,5 @@
 import { createApp, defineComponent,KeepAlive } from 'vue';
-import router, { RouterView,routes } from '@mooljs/cli-service/lib/preset/app/router';
+import router, { RouterView } from 'virturl:router';
 import appMount from 'virturl:app-mount';
 const App = defineComponent({
   setup() {

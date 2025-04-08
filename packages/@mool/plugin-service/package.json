@@ -1,34 +1,31 @@
 {
-  "name": "@mooljs/plugin-locale",
-  "version": "0.1.3",
-  "description": "i18n plugin for mool",
+  "name": "@mooljs/plugin-service",
+  "version": "0.0.2",
+  "description": "request plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-locale"
+    "directory": "packages/@mool/plugin-service"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "locale"
+    "request",
+    "service"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-locale#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-service#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "vue-i18n": "^11.1.2"
-
-  },
-  "devDependencies": {
-    "@vue/cli-test-utils": "^5.0.8"
+    "vite-plugin-service": "^0.0.8"
   }
 }

@@ -23,4 +23,9 @@ module.exports = class VirtualModuleGenerator {
         return acc;
       }, {});
     }
+    generateImportsMool(){
+      return this.modules.flatMap((_) => {
+        return _.injectMool?.() || [];
+      }).join('\n');
+    }
   }

@@ -1,8 +1,8 @@
 {
   "name": "@mooljs/plugin-layout",
-  "version": "0.2.0",
+  "version": "1.3.0",
   "description": "pro layout for mooljs",
-  "main": "dist/access.mjs",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
@@ -13,6 +13,10 @@
     "ProLayout",
     "mooljs",
     "element-plus"
+  ],
+  "files": [
+    "dist",
+    "src"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
@@ -28,7 +32,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "vite-plugin-pages": "^0.32.4"
+    "vite-plugin-vue-layouts": "^0.11.0"
   },
   "devDependencies": {
     "vite": "^5.3.4"
@@ -37,6 +41,6 @@
     "vue": "^3.2.25",
     "vue-router": "^4.0.3",
     "element-plus": "^2.5.3",
-    "mooljs":"^0.4.4"
+    "mooljs":"^1.0.1"
   }
 }

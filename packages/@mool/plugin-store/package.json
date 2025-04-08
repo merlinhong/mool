@@ -1,8 +1,8 @@
 {
   "name": "@mooljs/plugin-store",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "description": " global data store for mooljs",
-  "main": "dist/access.mjs",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
@@ -12,6 +12,9 @@
     "layout",
     "mooljs",
     "store"
+  ],
+  "files": [
+    "dist"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
@@ -27,10 +30,13 @@
     "build": "vite build"
   },
   "devDependencies": {
+    "@vueuse/core": "^13.0.0",
     "vite": "^5.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.25",
-    "vue-router": "^4.0.3"
+    "vue": "^3.2.25"
+  },
+  "dependencies": {
+    "tiny-glob": "^0.2.9"
   }
 }

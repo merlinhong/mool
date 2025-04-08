@@ -207,7 +207,8 @@ module.exports = class Service {
 
     let plugins
 
-    const builtInPlugins = [
+
+    const buildIns =[
       './commands/serve',
       // './commands/build',
       './commands/inspect',
@@ -217,8 +218,24 @@ module.exports = class Service {
       './preset/compression/index',
       './preset/svg/index',
       './preset/vue/index',
-      './preset/app/index'
-    ].map((id) => idToPlugin(id))
+      './preset/app/index',
+    ];
+    try {
+      // Check if it has been installed @mooljs/plugin-max
+      require.resolve('@mooljs/plugin-max');
+      buildIns.push(
+        '@mooljs/plugin-store',
+        '@mooljs/plugin-locale',
+        '@mooljs/plugin-access',
+        '@mooljs/plugin-layout',
+        '@mooljs/plugin-service',
+        '@mooljs/plugin-windicss',
+        '@mooljs/plugin-ep'
+      )
+    } catch (error) {
+      
+    }
+    const builtInPlugins = buildIns.map((id) => idToPlugin(id))
 
     if (inlinePlugins) {
       plugins = useBuiltIn !== false

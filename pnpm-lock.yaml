@@ -422,9 +422,6 @@ importers:
       '@types/qs':
         specifier: ^6.9.15
         version: 6.9.18
-      '@vueuse/core':
-        specifier: ^13.0.0
-        version: 13.0.0(vue@3.5.13(typescript@4.9.5))
       axios:
         specifier: ^1.6.5
         version: 1.8.4(debug@4.4.0)
@@ -449,10 +446,10 @@ importers:
     dependencies:
       vue:
         specifier: ^3.2.25
-        version: 3.5.13(typescript@4.9.5)
+        version: 3.5.13(typescript@5.8.2)
       vue-router:
         specifier: ^4.0.3
-        version: 4.5.0(vue@3.5.13(typescript@4.9.5))
+        version: 4.5.0(vue@3.5.13(typescript@5.8.2))
     devDependencies:
       vite:
         specifier: ^5.3.4
@@ -466,12 +463,6 @@ importers:
       ant-design-vue:
         specifier: ~4.2.5
         version: 4.2.6(vue@3.5.13(typescript@5.8.2))
-
-  packages/@mool/plugin-arco:
-    dependencies:
-      '@vue/cli-shared-utils':
-        specifier: ^5.0.8
-        version: 5.0.8(encoding@0.1.13)
 
   packages/@mool/plugin-electron: {}
 
@@ -508,11 +499,11 @@ importers:
         specifier: ^2.5.3
         version: 2.9.7(vue@3.5.13(typescript@5.8.2))
       mooljs:
-        specifier: ^0.4.4
-        version: 0.4.6(debug@4.4.0)(vue@3.5.13(typescript@5.8.2))
-      vite-plugin-pages:
-        specifier: ^0.32.4
-        version: 0.32.5(@vue/compiler-sfc@3.5.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))
+        specifier: ^1.0.1
+        version: 1.1.0(debug@4.4.0)(vue@3.5.13(typescript@5.8.2))
+      vite-plugin-vue-layouts:
+        specifier: ^0.11.0
+        version: 0.11.0(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
       vue:
         specifier: ^3.2.25
         version: 3.5.13(typescript@5.8.2)
@@ -539,27 +530,30 @@ importers:
 
   packages/@mool/plugin-max:
     dependencies:
+      '@mooljs/plugin-access':
+        specifier: ^0.3.0
+        version: 0.3.0(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
+      '@mooljs/plugin-ep':
+        specifier: ^0.1.0
+        version: 0.1.0(encoding@0.1.13)(vue@3.5.13(typescript@5.8.2))
+      '@mooljs/plugin-layout':
+        specifier: ^1.3.0
+        version: 1.3.0(element-plus@2.9.7(vue@3.5.13(typescript@5.8.2)))(mooljs@1.1.0(debug@4.4.0)(vue@3.5.13(typescript@5.8.2)))(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
+      '@mooljs/plugin-locale':
+        specifier: ^0.1.3
+        version: 0.1.3(encoding@0.1.13)(vue@3.5.13(typescript@5.8.2))
+      '@mooljs/plugin-service':
+        specifier: ^0.0.2
+        version: 0.0.2(encoding@0.1.13)(esbuild@0.25.1)(mockjs@1.1.0)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
+      '@mooljs/plugin-store':
+        specifier: ^1.0.0
+        version: 1.0.0(vue@3.5.13(typescript@5.8.2))
+      '@mooljs/plugin-windicss':
+        specifier: ^0.0.6
+        version: 0.0.6(encoding@0.1.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
       '@vue/cli-shared-utils':
         specifier: ^5.0.8
         version: 5.0.8(encoding@0.1.13)
-      element-plus:
-        specifier: ^2.5.3
-        version: 2.9.7(vue@3.5.13(typescript@5.8.2))
-      vite-plugin-service:
-        specifier: ^0.0.8
-        version: 0.0.8(esbuild@0.25.1)(mockjs@1.1.0)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
-      vite-plugin-vue-layouts:
-        specifier: ^0.11.0
-        version: 0.11.0(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
-      vite-plugin-windicss:
-        specifier: ^1.9.4
-        version: 1.9.4(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
-      vue-i18n:
-        specifier: ^11.1.2
-        version: 11.1.2(vue@3.5.13(typescript@5.8.2))
-      windicss:
-        specifier: ^3.5.6
-        version: 3.5.6
     devDependencies:
       '@vue/cli-test-utils':
         specifier: ^5.0.8
@@ -572,21 +566,36 @@ importers:
         version: 5.0.8(encoding@0.1.13)
       vite-plugin-pages:
         specifier: ^0.32.4
-        version: 0.32.5(@vue/compiler-sfc@3.5.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))
+        version: 0.32.5(@vue/compiler-sfc@3.5.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
     devDependencies:
       '@vue/cli-test-utils':
         specifier: ^5.0.8
         version: 5.0.8
 
-  packages/@mool/plugin-store:
+  packages/@mool/plugin-service:
     dependencies:
       '@vue/cli-shared-utils':
         specifier: ^5.0.8
         version: 5.0.8(encoding@0.1.13)
+      vite-plugin-service:
+        specifier: ^0.0.8
+        version: 0.0.8(esbuild@0.25.1)(mockjs@1.1.0)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
+
+  packages/@mool/plugin-store:
+    dependencies:
+      tiny-glob:
+        specifier: ^0.2.9
+        version: 0.2.9
+      vue:
+        specifier: ^3.2.25
+        version: 3.5.13(typescript@5.8.2)
     devDependencies:
-      '@vue/cli-test-utils':
-        specifier: ^5.0.8
-        version: 5.0.8
+      '@vueuse/core':
+        specifier: ^13.0.0
+        version: 13.0.0(vue@3.5.13(typescript@5.8.2))
+      vite:
+        specifier: ^5.3.4
+        version: 5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0)
 
   packages/@mool/plugin-uni: {}
 
@@ -2570,6 +2579,37 @@ packages:
     resolution: {integrity: sha512-XRG5BloiArpXRakcnPHmEHJp+4AtnhRtpDIHSghmXD5EichI1uD73J7FgPp30mm2pDRq3FdqB0NbwSEsJ9xFQg==}
     engines: {node: '>= 10.18.0'}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+
+  '@mooljs/plugin-access@0.3.0':
+    resolution: {integrity: sha512-dsU6MwVwCzxGvWFuwvaznQF7p4nVS4pBq3cl0RG11Drc5rLHCFx+uL1VDvnIP04fNH0Oub4eGEo1L0TeuGSpmQ==}
+    peerDependencies:
+      vue: ^3.2.25
+      vue-router: ^4.0.3
+
+  '@mooljs/plugin-ep@0.1.0':
+    resolution: {integrity: sha512-OCwC4uM6A4rKsCTF2nygHzsKrHtPIHC/EuthPqQeWomB3Yt0IJRmU+6NVe3qYoOlqvvp24ukooHW1/hxwPk65Q==}
+
+  '@mooljs/plugin-layout@1.3.0':
+    resolution: {integrity: sha512-/LeOvz00XSC82biCykv9o6+4vkcByUJMKWysXz/TRIZDPFDwVxg3F9B6RJsfSsUZmNmwcqspFPCeKoHgA/WVaA==}
+    peerDependencies:
+      element-plus: ^2.5.3
+      mooljs: ^1.0.1
+      vue: ^3.2.25
+      vue-router: ^4.0.3
+
+  '@mooljs/plugin-locale@0.1.3':
+    resolution: {integrity: sha512-6qfbZt7Jh/VMldGKFRmcaFLFfk/rgpCV3t5fvKt/EqMfA4eoQCWK7NGdMPgnvJLI7TEL5nZThiPifei8ZXiKcQ==}
+
+  '@mooljs/plugin-service@0.0.2':
+    resolution: {integrity: sha512-Rdb3jWfwnh5BVZcotyUGUhxe7DvA7P/4E2iasA7J2a07u6pyMghkzd0EePiD1wYxzN8Jk3FIfbL4/dHHLl417w==}
+
+  '@mooljs/plugin-store@1.0.0':
+    resolution: {integrity: sha512-vMmpe74TyihlKGL1PfC7PfQdmuGHfWx+f4MlAqaS7OsVQi5lH+w5j4nUBekO3f6I/zT4V2AdvsIWDssS9ozb6Q==}
+    peerDependencies:
+      vue: ^3.2.25
+
+  '@mooljs/plugin-windicss@0.0.6':
+    resolution: {integrity: sha512-FKAIPeLP7BxWtVIQKklX3Pz8EbnyGeYGfreLKksfXmqnnVf3P3TEIBf0oUlxoSGtjeZktwS6uiIkZA9IJkgqzw==}
 
   '@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1':
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
@@ -6382,6 +6422,9 @@ packages:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
 
+  globalyzer@0.1.0:
+    resolution: {integrity: sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==}
+
   globby@11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
@@ -6389,6 +6432,9 @@ packages:
   globby@13.2.2:
     resolution: {integrity: sha512-Y1zNGV+pzQdh7H39l9zgB4PJqjRNqydvdYCDG4HFXM4XuvSaQQlEc91IU1yALL8gUTDomgBAfz3XJdmUS+oo0w==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -8037,8 +8083,8 @@ packages:
   module-alias@2.2.3:
     resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
 
-  mooljs@0.4.6:
-    resolution: {integrity: sha512-t2EXhEKs9EW0PGoZdmIefbHXu7BeyU7BqyaKpPNnhVJOCU9dtQP0r6EIaNKD9bz6f3D1ytPY3dUu7fOcF0Vdrw==}
+  mooljs@1.1.0:
+    resolution: {integrity: sha512-tRo7MpDgjdQ8SDREO28DUgqfr2p0uOc/1z/tmBNv46Kk+DBAJ7nvURsovHd2eloapbYf6YE5T2vdH8bBNz1ycQ==}
     peerDependencies:
       vue: ^3.2.25
 
@@ -10391,6 +10437,9 @@ packages:
   timed-out@4.0.1:
     resolution: {integrity: sha512-G7r3AhovYtr5YKOWQkta8RKAPb+J9IsO4uVmzjl8AZwfhs8UcUwTiD6gcJYSgOtzyjvQKrKYn41syHbUWMkafA==}
     engines: {node: '>=0.10.0'}
+
+  tiny-glob@0.2.9:
+    resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}
 
   tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
@@ -13709,6 +13758,64 @@ snapshots:
       npmlog: 4.1.2
       write-file-atomic: 3.0.3
 
+  '@mooljs/plugin-access@0.3.0(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      vue: 3.5.13(typescript@5.8.2)
+      vue-router: 4.5.0(vue@3.5.13(typescript@5.8.2))
+
+  '@mooljs/plugin-ep@0.1.0(encoding@0.1.13)(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      '@vue/cli-shared-utils': 5.0.8(encoding@0.1.13)
+      element-plus: 2.9.7(vue@3.5.13(typescript@5.8.2))
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - encoding
+      - vue
+
+  '@mooljs/plugin-layout@1.3.0(element-plus@2.9.7(vue@3.5.13(typescript@5.8.2)))(mooljs@1.1.0(debug@4.4.0)(vue@3.5.13(typescript@5.8.2)))(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      element-plus: 2.9.7(vue@3.5.13(typescript@5.8.2))
+      mooljs: 1.1.0(debug@4.4.0)(vue@3.5.13(typescript@5.8.2))
+      vite-plugin-vue-layouts: 0.11.0(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)))(vue@3.5.13(typescript@5.8.2))
+      vue: 3.5.13(typescript@5.8.2)
+      vue-router: 4.5.0(vue@3.5.13(typescript@5.8.2))
+    transitivePeerDependencies:
+      - supports-color
+      - vite
+
+  '@mooljs/plugin-locale@0.1.3(encoding@0.1.13)(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      '@vue/cli-shared-utils': 5.0.8(encoding@0.1.13)
+      vue-i18n: 11.1.2(vue@3.5.13(typescript@5.8.2))
+    transitivePeerDependencies:
+      - encoding
+      - vue
+
+  '@mooljs/plugin-service@0.0.2(encoding@0.1.13)(esbuild@0.25.1)(mockjs@1.1.0)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))':
+    dependencies:
+      '@vue/cli-shared-utils': 5.0.8(encoding@0.1.13)
+      vite-plugin-service: 0.0.8(esbuild@0.25.1)(mockjs@1.1.0)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
+    transitivePeerDependencies:
+      - encoding
+      - esbuild
+      - mockjs
+      - supports-color
+      - vite
+
+  '@mooljs/plugin-store@1.0.0(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      vue: 3.5.13(typescript@5.8.2)
+
+  '@mooljs/plugin-windicss@0.0.6(encoding@0.1.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))':
+    dependencies:
+      '@vue/cli-shared-utils': 5.0.8(encoding@0.1.13)
+      vite-plugin-windicss: 1.9.4(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))
+      windicss: 3.5.6
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+      - vite
+
   '@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1':
     dependencies:
       eslint-scope: 5.1.1
@@ -15266,13 +15373,6 @@ snapshots:
 
   '@vue/web-component-wrapper@1.3.0': {}
 
-  '@vueuse/core@13.0.0(vue@3.5.13(typescript@4.9.5))':
-    dependencies:
-      '@types/web-bluetooth': 0.0.21
-      '@vueuse/metadata': 13.0.0
-      '@vueuse/shared': 13.0.0(vue@3.5.13(typescript@4.9.5))
-      vue: 3.5.13(typescript@4.9.5)
-
   '@vueuse/core@13.0.0(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@types/web-bluetooth': 0.0.21
@@ -15293,10 +15393,6 @@ snapshots:
   '@vueuse/metadata@13.0.0': {}
 
   '@vueuse/metadata@9.13.0': {}
-
-  '@vueuse/shared@13.0.0(vue@3.5.13(typescript@4.9.5))':
-    dependencies:
-      vue: 3.5.13(typescript@4.9.5)
 
   '@vueuse/shared@13.0.0(vue@3.5.13(typescript@5.8.2))':
     dependencies:
@@ -18538,6 +18634,8 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.2.0
 
+  globalyzer@0.1.0: {}
+
   globby@11.1.0:
     dependencies:
       array-union: 2.1.0
@@ -18554,6 +18652,8 @@ snapshots:
       ignore: 5.3.2
       merge2: 1.4.1
       slash: 4.0.0
+
+  globrex@0.1.2: {}
 
   gopd@1.2.0: {}
 
@@ -20686,7 +20786,7 @@ snapshots:
 
   module-alias@2.2.3: {}
 
-  mooljs@0.4.6(debug@4.4.0)(vue@3.5.13(typescript@5.8.2)):
+  mooljs@1.1.0(debug@4.4.0)(vue@3.5.13(typescript@5.8.2)):
     dependencies:
       '@types/qs': 6.9.18
       '@vueuse/core': 13.0.0(vue@3.5.13(typescript@5.8.2))
@@ -23280,6 +23380,11 @@ snapshots:
 
   timed-out@4.0.1: {}
 
+  tiny-glob@0.2.9:
+    dependencies:
+      globalyzer: 0.1.0
+      globrex: 0.1.2
+
   tinyexec@0.3.2: {}
 
   tinyglobby@0.2.12:
@@ -23946,7 +24051,7 @@ snapshots:
       pathe: 0.2.0
       vite: 5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0)
 
-  vite-plugin-pages@0.32.5(@vue/compiler-sfc@3.5.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0))(vue-router@4.5.0(vue@3.5.13(typescript@5.8.2))):
+  vite-plugin-pages@0.32.5(@vue/compiler-sfc@3.5.13)(vite@5.4.15(@types/node@20.17.27)(less@4.2.2)(sass@1.86.0)(stylus@0.64.0)(terser@5.39.0)):
     dependencies:
       '@types/debug': 4.1.12
       debug: 4.4.0(supports-color@8.1.1)
@@ -23960,7 +24065,6 @@ snapshots:
       yaml: 2.7.0
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.13
-      vue-router: 4.5.0(vue@3.5.13(typescript@5.8.2))
     transitivePeerDependencies:
       - supports-color
 
@@ -24236,11 +24340,6 @@ snapshots:
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.13
       vue: 3.5.13(typescript@4.5.5)
-
-  vue-router@4.5.0(vue@3.5.13(typescript@4.9.5)):
-    dependencies:
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.13(typescript@4.9.5)
 
   vue-router@4.5.0(vue@3.5.13(typescript@5.8.2)):
     dependencies:

@@ -95,6 +95,10 @@ module.exports = class Creator extends EventEmitter {
 
     // clone before mutating
     preset = cloneDeep(preset);
+
+    // inject core router plugin
+    preset.plugins["@mooljs/plugin-router"] = {};
+    
     // inject core service
     preset.plugins["@mooljs/cli-service"] = Object.assign(
       {
@@ -106,11 +110,6 @@ module.exports = class Creator extends EventEmitter {
     if (preset.answers.preset == "__max__") {
       preset.plugins["@mooljs/plugin-max"] = {};
       // inject core layout
-      preset.plugins["@mooljs/plugin-layout"] = {};
-      preset.plugins["@mooljs/plugin-access"] = {};
-    } else {
-      // inject core router
-      preset.plugins["@mooljs/plugin-router"] = {};
     }
 
     // // legacy support for vuex

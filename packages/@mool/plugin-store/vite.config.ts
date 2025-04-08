@@ -5,14 +5,14 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/access.ts'),
-      name: 'access',
-      fileName: 'access',
+      entry: resolve(__dirname, 'src/store.ts'),
+      name: 'store',
+      fileName: 'store',
       formats:['es']
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['vue','vue-router','@mooljs/plugin-layout/layouts/403.vue'],
+      external: ['vue'],
     //   output: {
     //     // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
     //     globals: {

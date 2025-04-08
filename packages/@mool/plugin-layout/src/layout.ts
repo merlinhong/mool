@@ -2,10 +2,10 @@
 import { UseProviderOptions, IMenuRoutes, LayoutConfig } from "@mooljs/plugin-layout/type";
 
 import { App, markRaw, readonly } from "vue";
-import {type} from '../utils/type';
+import {type} from './utils/type';
 
-const LAYOUT_CONFIG = Symbol('layout-config');
-const MENU_ROUTES = Symbol('menu-config');
+export const LAYOUT_CONFIG = Symbol('layout-config');
+export const MENU_ROUTES = Symbol('menu-config');
 
 
 function convertToArray(value:any) {
@@ -43,14 +43,11 @@ export const useLayout = (app: App, options: { accessInjectKey: symbol; routes: 
     // const { accessInjectKey, routesInjectKey } = options;
     const { routes=[], layout=[] } = options??{};
 
-    app.provide('@@routes-key', MENU_ROUTES);
     /**
      * 注入菜单路由
      */
     app.provide(MENU_ROUTES, readonly(markRaw(routes)));
     
-
-    app.provide('@@layout-key', LAYOUT_CONFIG)
     /**
      * 注入布局配置
      */

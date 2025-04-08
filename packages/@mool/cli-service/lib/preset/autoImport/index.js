@@ -4,7 +4,6 @@ const {
   AntDesignVueResolver,
   ArcoResolver,
 } = require("unplugin-vue-components/resolvers");
-const path = require("path");
 const resolvers = {
   ep: ElementPlusResolver(),
   antd: AntDesignVueResolver(),
