@@ -1,10 +1,48 @@
-const { existsSync, readFileSync } = require("fs");
+const { readFileSync,writeFileSync } = require("fs");
 const { checkFiles } = require('@mooljs/cli-service/lib/util/checkFile');
+const MARKER = '// auto generate by mool plugins'         
 
 module.exports = function virtual(api, options) {
   const vmGenerator = api.resolveMaxPlugins();
   const virtualModules = vmGenerator.generateVirtualModules();
-  const virtualModuleIds = ["virturl:app-mount",'virturl:router'];
+  const virtualModuleIds = ["virturl:app-mount", 'virturl:router'];
+  const moduleTypes = vmGenerator.generateModuleType();
+  function generateModuleType(pathname = 'types/module.d.ts') {
+    try {
+      // 读取类型文件
+      let content = readFileSync(api.resolve(pathname), 'utf-8')
+      
+      // 定位目标模块声明
+      const moduleRegex = /declare\s+module\s+"mooljs"\s*\{([\s\S]*?)\}(?=\s*(?:declare|module|}|$))/g
+      const match = moduleRegex.exec(content)
+      
+      if (!match) {
+        return writeFileSync(api.resolve(pathname), `${content}\ndeclare module "mooljs" {\n${MARKER}\n${moduleTypes}\n}`, 'utf-8')
+      }
+  
+      // 检查是否已有生成内容
+      const existingContent = match[1]
+      if (existingContent.includes(MARKER)) {
+        content = content.replace(moduleRegex, `declare module "mooljs" {\n${MARKER}\n${moduleTypes}\n}`)
+      } else {
+        // 插入新内容
+        const insertionPoint = content.indexOf('declare module "mooljs"') 
+          + 'declare module "mooljs"'.length
+        content = [
+          content.slice(0, insertionPoint),
+          ` {\n  ${MARKER}\n${moduleTypes}\n}`
+        ].join('')
+      }
+  
+      // 写入文件
+      writeFileSync(api.resolve(pathname), content, 'utf-8')
+      console.log('✅ mooljs类型声明更新成功')
+  
+    } catch (error) {
+      console.error('❌ mooljs生成类型声明失败:', error.message)
+      process.exit(1)
+    }
+  }
   return {
     name: "vite-mooljs-virtual",
     enforce: "pre",
@@ -37,6 +75,7 @@ module.exports = function virtual(api, options) {
         //   // lines.splice(0, 0, `import 'virtual:windi.css';`);
         //   imports.push(`import 'virtual:windi.css';`)
         // }
+
         imports.push(
           vmGenerator.generateImports()
         );
@@ -95,22 +134,20 @@ module.exports = function virtual(api, options) {
           `
         }
       }
-      
+
       const modules = virtualModules[id.replace('\0', '')];
       if (modules) return modules;
     },
-    transform(code,id){
-      if(id.includes('mooljs.js')){
-        const newcode = 
-        `
-        ${vmGenerator.generateImportsMool()}
-        ${code}
-        `
+    transform(code, id) {
+      if (id.includes('mooljs.js')) {
         return {
-          code:newcode,
-          map:null
+          code: `${code}\n${vmGenerator.generateImportsMool()}`,
+          map: null
         }
       }
+    },
+    buildStart() {
+      generateModuleType();
     }
   };
 }

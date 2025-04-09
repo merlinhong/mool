@@ -26,15 +26,14 @@ module.exports = async (api, options) => {
         after: [],
         injectImports: (opt) => {
           return [
-            `import { useLayout, getAppConfig} from 'virtual:layout'; 
-            ${existsSync("src/access.ts") ? `import  *  as accessConfig  from '/src/access.ts';` : `const accessConfig = {default:()=>({})};`}
+            `import { setupLayout, getAppConfig} from 'virtual:layout'; 
             `,
           ];
         },
         // 运行时逻辑
         runtime: (ctx) => `
-            const {routes,access,layout} = await getAppConfig({config,access:accessConfig});
-            app.use(useLayout,{
+            const {routes,layout} = await getAppConfig({config});
+            app.use(setupLayout,{
               routes,
               layout
             });
@@ -48,7 +47,7 @@ module.exports = async (api, options) => {
           ),
         }),
         injectMool: () => {
-          return [`import { LAYOUT_CONFIG,MENU_ROUTES } from 'virtual:layout';`]
+          return [`export { useLayout,useMenuRoutes } from 'virtual:layout'`]
         }
       });
     }

@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-layout",
-  "version": "1.3.0",
+  "version": "1.3.5",
   "description": "pro layout for mooljs",
   "main": "index.js",
   "repository": {

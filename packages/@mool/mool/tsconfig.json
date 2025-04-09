@@ -14,9 +14,7 @@
   },
   "compileOnSave": true,
   "include": [
-    "lib/*.ts", // 包含所有 TypeScript 文件
-    "lib/utils/*.ts",
-    "lib/hooks/useEffect.ts"
+    "index.d.ts"
   ],
   "exclude": [
     "node_modules", // 排除 node_modules 目录

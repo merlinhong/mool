@@ -1,13 +1,22 @@
 {
   "name": "@mooljs/plugin-service",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "request plugin for mool",
   "main": "index.js",
+  "module":"./src/createService.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
     "directory": "packages/@mool/plugin-service"
   },
+  "exports":{
+    "import":"./src/createService.ts",
+    "require":"./index.js"
+  },
+  "types": "./src/createService.ts",
+  "files": [
+    "src"
+  ],
   "keywords": [
     "vue3",
     "mool",

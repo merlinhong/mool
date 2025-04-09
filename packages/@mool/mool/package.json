@@ -1,12 +1,15 @@
 {
   "name": "mooljs",
-  "version": "1.2.1",
+  "version": "2.0.1-beta",
   "description": "function tool library for mooljs",
-  "main": "lib/index.ts",
-  "module": "lib/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "exports": {
-    ".": "./lib/index.ts"
+    ".": "./dist/index.js",
+    "./hooks":"./dist/hooks/index",
+    "./utils":"./dist/utils/index"
   },
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
@@ -16,6 +19,12 @@
     "mool",
     "service",
     "hooks"
+  ],
+  "files": [
+    "dist",
+    "lib",
+    "type.d.ts",
+    "index.d.ts"
   ],
   "author": "Merlin Hong",
   "license": "MIT",

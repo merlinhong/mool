@@ -1,6 +1,6 @@
 <template>
   <pro-layout v-model:collapsed="collapsed" title="Admin Pro" :logo="logo" :menu-data="menuData" :page-title="pageTitle"
-    :page-sub-title="pageSubTitle" :breadcrumb="true" :copyright="copyright" :links="links" >
+    :page-sub-title="pageSubTitle" :breadcrumb="true" :copyright="copyright" :links="links">
     <template #rightContentRender>
       <RightRender />
     </template>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="tsx">
-import { ref,unref } from 'vue'
+import { ref, unref } from 'vue'
 import ProLayout from '../components/ProLayout/index.vue'
 import {
   HomeFilled,
@@ -27,18 +27,16 @@ import {
 } from '@element-plus/icons-vue';
 import { ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem, ElTooltip, ElButton, ElAvatar } from 'element-plus';
 import { useMenuFromRoutes } from '../utils/useMenu';
-import { useAccess, useLayout,useMenuRoutes } from 'mooljs';
-import { onMounted } from 'vue';
+import * as Mool from 'mooljs';
+const {useAccess,useLayout,useMenuRoutes} = Mool;
 
-const access = useAccess();
+const menuData = ref([]);
 const layout = useLayout();
 const routes = useMenuRoutes();
+const access = useAccess?.() ?? null;
+menuData.value = useMenuFromRoutes(routes, {}, access).menuData.value;
 
-const {menuData} = useMenuFromRoutes(routes, {}, access);
 
-// onMounted(()=>{
-//   renderMenu();
-// })
 // 状态
 const collapsed = ref(false)
 const pageTitle = ref('仪表盘')

@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-store",
-  "version": "1.1.0",
+  "version": "1.2.3",
   "description": " global data store for mooljs",
   "main": "index.js",
   "repository": {

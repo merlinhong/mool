@@ -49,7 +49,7 @@ export interface RespThisType {
   parseJson: () => any;
 }
 
-// export type MethodType = "get" | "post" | "put" | "delete" | "patch";
+export type HttpMethodMap = "get" | "post" | "put" | "delete" | "patch";
 export type Recordable<T = any> = Record<string, T>;
 interface DEFAULTSETTING<T = any, K = Record<string, any>> {
   /**
@@ -101,7 +101,7 @@ interface DEFAULTSETTING<T = any, K = Record<string, any>> {
    * default `'post'`
    * 请求类型
    * */
-  type?: keyof HttpMethodMap;
+  type?: HttpMethodMap;
   /**请求路径 */
   url: string;
   /**请求体 */

@@ -1,4 +1,4 @@
-const { readFileSync, existsSync } = require("node:fs");
+const { readFileSync, existsSync, readdirSync } = require("node:fs");
 module.exports = (api, options) => {
   api.applyPlugins((config) => {
     // 检查 @mooljs/plugin-layout 插件是否存在，且 @mooljs/plugin-access 插件尚未添加
@@ -10,7 +10,9 @@ module.exports = (api, options) => {
       },
       // 运行时逻辑
       runtime: (ctx) => `
-            app.use(setupStore);
+            app.use(setupStore,{
+              initialState:(await config.getInitialState?.()) ?? {}
+            });
           `,
       // 虚拟模块定义
       virtualModule: () => ({
@@ -21,8 +23,21 @@ module.exports = (api, options) => {
         ),
       }),
       injectMool: () => {
-        return [`import { STORE_KEY } from 'virtual:store';`];
+        return [`export { useStore } from 'virtual:store';`];
       },
+      injectModuleType: () => {
+        const storeFiles = readdirSync(api.resolve('src/store'))
+          .filter((file) => file.endsWith(".ts"))
+          .map((file) => file.replace(".ts", ""));
+        const moduleTypes = storeFiles
+          .map(
+            (module) => `    ${module}: typeof import("src/store/${module}")['default'];\n`,
+          ).concat([`    '@@initialState':(typeof import("src/app.ts"))["getInitialState"]|(typeof import("src/app.tsx"))["getInitialState"];`])
+          .join("");
+        return [
+          `  interface StoreModule {\n${moduleTypes}\n  }\n  export const useStore: <K extends keyof StoreModule>(_namespace: K) => StoreModule[K]`
+        ]
+      }
     });
   });
 };

@@ -30,7 +30,6 @@ export class StoreManager {
   public async initialize(
     app: App,
     options?: {
-      namespace?: string;
       initialState?: Record<string, any>;
     },
   ) {
@@ -51,8 +50,8 @@ export class StoreManager {
     });
 
     // 注册自定义模块
-    if (options?.namespace && options.initialState) {
-      this.register(options.namespace, () => options.initialState);
+    if (options?.initialState) {
+      this.register("@@initialState", () => options.initialState);
     }
 
     // 注入 Vue 应用
@@ -78,8 +77,15 @@ export class StoreManager {
 }
 
 // 初始化函数
-export const setupStore = (app: App) => {
+export const setupStore = (app: App, options: { initialState: {} }) => {
   const storeManager = StoreManager.getInstance();
-  storeManager.initialize(app);
+  storeManager.initialize(app, options);
   return storeManager;
+};
+export const useStore = (namespace) => {
+  const modules = inject(STORE_KEY, "");
+  if (!modules?.[namespace]) {
+    throw new Error(`[useStore] 未找到命名空间为 ${namespace} 的模块`);
+  }
+  return modules[namespace]();
 };

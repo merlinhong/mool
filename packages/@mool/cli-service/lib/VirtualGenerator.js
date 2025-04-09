@@ -2,7 +2,6 @@ const {sortPlugins} = require('./util/sortPlugins');
 module.exports = class VirtualModuleGenerator {
     constructor(pluginModules) {
       this.modules = sortPlugins(pluginModules);
-      console.log(this.modules);
     }
     generateImports(imports) {
       return this.modules.flatMap((_) => {
@@ -27,5 +26,10 @@ module.exports = class VirtualModuleGenerator {
       return this.modules.flatMap((_) => {
         return _.injectMool?.() || [];
       }).join('\n');
+    }
+    generateModuleType(){
+      return this.modules.flatMap(_=>{
+        return _.injectModuleType?.()||[];
+      }).join('\n')
     }
   }
