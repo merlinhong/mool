@@ -34,7 +34,6 @@
     "acorn-walk": "^8.0.2",
     "address": "^1.1.2",
     "autoprefixer": "^10.2.4",
-    "axios": "^1.6.5",
     "browserslist": "^4.16.3",
     "bundle-require": "^5.0.0",
     "chokidar": "^4.0.1",
@@ -64,7 +63,7 @@
     "postcss": "^8.2.6",
     "sass": "^1.32.7",
     "less": "^4.0.0",
-    "qs": "^6.12.1",
+    
     "ssri": "^8.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",

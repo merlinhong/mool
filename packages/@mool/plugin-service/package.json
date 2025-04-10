@@ -3,17 +3,17 @@
   "version": "0.1.1",
   "description": "request plugin for mool",
   "main": "index.js",
-  "module":"./src/createService.ts",
+  "module": "./src/createService.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
     "directory": "packages/@mool/plugin-service"
   },
-  "exports":{
-    "import":"./src/createService.ts",
-    "require":"./index.js"
+  "exports": {
+    "import": "./src/createService.ts",
+    "require": "./index.js"
   },
-  "types": "./src/createService.ts",
+  "types": "types/index.d.ts",
   "files": [
     "src"
   ],
@@ -24,6 +24,9 @@
     "request",
     "service"
   ],
+  "scripts": {
+    "build": "vite build"
+  },
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
@@ -35,6 +38,9 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
+    "axios": "^1.6.5",
+    "http": "0.0.1-security",
+    "qs": "^6.12.1",
     "vite-plugin-service": "^0.2.0"
   }
 }
