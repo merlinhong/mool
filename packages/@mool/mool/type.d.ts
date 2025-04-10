@@ -6,7 +6,7 @@ export interface RuntimeConfig {
     layout?: ILayout | ((option: GetInitialStateReturnType<RuntimeConfig["getInitialState"]>) => LayoutConfig);
     getInitialState?: (typeof import("src/app.ts"))["getInitialState"] | (typeof import("src/app.tsx"))["getInitialState"];
 }
-export type GetInitialState = GetInitialStateReturnType<RuntimeConfig['getInitialState']>;
+export type GetInitialState = Awaited<GetInitialStateReturnType<RuntimeConfig['getInitialState']>>;
 export interface IMenuRoutes {
     path: string;
     /**

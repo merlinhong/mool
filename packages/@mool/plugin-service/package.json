@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "request plugin for mool",
   "main": "index.js",
   "module":"./src/createService.ts",
@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "vite-plugin-service": "^0.0.8"
+    "vite-plugin-service": "^0.2.0"
   }
 }

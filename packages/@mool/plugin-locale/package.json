@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-locale",
-  "version": "0.1.3",
+  "version": "0.2.1",
   "description": "i18n plugin for mool",
   "main": "index.js",
   "repository": {
@@ -14,7 +14,13 @@
     "cli",
     "locale"
   ],
+  "files": [
+    "dist"
+  ],
   "author": "Merlin Hong",
+  "scripts": {
+    "build":"vite build"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
@@ -29,6 +35,8 @@
 
   },
   "devDependencies": {
-    "@vue/cli-test-utils": "^5.0.8"
+    "@vue/cli-test-utils": "^5.0.8",
+    "vite": "^5.3.4"
+
   }
 }
