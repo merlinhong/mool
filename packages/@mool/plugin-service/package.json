@@ -3,19 +3,19 @@
   "version": "0.1.1",
   "description": "request plugin for mool",
   "main": "index.js",
-  "module": "./src/createService.ts",
+  "module": "dist/createService.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
     "directory": "packages/@mool/plugin-service"
   },
   "exports": {
-    "import": "./src/createService.ts",
+    "import": "./dist/createService.mjs",
     "require": "./index.js"
   },
-  "types": "types/index.d.ts",
+  "types": "dist/createService.d.ts",
   "files": [
-    "src"
+    "dist"
   ],
   "keywords": [
     "vue3",
@@ -25,7 +25,7 @@
     "service"
   ],
   "scripts": {
-    "build": "vite build"
+    "build": "unbuild"
   },
   "author": "Merlin Hong",
   "license": "MIT",
@@ -36,11 +36,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "devDependencies": {
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1",
+    "vite": "4.2.1"
+
+  },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
     "axios": "^1.6.5",
-    "http": "0.0.1-security",
-    "qs": "^6.12.1",
     "vite-plugin-service": "^0.2.0"
   }
 }

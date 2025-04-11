@@ -1,20 +1,14 @@
 import axios, {
-  GenericAbortSignal,
-  AxiosStatic,
   AxiosRequestConfig,
-  AxiosProgressEvent,
-  ResponseType,
   AxiosInstance,
   InternalAxiosRequestConfig,
   AxiosResponse,
   AxiosInterceptorManager,
-  RawAxiosRequestHeaders,
   CreateAxiosDefaults,
   CanceledError,
 } from "axios";
 import { isPlainObject,serialize } from "./utils/index";
-import { IncomingMessage, ServerResponse } from "http";
-import {DEFAULTSETTING,IUrlConfig,ServiceModules,IConfig,IViteKeys} from '../types/index';
+import {DEFAULTSETTING,IUrlConfig,ServiceModules,IConfig,IViteKeys,CommonResponse} from '../types/index';
 export enum StateEnum {
   OK = 200,
   CREATED = 201,
@@ -101,10 +95,8 @@ export class CreateService<
       "/src/service/!(index).ts",
       { eager: true }
     );
-    console.log(3333, moduleFiles);
-
     const modules = {} as Record<string, IUrlConfig>;
-
+    
     for (const path in moduleFiles) {
       const moduleName = path.match(/([^/]+)\.ts$/)?.[1];
       if (moduleName && moduleName !== "index") {
@@ -234,7 +226,7 @@ export class CreateService<
         .then((response: AxiosResponse | CanceledError<any>) => {
           if (!response.status) {
             (response as AxiosResponse).data = { ...response };
-            response.status = response.code || 200;
+            response.status = (response as AxiosResponse).data.code || 200;
           }
           const { status, data } = response as AxiosResponse;
           if (
@@ -279,7 +271,32 @@ export class CreateService<
 
  
 }
+type ApiServiceWithModules<
+T extends Record<string, any>,
+G extends string,
+M extends ServiceModules,
+> = CreateService<T, G, IUrlConfig, CommonResponse, M> & {
+[K in keyof M]: {
+  [P in keyof M[K]]: ApiParams<M[K], P> extends undefined
+    ? (data?: {}) => Promise<CommonResponse>
+    : (data: ApiParams<M[K], P>) => Promise<CommonResponse>;
+};
+};
 
+type ApiParams<T, K extends keyof T> = T[K] extends { data: infer D }
+? D
+: undefined;
+
+// 添加类型转换函数
+export function createServiceWithModules<
+T extends Record<string, any>,
+G extends string,
+M extends ServiceModules,
+>(
+apiService: CreateService<T, G, IUrlConfig, CommonResponse, M>,
+): ApiServiceWithModules<T, G, M> {
+return apiService as ApiServiceWithModules<T, G, M>;
+}
 
 
 export const request = new CreateService();

@@ -1,32 +1,26 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "esnext", // 编译目标
+    "module": "ESNext", // 模块系统
+    "moduleResolution": "node", // 模块解析策略
+    "declaration": true, // 生成类型声明文件
+    "declarationDir": "./dist/", // 类型声明文件输出目录
+    "outDir": "dist", // 输出目录
+    "lib": [
+      "ESNext"
+    ],
+    "types": ["vite/client"],
     "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "sourceMap": false,
+    "noEmitOnError": false,
+    "esModuleInterop": true, // 允许默认导入非 ES 模块
   },
-  "exclude": ["node_modules","dist"],
+  "compileOnSave": true,
   "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "types/**/*.d.ts",
-    "types/**/*.ts"
+    "src"
+  ],
+  "exclude": [
+    "**/node_modules/**", // 排除 node_modules 目录
+    "**/dist/**" // 排除输出目录
   ]
 }

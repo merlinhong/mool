@@ -1,36 +1,29 @@
+import {
+  GenericAbortSignal,
+  AxiosStatic,
+  AxiosProgressEvent,
+  ResponseType,
+  RawAxiosRequestHeaders,
+} from "axios";
+import { IncomingMessage, ServerResponse } from "http";
+
 declare module "@mooljs/plugin-service" {
-  export type IRootKeys<T extends { env: any; default?: any }> = keyof IViteKeys<
-    T["env"],
-    T["default"]
+  export type IRootKeys<T extends { env: any; default?: any }> =
+    keyof IViteKeys<T["env"], T["default"]>;
+  export type IUrlConfig<T = any, K = {}> = Record<
+    string,
+    DEFAULTSETTING<T, K>
   >;
-  // 修改 ApiServiceWithModules 类型定义
-  type ApiServiceWithModules<
-    T extends Record<string, any>,
-    G extends string,
-    M extends ServiceModules,
-  > = CreateService<T, G, IUrlConfig, CommonResponse, M> & {
-    [K in keyof M]: {
-      [P in keyof M[K]]: ApiParams<M[K], P> extends undefined
-        ? (data?: {}) => Promise<CommonResponse>
-        : (data: ApiParams<M[K], P>) => Promise<CommonResponse>;
-    };
+  /**
+   * 推导接口参数类型
+   */
+  export type IConfig<T, G = string, L = CommonResponse> = {
+    env: T;
+    default?: G & keyof IEnvKeys<T>;
+    baseURL?: string;
+    response?: L;
   };
-
-  type ApiParams<T, K extends keyof T> = T[K] extends { data: infer D }
-    ? D
-    : undefined;
-
-  // 添加类型转换函数
-  export function createServiceWithModules<
-    T extends Record<string, any>,
-    G extends string,
-    M extends ServiceModules,
-  >(
-    apiService: CreateService<T, G, IUrlConfig, CommonResponse, M>,
-  ): ApiServiceWithModules<T, G, M> {
-    return apiService as ApiServiceWithModules<T, G, M>;
-  }
-  export * from "./createService";
+  // 修改 ApiServiceWithModules 类型定义
 }
 
 export interface RespThisType {
@@ -175,3 +168,12 @@ export type IConfig<T, G = string, L = CommonResponse> = {
 export type ServiceModules = {
   [K in keyof ServiceTypes]: ServiceTypes[K];
 };
+interface ApiResponse {
+  code: number;
+  desc?: string;
+  message?: string;
+  success?: string;
+}
+export interface CommonResponse<T = any> extends ApiResponse {
+  data: T;
+}

@@ -1,5 +1,4 @@
-__tests__
-__mocks__
-lib
+build.config.ts
 node_modules
 tsconfig.json
+src
