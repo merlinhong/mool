@@ -91,6 +91,7 @@
             "
           >
             <el-popover
+            class="!h-[50px]"
               placement="right"
               :width="'30vw'"
               :visible="showPopover"

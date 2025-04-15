@@ -143,12 +143,12 @@ const onMouseenter = () => {
       <!-- 侧边栏组件，用于显示和编辑页面配置 -->
       <!-- v-model:pageConfig 用于双向绑定页面配置 -->
       <!-- @change 事件用于监听侧边栏的打开或关闭 -->
-      <SideBar
-        v-model:pageConfig="pageConfig"
-        @change="openBar"
-        @editPage="openPage"
-        v-model:openPanel="openPanel"
-      />
+        <SideBar
+          v-model:pageConfig="pageConfig"
+          @change="openBar"
+          @editPage="openPage"
+          v-model:openPanel="openPanel"
+        />
       <!-- 画布组件，用于显示和编辑页面内容 -->
       <!-- v-model:pageConfig 用于双向绑定页面配置 -->
 
