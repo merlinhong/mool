@@ -85,25 +85,21 @@
             :sort="false"
             :group="{ name: 'blocks', pull: 'clone', put: false }"
             style="
-              background-color: rgb(234, 234, 232);
-              padding: 20px 0;
-              box-sizing: border-box;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              flex-wrap: wrap;
             "
           >
-            <el-popover
-            class="!h-[50px]"
-              placement="right"
-              :width="'30vw'"
-              :visible="showPopover"
-            >
-              <CardBlock />
-              <template #reference>
-                <BarBlock
-                  @mouseenter="onPopoverEnter"
-                  @mouseleave="onPopoverLeave"
-                />
-              </template>
-            </el-popover>
+            <div class="bg-gray-500 py-2 rounded-lg box" v-for="(item) in 3">
+              <BarBlock
+                @mouseenter="onPopoverEnter"
+                @mouseleave="onPopoverLeave"
+              />
+              <Popover :ref="'op'+item" >
+                <CardBlock />
+              </Popover>
+            </div>
           </VueDraggable>
         </div>
       </div>
@@ -140,7 +136,7 @@ const fucList = [
     component: "CardBlock",
   },
 ];
-const op = ref();
+const op1 = ref();
 const showPopover = ref(false);
 const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
 
@@ -153,14 +149,20 @@ const drawer = inject<Ref<boolean>>("drawer");
 
 const emit = defineEmits(["change", "editPage"]);
 
-const onPopoverEnter = () => {
+
+
+const onPopoverEnter = (e) => {
+console.log(op1.value)
+
   if (curStatus.value == "normal") {
-    showPopover.value = true;
+    // showPopover.value = true;
+    op1?.value.toggle(e);
   }
 };
-const onPopoverLeave = () => {
+const onPopoverLeave = (e) => {
   if (curStatus.value == "normal") {
-    showPopover.value = false;
+    // showPopover.value = false;
+    op1?.value.toggle(e);
   }
 };
 const onStart = () => {
