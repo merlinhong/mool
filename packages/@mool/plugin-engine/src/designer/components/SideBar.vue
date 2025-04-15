@@ -89,7 +89,16 @@
               box-sizing: border-box;
             "
           >
-            <BarBlock/>
+            <el-popover
+              placement="right"
+              :width="'30vw'"
+              trigger="hover"
+            >
+              <CardBlock/>
+              <template #reference>
+                <BarBlock />
+              </template>
+            </el-popover>
           </VueDraggable>
         </div>
       </div>
@@ -183,7 +192,10 @@ const fucList = ref([
     ],
   },
 ]);
-
+const op = ref();
+const toggle = (event) => {
+  op.value.toggle(event);
+};
 // 侧边栏按钮组
 const btnGroup = ref<{ name: string; className: string; active?: boolean }[]>([
   { name: "添加内容", className: "add-button" },
