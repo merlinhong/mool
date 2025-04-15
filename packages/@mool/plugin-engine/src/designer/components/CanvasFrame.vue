@@ -3,9 +3,11 @@ import { ref, onMounted, watch, nextTick, onUnmounted, Ref } from "vue";
 // import BasicCanvas from "./BasicCanvas.vue";
 import { useMagicKeys, useEventListener } from "@vueuse/core";
 import BasicPage from "./canvasContainer.vue";
+import { VueDraggable } from "vue-draggable-plus";
+
 defineOptions({
-  inheritAttrs:true
-})
+  inheritAttrs: true,
+});
 const props = defineProps<{
   // pageConfig: any;
   // currentConf?: any;
@@ -50,7 +52,9 @@ const saveToHistory = (config: Page) => {
 const undo = () => {
   if (historyIndex.value > 0) {
     historyIndex.value--;
-    pageConfig.value = JSON.parse(JSON.stringify(history.value[historyIndex.value]));
+    pageConfig.value = JSON.parse(
+      JSON.stringify(history.value[historyIndex.value])
+    );
   }
 };
 
@@ -58,7 +62,9 @@ const undo = () => {
 const redo = () => {
   if (historyIndex.value < history.value.length - 1) {
     historyIndex.value++;
-    pageConfig.value = JSON.parse(JSON.stringify(history.value[historyIndex.value]));
+    pageConfig.value = JSON.parse(
+      JSON.stringify(history.value[historyIndex.value])
+    );
   }
 };
 // 粘贴板
@@ -127,12 +133,45 @@ onMounted(() => {
       });
     }
   }
-  const { ctrl_z, ctrl_y, ctrl_c, ctrl_v, meta_z, meta_y, meta_c, meta_v, ctrl_x, meta_x } = useMagicKeys({
+  const {
+    ctrl_z,
+    ctrl_y,
+    ctrl_c,
+    ctrl_v,
+    meta_z,
+    meta_y,
+    meta_c,
+    meta_v,
+    ctrl_x,
+    meta_x,
+  } = useMagicKeys({
     target: iframeRef.value?.contentDocument as EventTarget,
   });
   watch(
-    [ctrl_z, meta_z, ctrl_y, meta_y, ctrl_c, meta_c, ctrl_v, meta_v, ctrl_x, meta_x],
-    ([ctrlZ, metaZ, ctrlY, metaY, ctrlC, metaC, ctrlV, metaV, ctrlX, metaX]) => {
+    [
+      ctrl_z,
+      meta_z,
+      ctrl_y,
+      meta_y,
+      ctrl_c,
+      meta_c,
+      ctrl_v,
+      meta_v,
+      ctrl_x,
+      meta_x,
+    ],
+    ([
+      ctrlZ,
+      metaZ,
+      ctrlY,
+      metaY,
+      ctrlC,
+      metaC,
+      ctrlV,
+      metaV,
+      ctrlX,
+      metaX,
+    ]) => {
       if (ctrlZ || metaZ) {
         // 撤销
         undo();
@@ -149,12 +188,14 @@ onMounted(() => {
         // 删除
         canvasRef.value?.del(currentConf.value?.id as string);
       }
-    },
+    }
   );
 });
 const del = () => {
   if (currentConf.value) {
-    currentConf.value.children = currentConf.value.children?.filter((item) => item.id !== currentConf.value?.id);
+    currentConf.value.children = currentConf.value.children?.filter(
+      (item) => item.id !== currentConf.value?.id
+    );
   }
 };
 const copy = () => {
@@ -162,7 +203,10 @@ const copy = () => {
 };
 const paste = () => {
   if (pasteIframe.value) {
-    currentConf.value?.children?.push({ ...pasteIframe.value, id: Date.now().toString().substring(8) });
+    currentConf.value?.children?.push({
+      ...pasteIframe.value,
+      id: Date.now().toString().substring(8),
+    });
   }
 };
 watch(
@@ -173,30 +217,51 @@ watch(
         canvasRef.value.init(props.pageConfig);
       }
       // 只有当新值与当前历史记录的最后一项不同时，才保存到历史记录
-      if (JSON.stringify(newValue) !== JSON.stringify(history.value[historyIndex.value])) {
+      if (
+        JSON.stringify(newValue) !==
+        JSON.stringify(history.value[historyIndex.value])
+      ) {
         saveToHistory(newValue);
       }
     });
   },
-  { deep: true },
+  { deep: true }
 );
-
-console.log(props.isPreview);
-
+const list = {
+  CardBlock: defineAsyncComponent(() => import("../blocks/card.vue")),
+};
+const cardSchema = ref([]);
 </script>
 
 <template>
-  <!-- <div v-on="$attrs"> -->
-    <BasicPage/>
-  <!-- </div> -->
+  <section
+    v-on="$attrs"
+    class="h-[80vh] bg-light-800 iframe-container absolute w-[78vw] left-4rem"
+    style="box-sizing: border-box"
+  >
+    <VueDraggable
+      v-model="cardSchema"
+      :animation="150"
+      group="blocks"
+      class="h-[100%]"
+    >
+      <div v-for="card in cardSchema">
+        <component :is="list[card.component]" :schema="card" />
+      </div>
+    </VueDraggable>
+  </section>
 </template>
 
 <style scoped>
-
 /* 添加响应式样式 */
 @media (max-width: 1024px) {
   .iframe-container {
     margin: 10px;
   }
+}
+.iframe-container {
+  /* width: 100%; */
+  height: 100%;
+  overflow: hidden;
 }
 </style>

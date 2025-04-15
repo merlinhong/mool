@@ -139,23 +139,18 @@ const onMouseenter = () => {
 <template>
   <el-container direction="vertical" class="h-[100vh] ml-[1px]">
     <TopBar v-model:pageConfig="pageConfig" @changeSize="changeSize" />
-    <div class="overflow-hidden flex h-[100%]">
+    <div class="overflow-hidden flex h-[100%] justify-between">
       <!-- 侧边栏组件，用于显示和编辑页面配置 -->
       <!-- v-model:pageConfig 用于双向绑定页面配置 -->
       <!-- @change 事件用于监听侧边栏的打开或关闭 -->
-        <SideBar
-          v-model:pageConfig="pageConfig"
-          @change="openBar"
-          @editPage="openPage"
-          v-model:openPanel="openPanel"
-        />
+      <SideBar v-model:pageConfig="pageConfig" @change="openBar" @editPage="openPage" v-model:openPanel="openPanel" />
       <!-- 画布组件，用于显示和编辑页面内容 -->
       <!-- v-model:pageConfig 用于双向绑定页面配置 -->
 
       <CanvasFrame @mouseenter="onMouseenter" />
 
       <!-- 侧边栏组件，用于显示和编辑页面配置 -->
-      <el-aside class="page-design-config bg-zinc-700" style="width: 20rem">
+      <el-aside class="page-design-config bg-zinc-700" style="flex: 1">
         <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"
             @openJs="openPanel.js = true" @openRef="openPanel.ref = true" /> -->
       </el-aside>
