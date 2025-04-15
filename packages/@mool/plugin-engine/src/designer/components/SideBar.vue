@@ -51,7 +51,7 @@
       </div>
     </nav>
     <el-aside
-      class="bg-zinc-700 absolute left-4rem top-3rem bottom-0.2rem right-0"
+      class="bg-zinc-700 relative"
       style="z-index: 20; transition: width 0.5s ease"
       :style="{
         ...(drawer ? { width: '22.5rem' } : { width: '0' }),
@@ -77,9 +77,10 @@
             卡片
           </div>
           <VueDraggable
-            @start="drawer = true"
-            @move="onMove"
             v-model="fucList"
+            @move="onMove"
+            @start="onStart"
+            @end="onEnd"
             :animation="150"
             :sort="false"
             :group="{ name: 'blocks', pull: 'clone', put: false }"
@@ -92,11 +93,14 @@
             <el-popover
               placement="right"
               :width="'30vw'"
-              trigger="hover"
+              :visible="showPopover"
             >
-              <CardBlock/>
+              <CardBlock />
               <template #reference>
-                <BarBlock />
+                <BarBlock
+                  @mouseenter="onPopoverEnter"
+                  @mouseleave="onPopoverLeave"
+                />
               </template>
             </el-popover>
           </VueDraggable>
@@ -130,101 +134,45 @@ defineProps({
     default: false,
   },
 });
-const fucList = ref([
+const fucList = [
   {
-    cardType: "card_gen_fuc",
-    cardId: "fuc",
-    title: "常规功能卡",
-    displayName: "内容子标题",
-    pos: 0,
-    conMore: 1,
-    multiInstances: 0,
-    cardLink: {},
-    items: [
-      {
-        itemType: "item_clickbutton",
-        itemId: `a_${uuid()}`,
-        icon: "",
-        title: "功能名称",
-        pos: 0,
-        supportMinAppVersion: "20004300",
-        supportMaxAppVersion: "",
-        link: {
-          linkId: "",
-          linkUrl: "",
-          linkType: 0,
-          supportMinAppVersion: "",
-          supportMaxAppVersion: "",
-        },
-      },
-      {
-        itemType: "item_clickbutton",
-        itemId: `a_${uuid()}`,
-        icon: "",
-        title: "功能名称",
-        pos: 0,
-        supportMinAppVersion: "20004300",
-        supportMaxAppVersion: "",
-        link: {
-          linkId: "",
-          linkUrl: "",
-          linkType: 0,
-          supportMinAppVersion: "",
-          supportMaxAppVersion: "",
-        },
-      },
-      {
-        itemType: "item_clickbutton",
-        itemId: `a_${uuid()}`,
-        icon: "",
-        title: "功能名称",
-        pos: 0,
-        supportMinAppVersion: "20004300",
-        supportMaxAppVersion: "",
-        link: {
-          linkId: "",
-          linkUrl: "",
-          linkType: 0,
-          supportMinAppVersion: "",
-          supportMaxAppVersion: "",
-        },
-      },
-    ],
+    component: "CardBlock",
   },
-]);
+];
 const op = ref();
-const toggle = (event) => {
-  op.value.toggle(event);
-};
+const showPopover = ref(false);
+const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
+
 // 侧边栏按钮组
 const btnGroup = ref<{ name: string; className: string; active?: boolean }[]>([
   { name: "添加内容", className: "add-button" },
 ]);
 
-const drawer = defineModel("drawer", { required: true, type: Boolean });
-
-watch(
-  () => drawer.value,
-  (n, o) => {
-    if (n) {
-      emit("change", [n, "20px 40px"]);
-    } else {
-      emit("change", [n, "20px 160px"]);
-    }
-  },
-
-  { flush: "post" }
-);
-// ai
+const drawer = inject<Ref<boolean>>("drawer");
 
 const emit = defineEmits(["change", "editPage"]);
 
-const activeGroups = ref([0]); // 默认展开第一个分组
-
-const onMove = () => {
-  setTimeout(() => {
-    drawer.value = false;
-  }, 50);
+const onPopoverEnter = () => {
+  if (curStatus.value == "normal") {
+    showPopover.value = true;
+  }
+};
+const onPopoverLeave = () => {
+  if (curStatus.value == "normal") {
+    showPopover.value = false;
+  }
+};
+const onStart = () => {
+  // drawer.value = true;
+  showPopover.value = false;
+  curStatus.value = "dragStart";
+};
+const onEnd = () => {
+  curStatus.value = "normal";
+};
+const onMove = (e) => {
+  drawer!.value = false;
+  curStatus.value = "draging";
 };
 </script>
 

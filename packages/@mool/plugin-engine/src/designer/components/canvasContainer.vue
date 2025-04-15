@@ -63,8 +63,11 @@ const HeaderBar = function (props: { name?: string }) {
     </div>
   );
 };
-
+const list = {
+  CardBlock: defineAsyncComponent(() => import("../blocks/card.vue")),
+};
 const cardSchema = ref(props.schema);
+const drawer = inject<Ref<boolean>>("drawer");
 </script>
 
 <template>
@@ -73,58 +76,14 @@ const cardSchema = ref(props.schema);
     class="h-[80vh] bg-light-800 iframe-container"
     style="box-sizing: border-box"
   >
-    <VueDraggable v-model="cardSchema" :animation="150" group="blocks" class="h-[100%]">
+    <VueDraggable
+      v-model="cardSchema"
+      :animation="150"
+      group="blocks"
+      class="h-[100%]"
+    >
       <div v-for="card in cardSchema">
-        <div
-          style="
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            box-sizing: border-box;
-            display: flex;
-            cursor: move;
-            flex-direction: column;
-          "
-        >
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              font-size: 11px;
-              padding: 0px 5px;
-              margin-bottom: 20px;
-            "
-          >
-            <span style="font-size: inherit; color: #666">{{
-              card.title
-            }}</span>
-            <span style="color: #666">{{ "请输入>" }}</span>
-          </div>
-          <div
-            class="modules"
-            style="
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 10px;
-              flex-wrap: wrap;
-            "
-          >
-            <div
-              v-for="item in 3"
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 18%;
-              "
-            >
-              <img src="" alt="" style="width: 50%" />
-              <div style="margin-top: 10px"></div>
-              <span style="font-size: 0.6vw; color: #666">功能名称</span>
-            </div>
-          </div>
-        </div>
+        <component :is="list[card.component]" :schema="card" />
       </div>
     </VueDraggable>
   </section>
@@ -379,6 +338,7 @@ const cardSchema = ref(props.schema);
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
+
 .el-menu {
   border: none;
 }
