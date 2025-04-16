@@ -83,7 +83,7 @@ const drawer = inject<Ref<boolean>>("drawer");
       class="h-[100%]"
     >
       <div v-for="card in cardSchema">
-        <component :is="list[card.component]" :schema="card" />
+        <component :is="list[card.component]"/>
       </div>
     </VueDraggable>
   </section>

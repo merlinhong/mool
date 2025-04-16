@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-10  rounded  overflow-hidden ">
+  <div class="w-full h-10  overflow-hidden flex items-center">
     <!-- 迷你工具栏 -->
     <div class="w-full h-8 bg-white p-1 flex items-center justify-between border-b">
       <!-- 左侧内容 -->

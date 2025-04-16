@@ -1,122 +1,9 @@
-<template>
-  <div class="sidebar-container">
-    <nav
-      class="sidebar-nav !bg-zinc-700 border-r !border-zinc-900 z-10 rounded-bl-lg"
-    >
-      <div class="top-buttons">
-        <div
-          v-for="item in btnGroup"
-          :key="item.name"
-          style="padding: 5px; width: 100%"
-          :class="[{ 'active-button': item.active, cursor: 'pointer' }]"
-        >
-          <div
-            @mouseenter="drawer = true"
-            style="
-              cursor: pointer;
-              margin: 10px;
-              white-space: wrap;
-              width: 2rem;
-              text-align: center;
-              border-radius: 5px;
-              padding: 5px 0;
-              color: white;
-            "
-            class="border !border-zinc-500"
-          >
-            <el-icon>
-              <CirclePlus />
-            </el-icon>
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
-
-      <div class="bottom-buttons">
-        <button class="icon-button">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-            <g
-              fill="none"
-              stroke="#fff"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect width="13" height="13" x=".5" y=".5" rx="1" />
-              <path
-                d="M.5 4h13m-9 3L3 8.5L4.5 10M10 7l1.5 1.5L10 10m-3.5.5L8 6"
-              />
-            </g>
-          </svg>
-        </button>
-      </div>
-    </nav>
-    <el-aside
-      class="bg-zinc-700 relative"
-      style="z-index: 20; transition: width 0.5s ease"
-      :style="{
-        ...(drawer ? { width: '22.5rem' } : { width: '0' }),
-      }"
-    >
-      <div
-        style="
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          position: absolute;
-          width: 100%;
-          transition: transform 0.5s ease;
-        "
-        :style="{
-          ...(drawer
-            ? { transform: 'translateX(0)' }
-            : { transform: 'translateX(-22.5rem)' }),
-        }"
-      >
-        <div style="padding: 20px; flex: 1; font-size: 13px; color: #333">
-          <div style="padding: 0px 10px; margin-bottom: 10px; color: #fff">
-            卡片
-          </div>
-          <VueDraggable
-            v-model="fucList"
-            @move="onMove"
-            @start="onStart"
-            @end="onEnd"
-            :animation="150"
-            :sort="false"
-            :group="{ name: 'blocks', pull: 'clone', put: false }"
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              flex-wrap: wrap;
-            "
-          >
-            <div class="bg-gray-500 py-2 rounded-lg box" v-for="(item) in 3">
-              <BarBlock
-                @mouseenter="onPopoverEnter"
-                @mouseleave="onPopoverLeave"
-              />
-              <Popover :ref="'op'+item" >
-                <CardBlock />
-              </Popover>
-            </div>
-          </VueDraggable>
-        </div>
-      </div>
-    </el-aside>
-  </div>
-</template>
-
 <script setup lang="ts">
-import BarBlock from "../blocks/bar.vue";
-import CardBlock from "../blocks/card.vue";
-// import { useMool } from "@/mool";
-// import { baseComponentList, seniorComponentList, initEditor, type MonacoEditor } from "@/mool/utils";
-// import PagePanel from "./PagePanel.vue";
-// import { componentGroups } from "@/mool/utils/schema";
 import { CirclePlus } from "@element-plus/icons-vue";
-import { VueDraggable } from "vue-draggable-plus";
-import { uuid } from "mooljs";
+import { SortableEvent, VueDraggable } from "vue-draggable-plus";
+import { componentLibrary } from "../schema";
+import { useRefs } from "mooljs";
+const { refs, setRefs } = useRefs();
 defineProps({
   pageConfig: {
     type: Object as PropType<any>,
@@ -131,13 +18,7 @@ defineProps({
     default: false,
   },
 });
-const fucList = [
-  {
-    component: "CardBlock",
-  },
-];
-const op1 = ref();
-const showPopover = ref(false);
+
 const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
 
 // 侧边栏按钮组
@@ -146,43 +27,147 @@ const btnGroup = ref<{ name: string; className: string; active?: boolean }[]>([
 ]);
 
 const drawer = inject<Ref<boolean>>("drawer");
-
+const aside = ref();
 const emit = defineEmits(["change", "editPage"]);
 
-
-
-const onPopoverEnter = (e) => {
-console.log(op1.value)
-
+/**
+ * 监听popover组件进入事件
+ * @param e MouseEvent
+ * @param id String
+ */
+const onPopoverEnter = (e: MouseEvent, id: string) => {
   if (curStatus.value == "normal") {
-    // showPopover.value = true;
-    op1?.value.toggle(e);
+    refs[id].show(e);
   }
 };
-const onPopoverLeave = (e) => {
+
+/**
+ * 监听popover组件离开事件
+ * @param e MouseEvent
+ * @param id String
+ */
+const onPopoverLeave = (e: MouseEvent, id: string) => {
   if (curStatus.value == "normal") {
-    // showPopover.value = false;
-    op1?.value.toggle(e);
+    refs[id].hide(e);
   }
 };
-const onStart = () => {
-  // drawer.value = true;
-  showPopover.value = false;
+
+/**
+ *
+ * @param e 监听拖拽开始
+ */
+const onStart = (e: SortableEvent) => {
+  Object.keys(refs).forEach((_) => {
+    refs[_].hide(e);
+  });
   curStatus.value = "dragStart";
 };
-const onEnd = () => {
+/**
+ * 监听拖拽结束
+ * @param e SortableEvent
+ */
+const onEnd = (e: SortableEvent) => {
+  Object.keys(refs).forEach((_) => {
+    refs[_].hide(e);
+  });
+  e.item.classList.add("w-[45%]");
   curStatus.value = "normal";
 };
+/**
+ * 监听拖移动
+ * @param e SortableEvent
+ */
 const onMove = (e) => {
   drawer!.value = false;
   curStatus.value = "draging";
 };
-</script>
 
+/**
+ * 添加内容
+ */
+const addContent = () => {
+  aside.value.classList.add("pointer-events-none");
+  drawer!.value = true;
+  setTimeout(() => {
+    aside.value.classList.remove("pointer-events-none");
+  }, 300);
+};
+</script>
+<template>
+  <div class="sidebar-container ">
+    <nav class="sidebar-nav !bg-zinc-700 border-r z-20 rounded-bl-[5px] ">
+      <div class="top-buttons ">
+        <div v-for="item in btnGroup" :key="item.name" style="padding: 5px; width: 100%"
+          :class="[{ 'active-button': item.active, cursor: 'pointer' }]">
+          <div @mouseenter="addContent" style="
+              cursor: pointer;
+              margin: 10px;
+              white-space: wrap;
+              width: 2rem;
+              text-align: center;
+              border-radius: 5px;
+              padding: 5px 0;
+              color: rgb(230, 228, 228);
+            " class="border !border-zinc-500">
+            <i class="pi pi-plus-circle pi-plus text-white-500"></i>
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-buttons">
+        <button class="icon-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+            <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="13" height="13" x=".5" y=".5" rx="1" />
+              <path d="M.5 4h13m-9 3L3 8.5L4.5 10M10 7l1.5 1.5L10 10m-3.5.5L8 6" />
+            </g>
+          </svg>
+        </button>
+      </div>
+    </nav>
+    <Splitter class="relative !w-[30rem] bottom-[2px]" style="z-index: 10; transition: transform 0.3s ease" :style="{
+      ...(drawer
+        ? { transform: 'translateX(0rem)' }
+        : { transform: 'translateX(-34rem)' }),
+    }">
+      <SplitterPanel class="rounded-br-[5px] !bg-zinc-700">
+        <div ref="aside" style="
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            width: 100%;
+            transition: transform 1s ease;
+          ">
+          <div style="padding: 20px; flex: 1; font-size: 13px; color: #333" v-for="_ in componentLibrary">
+            <div style="padding: 0px 10px; margin-bottom: 10px; color: #fff">
+              {{ _.name }}
+            </div>
+            <VueDraggable v-model="_.compList" @move="onMove" @start="onStart" @end="onEnd" :animation="150" :sort="false"
+              :group="{ name: 'blocks', pull: 'clone', put: false }" style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+              ">
+              <div class="bg-gray-500 py-2 box mb-6 w-[45%]" v-for="item in _.compList">
+                <component :is="item.miniComponent" @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
+                  @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"></component>
+                <Popover :ref="setRefs(item.id)">
+                  <component :is="item.component" />
+                </Popover>
+              </div>
+            </VueDraggable>
+          </div>
+        </div>
+      </SplitterPanel>
+    </Splitter>
+  </div>
+</template>
 <style lang="less" scoped>
 .sidebar-container {
   display: flex;
-  height: calc(100% - 0.2rem);
 }
 
 .sidebar-nav {

@@ -1,91 +1,36 @@
 <template>
   <div
-    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-50 rounded-tl-md"
-  >
+    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-50 rounded-tl-md ml-[1px] h-[6vh]">
     <span class="text-xs text-blue-400 font-bold">查看新手引导</span>
 
     <!--PC/移动端切换图标-->
-    <div class="flex items-center ">
-      <el-button
-        type="text"
-        @click="switchToPC(0)"
-      >
-        <el-icon class="custom-icon">
-        
-          <Monitor class="text-white" :class="{ 'icon-active': isPC }"/>
-        </el-icon>
-      </el-button>
-      <el-button
-        type="text"
-        @click="switchToMobile(0)"
-        
-      >
-        <el-icon class="custom-icon">
-          <Iphone class="text-white" :class="{ 'icon-active': !isPC }"/>
-        </el-icon>
-      </el-button>
+    <div class="flex items-center cursor-pointer">
+      <i class="pi pi-desktop text-white mr-4" @click="switchToPC(0)" :class="{ 'icon-active': isPC }"></i>
+      <i class="pi pi-mobile text-white" @click="switchToMobile(0)" :class="{ 'icon-active': !isPC }"></i>
     </div>
 
     <div class="flex items-center space-x-1">
       <!-- 创建页面 -->
-      <el-tooltip content="近期所建" placement="top">
-        <el-button type="text">
-          <el-icon class="custom-icon">
-            <DocumentAdd class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
+      <i v-tooltip.bottom="'近期所建'" class="pi pi-file pi-file-plus text-white"></i>
+      <Popover>
+        ff
+      </Popover>
       
       <span class="mx-2 text-gray-400">|</span>
 
-      <el-tooltip content="撤销" placement="top">
-        <el-button type="text">
-          <el-icon class="custom-icon">
-            <RefreshLeft class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip content="重做" placement="top">
-        <el-button type="text" @click="redo">
-          <el-icon class="custom-icon">
-            <RefreshRight class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip content="预览" placement="top">
-        <el-button type="text">
-          <el-icon class="custom-icon">
-            <View class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip content="保存" placement="top">
-        <el-button type="text" @click="saveSchema">
-          <el-icon class="custom-icon">
-            <Upload class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
-      <el-tooltip content="出码" placement="top">
-        <el-button type="text" @click="genCode">
-          <el-icon class="custom-icon">
-            <Download class="text-white" />
-          </el-icon>
-        </el-button>
-      </el-tooltip>
+      <i v-tooltip.bottom="'回退'" class="pi-arrow-left pi text-white !mr-4"></i>
+      <i v-tooltip.bottom="'下一步'" class="pi-arrow-right pi text-white !mr-4"></i>
+      <i v-tooltip.bottom="'重置'" class="pi-refresh pi text-white !mr-4"></i>
+      <i v-tooltip.bottom="'预览'" class="pi-eye pi text-white !mr-4"></i>
+      <i v-tooltip.bottom="'保存'" class="pi-save pi text-white !mr-4"></i>
+      <i v-tooltip.bottom="'下载'" class="pi-download pi text-white"></i>
     </div>
   </div>
   <div class="">
-    <el-result
-      class="w-80 absolute bg-white left-1/2 top-[40%] -translate-x-1/2 z-50 border border-gray-200"
-      v-if="generateCoding"
-      :icon="statuIcon"
-      :title="statuTitle"
-    >
+    <el-result class="w-80 absolute bg-white left-1/2 top-[40%] -translate-x-1/2 z-50 border border-gray-200"
+      v-if="generateCoding" :icon="statuIcon" :title="statuTitle">
       <template #extra v-if="statuIcon == 'success'">
-        <el-button type="primary" @click="generateCoding = false"
-          >好的</el-button
-        >
+        <el-button type="primary" @click="generateCoding = false">好的</el-button>
       </template>
     </el-result>
   </div>
@@ -116,7 +61,7 @@ const generateCoding = ref(false);
 
 const previewRef = ref(false);
 
-const ctx = ref<Function>(function () {});
+const ctx = ref<Function>(function () { });
 
 const genCode = async () => {
   try {

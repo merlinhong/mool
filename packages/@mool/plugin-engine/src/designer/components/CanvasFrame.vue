@@ -4,6 +4,7 @@ import { ref, onMounted, watch, nextTick, onUnmounted, Ref } from "vue";
 import { useMagicKeys, useEventListener } from "@vueuse/core";
 import BasicPage from "./canvasContainer.vue";
 import { VueDraggable } from "vue-draggable-plus";
+import { componentLibrary } from "../schema";
 
 defineOptions({
   inheritAttrs: true,
@@ -69,128 +70,7 @@ const redo = () => {
 };
 // 粘贴板
 const pasteIframe = ref<Col | null>(null);
-onMounted(() => {
-  if (iframeRef.value) {
-    const iframeDoc = iframeRef.value.contentDocument;
-    if (iframeDoc) {
-      iframeDoc.open();
-      iframeDoc.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              body { 
-                margin: 0; 
-                padding: 0; 
-                overflow: hidden; 
-              }
-              #canvas-container { 
-                width: 100%; 
-                height: 100%; 
-                overflow-y: auto;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-              }
-              #canvas-container::-webkit-scrollbar {
-                display: none;
-              }
-              .canvas-wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100%;
-              }
-                
-            </style>
-          </head>
-          <body>
-            <div id="canvas-container"></div>
-          </body>
-        </html>
-      `);
-      iframeDoc.close();
 
-      // 注入 Tailwind CSS
-      injectTailwindCSS(iframeDoc);
-
-      // 复制主文档的样式到 iframe
-      const styles = Array.from(document.styleSheets);
-      styles.forEach((styleSheet) => {
-        if (styleSheet.href) {
-          const linkElem = iframeDoc.createElement("link");
-          linkElem.rel = "stylesheet";
-          linkElem.href = styleSheet.href;
-          iframeDoc.head.appendChild(linkElem);
-        } else {
-          const styleElem = iframeDoc.createElement("style");
-          Array.from(styleSheet.cssRules).forEach((rule) => {
-            styleElem.appendChild(iframeDoc.createTextNode(rule.cssText));
-          });
-          iframeDoc.head.appendChild(styleElem);
-        }
-      });
-    }
-  }
-  const {
-    ctrl_z,
-    ctrl_y,
-    ctrl_c,
-    ctrl_v,
-    meta_z,
-    meta_y,
-    meta_c,
-    meta_v,
-    ctrl_x,
-    meta_x,
-  } = useMagicKeys({
-    target: iframeRef.value?.contentDocument as EventTarget,
-  });
-  watch(
-    [
-      ctrl_z,
-      meta_z,
-      ctrl_y,
-      meta_y,
-      ctrl_c,
-      meta_c,
-      ctrl_v,
-      meta_v,
-      ctrl_x,
-      meta_x,
-    ],
-    ([
-      ctrlZ,
-      metaZ,
-      ctrlY,
-      metaY,
-      ctrlC,
-      metaC,
-      ctrlV,
-      metaV,
-      ctrlX,
-      metaX,
-    ]) => {
-      if (ctrlZ || metaZ) {
-        // 撤销
-        undo();
-      } else if (ctrlY || metaY) {
-        // 重做
-        redo();
-      } else if (ctrlC || metaC) {
-        // 复制
-        copy();
-      } else if (ctrlV || metaV) {
-        // 粘贴
-        paste();
-      } else if (ctrlX || metaX) {
-        // 删除
-        canvasRef.value?.del(currentConf.value?.id as string);
-      }
-    }
-  );
-});
 const del = () => {
   if (currentConf.value) {
     currentConf.value.children = currentConf.value.children?.filter(
@@ -227,29 +107,40 @@ watch(
   },
   { deep: true }
 );
-const list = {
-  CardBlock: defineAsyncComponent(() => import("../blocks/card.vue")),
+
+const cardSchema = ref<any[]>([]);
+const isDragging = ref(false);
+const change = (e) => {
+  e.item.classList.remove("w-[45%]");
+  isDragging.value = true;
 };
-const cardSchema = ref([]);
+const list = computed<Record<string, any>>(() =>
+  componentLibrary
+    .map((_) => _.compList)
+    .flat()
+    .reduce((acc, cur) => ({ ...acc, [cur.id]: cur.component }), {})
+);
 </script>
 
 <template>
-  <section
+  <div
     v-on="$attrs"
-    class="h-[80vh] bg-light-800 iframe-container absolute w-[78vw] left-4rem"
+    class="bg-light-800 absolute w-[78vw] h-[93.5vh] left-4rem top-6vh"
     style="box-sizing: border-box"
   >
     <VueDraggable
       v-model="cardSchema"
       :animation="150"
       group="blocks"
-      class="h-[100%]"
+      @change="change"
+      :class="{ '!ml-[0]': isDragging }"
+      class="h-[100%] ml-[28rem]"
     >
       <div v-for="card in cardSchema">
-        <component :is="list[card.component]" :schema="card" />
+        <component :is="list[card.id]" />
       </div>
     </VueDraggable>
-  </section>
+  </div>
 </template>
 
 <style scoped>
@@ -259,6 +150,7 @@ const cardSchema = ref([]);
     margin: 10px;
   }
 }
+
 .iframe-container {
   /* width: 100%; */
   height: 100%;
