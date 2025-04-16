@@ -125,7 +125,7 @@ const list = computed<Record<string, any>>(() =>
 <template>
   <div
     v-on="$attrs"
-    class="bg-light-800 absolute w-[78vw] h-[93.5vh] left-4rem top-6vh"
+    class="bg-light-800 absolute w-[77vw] h-[93.5vh] left-4rem top-6vh"
     style="box-sizing: border-box"
   >
     <VueDraggable

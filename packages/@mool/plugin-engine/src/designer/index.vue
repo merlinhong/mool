@@ -139,7 +139,7 @@ const onMouseenter = () => {
 <template>
   <div class="h-[100vh] flex flex-col ">
     <TopBar v-model:pageConfig="pageConfig" @changeSize="changeSize" />
-    <Splitter class="h-[100%] ">
+    <Splitter class="h-[100%]">
       <SplitterPanel>
         <div class="flex panel_container justify-between ">
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
@@ -150,12 +150,11 @@ const onMouseenter = () => {
             @change="openBar"
             @editPage="openPage"
             v-model:openPanel="openPanel"
-            class=" "
           />
           <!-- 画布组件，用于显示和编辑页面内容 -->
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
 
-          <CanvasFrame @mouseenter="onMouseenter" />
+          <CanvasFrame @mouseenter="onMouseenter" style="width:calc(100vw - 24rem)"/>
 
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <el-aside
