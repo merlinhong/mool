@@ -1,7 +1,7 @@
 
 <template>
-    <div class="card">
-        <Toolbar class="!p-2">
+    <div class="card ">
+        <Toolbar class="!p-2 !bg-white">
             <template #start>
                 <div class="flex items-center gap-2 text-[6px]">
                     <svg viewBox="0 0 35 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 1.2rem; margin-right: 1rem;">

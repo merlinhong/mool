@@ -17,6 +17,11 @@ const props = defineProps<{
   // loading: boolean;
   // isPreview?: boolean;
   // ctx?: Function;
+  hint: boolean;
+  place: {
+    el: HTMLElement;
+    orientation: "after" | "before";
+  };
 }>();
 
 const pageConfig = defineModel<any>("pageConfig");
@@ -120,24 +125,55 @@ const list = computed<Record<string, any>>(() =>
     .flat()
     .reduce((acc, cur) => ({ ...acc, [cur.id]: cur.component }), {})
 );
+console.log(list.value);
+const hint = ref();
+
+watch(
+  () => props.place,
+  (item) => {
+    nextTick(() => {
+      console.log(hint);
+
+      if (!item.el.parentNode) {
+        item.el.appendChild(hint.value);
+      } else {
+        if (item.orientation == "before") {
+          item.el.parentNode?.insertBefore(hint.value, item.el);
+        } else {
+          item.el.parentNode?.insertBefore(hint.value, item.el.nextSibling);
+        }
+      }
+    });
+  }
+);
+watch(()=>props.hint,(n)=>{
+  if(n){
+    hint.value.classList.remove('hint');
+  }
+})
 </script>
 
 <template>
   <div
     v-on="$attrs"
-    class="bg-light-800 absolute w-[77vw] h-[93.5vh] left-4rem top-6vh"
+    class="bg-light-800 absolute w-[77vw] h-[93.5vh] left-4rem overflow-y-scroll"
     style="box-sizing: border-box"
+    :style="{ width: 'calc(100vw - 24rem)' }"
   >
     <VueDraggable
       v-model="cardSchema"
       :animation="150"
       group="blocks"
-      @change="change"
       :class="{ '!ml-[0]': isDragging }"
       class="h-[100%] ml-[28rem]"
+      @change="change"
     >
-      <div v-for="card in cardSchema">
-        <component :is="list[card.id]" />
+      <div class="hint" ref="hint">
+        {{ "从左边拖拽组件放到此处" }}
+      </div>
+      <div v-for="card in cardSchema" :key="card.id">
+        <!-- <component :is="card.Hint" v-if="hint"/> -->
+        <component :is="list[card.component]" :height="card.height" />
       </div>
     </VueDraggable>
   </div>
@@ -150,7 +186,12 @@ const list = computed<Record<string, any>>(() =>
     margin: 10px;
   }
 }
-
+.hint {
+  width: 100%;
+  height: 90vh;
+  display:flex;
+  align-items: center;
+}
 .iframe-container {
   /* width: 100%; */
   height: 100%;

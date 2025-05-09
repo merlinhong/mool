@@ -132,16 +132,18 @@ const back = () => {
 const drawer = ref(false);
 provide("drawer", drawer);
 const onMouseenter = () => {
-  drawer.value = false;
+  // drawer.value = false;
 };
+const hint = ref(false);
+const place = ref<any | null>(null);
 </script>
 
 <template>
-  <div class="h-[100vh] flex flex-col ">
+  <div class="h-[100vh] flex flex-col">
     <TopBar v-model:pageConfig="pageConfig" @changeSize="changeSize" />
     <Splitter class="h-[100%]">
       <SplitterPanel>
-        <div class="flex panel_container justify-between ">
+        <div class="flex panel_container justify-between">
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
           <!-- @change 事件用于监听侧边栏的打开或关闭 -->
@@ -150,16 +152,22 @@ const onMouseenter = () => {
             @change="openBar"
             @editPage="openPage"
             v-model:openPanel="openPanel"
+            v-model:hint="hint"
+            @place="
+              (item) => {
+                console.log(item);
+                
+                place = item;
+              }
+            "
           />
           <!-- 画布组件，用于显示和编辑页面内容 -->
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
 
-          <CanvasFrame @mouseenter="onMouseenter" style="width:calc(100vw - 24rem)"/>
+          <CanvasFrame @mouseenter="onMouseenter" :hint="hint" :place="place" />
 
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
-          <el-aside
-            class="page-design-config bg-zinc-700 !w-[20rem]"
-          >
+          <el-aside class="page-design-config bg-zinc-700 !w-[20rem]">
             <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"
             @openJs="openPanel.js = true" @openRef="openPanel.ref = true" /> -->
           </el-aside>

@@ -1,76 +1,52 @@
+import { uuid } from 'mooljs';
 export const componentLibrary = [
   {
     name: "顶部导航", // 显示名称
     type: "Toolbar", // 组件类型，用于渲染逻辑
     compList: [
       {
-        // 基本信息
-        id: "tool-bar", // 唯一标识符，用于查找和引用
+        height: 'auto',
+        popoverHeight: 'auto',
+        id: `toolbar`, // 唯一标识符，用于查找和引用
         // 组件引用
         component: defineAsyncComponent(() => import("./blocks/Toolbar.vue")), // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/miniToolbar.vue")
         ), // 侧边栏预览组件
-        // 默认属性
-        defaultProps: {
-          title: "卡片标题",
-          subtitle: "卡片副标题",
-          showFooter: true,
-          elevation: 1,
-        },
+        schema: [
+          {
+            // 基本信息
+            id: `toolbar_${uuid({})}`, // 唯一标识符，用于查找和引用
+            component:'toolbar',
+            height: 'auto',
+            // 默认属性
+            defaultProps: {
+              title: "卡片标题",
+              subtitle: "卡片副标题",
+              showFooter: true,
+              elevation: 1,
+            },
 
-        // 可配置属性定义（用于属性面板）
-        propDefinitions: [
-          {
-            name: "title",
-            label: "标题",
-            type: "string",
-            defaultValue: "卡片标题",
-            required: false,
-          },
-          {
-            name: "subtitle",
-            label: "副标题",
-            type: "string",
-            defaultValue: "卡片副标题",
-            required: false,
-          },
-        ],
+            // 可配置属性定义（用于属性面板）
+            propDefinitions: [
+              {
+                name: "title",
+                label: "标题",
+                type: "string",
+                defaultValue: "卡片标题",
+                required: false,
+              },
+              {
+                name: "subtitle",
+                label: "副标题",
+                type: "string",
+                defaultValue: "卡片副标题",
+                required: false,
+              },
+            ],
+          }
+        ]
       },
-      {
-        // 基本信息
-        id: "tool-bar_223", // 唯一标识符，用于查找和引用
-        // 组件引用
-        component: defineAsyncComponent(() => import("./blocks/Toolbar.vue")), // 实际组件
-        miniComponent: defineAsyncComponent(
-          () => import("./blocks/miniToolbar.vue")
-        ), // 侧边栏预览组件
-        // 默认属性
-        defaultProps: {
-          title: "卡片标题",
-          subtitle: "卡片副标题",
-          showFooter: true,
-          elevation: 1,
-        },
-
-        // 可配置属性定义（用于属性面板）
-        propDefinitions: [
-          {
-            name: "title",
-            label: "标题",
-            type: "string",
-            defaultValue: "卡片标题",
-            required: false,
-          },
-          {
-            name: "subtitle",
-            label: "副标题",
-            type: "string",
-            defaultValue: "卡片副标题",
-            required: false,
-          },
-        ],
-      }
     ],
 
     // 分类信息
@@ -112,4 +88,72 @@ export const componentLibrary = [
     deprecated: false,
     minAppVersion: "1.0.0",
   },
+  {
+    name: "carousel", // 显示名称
+    type: "Carousel", // 组件类型，用于渲染逻辑
+    compList: [
+      {
+        // 组件引用
+        id: `carousel`, // 唯一标识符，用于查找和引用
+        height: '60vh',
+        popoverHeight: '15vh',
+        component: defineAsyncComponent(() => import("./blocks/carousel.vue")), // 实际组件
+        miniComponent: defineAsyncComponent(
+          () => import("./blocks/miniCarousel.vue")
+        ), // 侧边栏预览组件
+        schema: [
+          {
+            // 基本信息
+            id: `carousel_${uuid({})}`, // 唯一标识符，用于查找和引用
+            height: '60vh',
+            component:'carousel'
+          }
+        ]
+      },
+      {
+        schema: [
+          {
+            // 基本信息
+            id: `galleria_${uuid({})}`, // 唯一标识符，用于查找和引用
+            height: '60vh',
+            component:'galleria'
+          }
+        ],
+        height: '60vh',
+        popoverHeight: '15vh',
+        id: `galleria`, // 唯一标识符，用于查找和引用
+        // 组件引用
+        component: defineAsyncComponent(() => import("./blocks/galleria.vue")), // 实际组件
+        miniComponent: defineAsyncComponent(
+          () => import("./blocks/miniGalleria.vue")
+        ), // 侧边栏预览组件
+      }
+    ]
+  },
+  {
+    name: "banner", // 显示名称
+    type: "Banner", // 组件类型，用于渲染逻辑
+    compList: [
+      {
+        // 组件引用
+        id: `banner`, // 唯一标识符，用于查找和引用
+        height: '60vh',
+        popoverHeight: '15vh',
+        component: defineAsyncComponent(() => import("./blocks/banner.vue")), // 实际组件
+        miniComponent: defineAsyncComponent(
+          () => import("./blocks/miniBanner.vue")
+        ), // 侧边栏预览组件
+        schema: [
+          {
+            // 基本信息
+            id: `banner_${uuid({})}`, // 唯一标识符，用于查找和引用
+            height: '60vh',
+            component:'banner'
+          }
+        ]
+      },
+     
+    ]
+  }
+
 ];

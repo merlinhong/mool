@@ -3,6 +3,7 @@ import { CirclePlus } from "@element-plus/icons-vue";
 import { SortableEvent, VueDraggable } from "vue-draggable-plus";
 import { componentLibrary } from "../schema";
 import { useRefs } from "mooljs";
+import { cloneDeep } from "mooljs";
 const { refs, setRefs } = useRefs();
 defineProps({
   pageConfig: {
@@ -17,6 +18,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  hint: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
@@ -28,7 +33,7 @@ const btnGroup = ref<{ name: string; className: string; active?: boolean }[]>([
 
 const drawer = inject<Ref<boolean>>("drawer");
 const aside = ref();
-const emit = defineEmits(["change", "editPage"]);
+const emit = defineEmits(["change", "editPage", "place"]);
 
 /**
  * 监听popover组件进入事件
@@ -61,6 +66,7 @@ const onStart = (e: SortableEvent) => {
     refs[_].hide(e);
   });
   curStatus.value = "dragStart";
+  pause.value = false;
 };
 /**
  * 监听拖拽结束
@@ -70,17 +76,41 @@ const onEnd = (e: SortableEvent) => {
   Object.keys(refs).forEach((_) => {
     refs[_].hide(e);
   });
-  e.item.classList.add('py-10')
+  if (e.data.id.includes("toolbar")) {
+    e.item.classList.add("py-10");
+  }
+  e.item.style.display = "block";
+
   curStatus.value = "normal";
+  hint.value = false;
 };
+const hint = defineModel("hint", { required: true });
+const pause = ref(false);
 /**
  * 监听拖移动
  * @param e SortableEvent
  */
 const onMove = (e) => {
-  e.dragged.classList.remove('py-10')
+  e.dragged.classList.remove("py-10");
   drawer!.value = false;
   curStatus.value = "draging";
+  e.dragged.style.display = "none";
+  hint.value = true;
+  const { originalEvent, relatedRect, related } = e;
+
+  if (!originalEvent.clientY) return;
+  if (originalEvent.clientY - (relatedRect?.height + relatedRect?.top) > 0) {
+    emit("place", {
+      el: related,
+      orientation: "after",
+    });
+  } else {
+    emit("place", {
+      el: related,
+      orientation: "before",
+    });
+  }
+  pause.value = true;
 };
 /**
  * 添加内容
@@ -92,17 +122,23 @@ const addContent = () => {
     aside.value.classList.remove("pointer-events-none");
   }, 300);
 };
+const clone = (item: any) => {
+  return {
+    ...item,
+    // Hint:defineAsyncComponent(()=>import('../blocks/hint.vue'))
+  };
+};
 </script>
 <template>
   <div class="sidebar-container">
     <nav
-      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-20 rounded-bl-[5px]"
+      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1000 rounded-bl-[5px]"
     >
       <div class="top-buttons">
         <div
           v-for="item in btnGroup"
           :key="item.name"
-          style="padding: 5px; width: 100%"
+          style="padding: 5px; width: 100%; z-index: 9999"
           :class="[{ 'active-button': item.active, cursor: 'pointer' }]"
         >
           <div
@@ -144,8 +180,8 @@ const addContent = () => {
       </div>
     </nav>
     <Splitter
-      class="relative !w-[30rem] bottom-[2px]"
-      style="z-index: 10; transition: transform 0.3s ease"
+      class="relative !w-[30rem] bottom-[1px]"
+      style="z-index: 999; transition: transform 0.3s ease"
       :style="{
         ...(drawer
           ? { transform: 'translateX(0rem)' }
@@ -162,10 +198,11 @@ const addContent = () => {
             position: absolute;
             width: 100%;
             transition: transform 1s ease;
+            z-index: 9999;
           "
         >
           <div
-            style="padding: 20px; flex: 1; font-size: 13px; color: #333"
+            style="padding: 20px; font-size: 13px; color: #333"
             v-for="_ in componentLibrary"
           >
             <div style="padding: 0px 10px; margin-bottom: 10px; color: #fff">
@@ -173,28 +210,40 @@ const addContent = () => {
             </div>
 
             <div class="flex justify-between items-center flex-wrap">
-              <VueDraggable
-                v-model="_.compList"
-                @move="onMove"
-                @start="onStart"
-                @end="onEnd"
-                :animation="150"
-                :sort="false"
-                :group="{ name: 'blocks', pull: 'clone', put: false }"
-                v-for="item in _.compList"
-                class="!w-[45%] box mb-6 bg-gray-500"
-              >
-                <div class="py-10">
-                  <component
-                    :is="item.miniComponent"
-                    @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
-                    @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
-                  ></component>
-                  <Popover :ref="setRefs(item.id)">
-                    <component :is="item.component" class="w-120" />
-                  </Popover>
-                </div>
-              </VueDraggable>
+              <div v-for="item in _.compList" class="!w-[45%] box">
+                <VueDraggable
+                  v-model="item.schema"
+                  @move="onMove"
+                  @start="onStart"
+                  @end="onEnd"
+                  :clone="clone"
+                  :animation="150"
+                  :sort="false"
+                  :forceFallback="true"
+                  :fallbackOnBody="true"
+                  fallbackClass="fallback"
+                  :group="{ name: 'blocks', pull: 'clone', put: false }"
+                  :class="[{ 'bg-gray-500 ': item.id.includes('toolbar') }]"
+                >
+                  <div
+                    :class="[{ 'py-10': item.id.includes('toolbar') }, item.id]"
+                  >
+                    <component
+                      :height="item.popoverHeight"
+                      :is="item.miniComponent"
+                      @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
+                      @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
+                    ></component>
+                    <Popover :ref="setRefs(item.id)">
+                      <component
+                        :is="item.component"
+                        class="w-100"
+                        :height="item.popoverHeight"
+                      />
+                    </Popover>
+                  </div>
+                </VueDraggable>
+              </div>
             </div>
             <!-- 迷你工具栏 -->
           </div>
@@ -401,5 +450,8 @@ const addContent = () => {
 
 .active-button {
   border-right: 2px solid #409eff;
+}
+.ghost {
+  opacity: 1;
 }
 </style>

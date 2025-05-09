@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full   overflow-hidden flex items-center">
+  <div class="w-full   overflow-hidden flex items-center ">
     <!-- 迷你工具栏 -->
     <div class="w-full h-4 bg-white p-1 flex items-center justify-between border-b">
       <!-- 左侧内容 -->
@@ -20,8 +20,8 @@
       
       <!-- 右侧内容 -->
       <div class="flex items-center space-x-1">
-        <div class="bg-zinc-900 rounded text-[4px] px-1 py-0.5 text-white">Share</div>
-        <img class="w-2 h-2 rounded-full bg-gray-300" src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"></img>
+        <div class="bg-zinc-900 rounded-[2px] text-[4px] px-1 py-1 text-white">Share</div>
+        <img class="w-2 h-2 rounded-[50px] bg-gray-300" src="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"/>
       </div>
     </div>
    
