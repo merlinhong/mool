@@ -2,13 +2,10 @@
   <div class="card bg-white">
     <Carousel
       :value="products"
-      :numVisible="1"
-      :numScroll="1"
-      :responsiveOptions="responsiveOptions"
       circular
     >
       <template #item="slotProps">
-        <div class="my-5">
+        <!-- <div class="my-5"> -->
           <img
             :src="
               'https://primefaces.org/cdn/primevue/images/product/' +
@@ -18,7 +15,7 @@
             class="rounded  w-full"
             :style="{height}"
           />
-        </div>
+        <!-- </div> -->
       </template>
     </Carousel>
   </div>
@@ -73,17 +70,17 @@ const products = ref([
 const responsiveOptions = ref([
   {
     breakpoint: "1400px",
-    numVisible: 2,
+    numVisible: 1,
     numScroll: 1,
   },
   {
     breakpoint: "1199px",
-    numVisible: 3,
+    numVisible: 1,
     numScroll: 1,
   },
   {
     breakpoint: "767px",
-    numVisible: 2,
+    numVisible: 1,
     numScroll: 1,
   },
   {

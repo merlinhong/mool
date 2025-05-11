@@ -2,7 +2,7 @@
 import TopBar from "./components/TopBar.vue";
 import SideBar from "./components/SideBar.vue";
 import CanvasFrame from "./components/CanvasFrame.vue"; // 导入 CanvasFrame 组件
-// import ConfigPlane from "./components/settings.vue";
+import ConfigPlane from "./components/propSetting.vue";
 import { useMagicKeys, useEventListener } from "@vueuse/core";
 import { useStore, useLoading } from "mooljs";
 const route = useRoute();
@@ -132,10 +132,15 @@ const back = () => {
 const drawer = ref(false);
 provide("drawer", drawer);
 const onMouseenter = () => {
-  // drawer.value = false;
+  drawer.value = false;
 };
 const hint = ref(false);
 const place = ref<any | null>(null);
+const activeIds = ref({
+  currActive: null,
+  currHover: null,
+  currRect: null,
+});
 </script>
 
 <template>
@@ -153,23 +158,29 @@ const place = ref<any | null>(null);
             @editPage="openPage"
             v-model:openPanel="openPanel"
             v-model:hint="hint"
+            v-model:activeIds="activeIds"
             @place="
               (item) => {
-                console.log(item);
-                
                 place = item;
               }
             "
           />
           <!-- 画布组件，用于显示和编辑页面内容 -->
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
-
-          <CanvasFrame @mouseenter="onMouseenter" :hint="hint" :place="place" />
-
+          <CanvasFrame
+            @mouseenter="onMouseenter"
+            :hint="hint"
+            :place="place"
+            v-model:activeIds="activeIds"
+          />
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
-          <el-aside class="page-design-config bg-zinc-700 !w-[20rem]">
+          <el-aside
+            class="page-design-config bg-zinc-700 !w-[20rem]"
+            v-model:activeIds="activeIds"
+          >
             <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"
             @openJs="openPanel.js = true" @openRef="openPanel.ref = true" /> -->
+            <ConfigPlane></ConfigPlane>
           </el-aside>
         </div>
       </SplitterPanel>

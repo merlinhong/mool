@@ -22,6 +22,7 @@ const props = defineProps<{
     el: HTMLElement;
     orientation: "after" | "before";
   };
+  activeIds: { currActive: number | null; currHover: number | null;currRect: number | null; };
 }>();
 
 const pageConfig = defineModel<any>("pageConfig");
@@ -116,8 +117,9 @@ watch(
 const cardSchema = ref<any[]>([]);
 const isDragging = ref(false);
 const change = (e) => {
-  e.item.classList.remove("w-[45%]");
-  isDragging.value = true;
+  // e.item.classList.remove("w-[45%]");
+  // isDragging.value = true;
+  
 };
 const list = computed<Record<string, any>>(() =>
   componentLibrary
@@ -125,34 +127,31 @@ const list = computed<Record<string, any>>(() =>
     .flat()
     .reduce((acc, cur) => ({ ...acc, [cur.id]: cur.component }), {})
 );
-console.log(list.value);
-const hint = ref();
+const hintRef = ref();
 
 watch(
   () => props.place,
   (item) => {
     nextTick(() => {
-      console.log(hint);
-
-      if (!item.el.parentNode) {
-        item.el.appendChild(hint.value);
+      if (!cardSchema.value.length) return;
+      if (item.orientation == "before") {
+        item.el?.insertBefore(hintRef.value, item.el.firstChild);
       } else {
-        if (item.orientation == "before") {
-          item.el.parentNode?.insertBefore(hint.value, item.el);
-        } else {
-          item.el.parentNode?.insertBefore(hint.value, item.el.nextSibling);
-        }
+        item.el?.appendChild(hintRef.value);
       }
     });
   }
 );
-watch(()=>props.hint,(n)=>{
-  if(n){
-    hint.value.classList.remove('hint');
-  }
-})
-</script>
 
+const activeIds = defineModel("activeIds", {
+  type: Object as PropType<{
+    currActive: number | null;
+    currHover: number | null;
+    currRect: number | null;
+  }>,
+  default: () => ({ currActive: null, currHover: null, currRect: null }),
+});
+</script>
 <template>
   <div
     v-on="$attrs"
@@ -160,20 +159,118 @@ watch(()=>props.hint,(n)=>{
     style="box-sizing: border-box"
     :style="{ width: 'calc(100vw - 24rem)' }"
   >
+    
     <VueDraggable
       v-model="cardSchema"
+      :chosenClass="'sortable-chosen'"
       :animation="150"
       group="blocks"
       :class="{ '!ml-[0]': isDragging }"
-      class="h-[100%] ml-[28rem]"
-      @change="change"
+      class="h-[100%]"
+      @sort="change"
+      forceFallBack
+      fallBackOnBody
+      @start="
+        () => {
+          isDragging = true;
+        }
+      "
+      @end="
+        (e) => {
+          isDragging = false;
+          activeIds.currActive = null;
+          activeIds.currHover = null;
+        }
+      "
+      @add="
+        (e) => {
+          $nextTick(() => {
+            hintRef.remove();
+          });
+        }
+      "
     >
-      <div class="hint" ref="hint">
-        {{ "从左边拖拽组件放到此处" }}
-      </div>
-      <div v-for="card in cardSchema" :key="card.id">
+    <div
+      :class="[{ hint: cardSchema.length == 0, place: cardSchema.length > 0 ,'!h-full':!hint}]"
+      ref="hintRef"
+      class="absolute z-100"
+    >
+      {{ !hint ? "从左边拖拽组件放到此处" : "放到此处" }}
+    </div>
+      <div
+        v-for="(card, ind) in cardSchema"
+        :key="card.id"
+        :class="[
+          {
+            'border-1 border-black border-dashed':
+              activeIds.currHover == ind && activeIds.currActive != ind,
+            'border-2 border-blue-600': activeIds.currActive == ind,
+          },
+        ]"
+        class="relative"
+        @mouseenter="
+          (e) => {
+            !isDragging && !hint && (activeIds.currHover = ind);
+          }
+        "
+        @mouseleave="
+          (e) => {
+            !isDragging && !hint && (activeIds.currHover = null);
+          }
+        "
+        @click="
+          (e) => {
+            !isDragging && !hint && (activeIds.currActive = ind);
+          }
+        "
+      >
         <!-- <component :is="card.Hint" v-if="hint"/> -->
-        <component :is="list[card.component]" :height="card.height" />
+        <div
+          v-if="activeIds.currHover == ind"
+          class="absolute top-0 bg-blue-300 text-white text-[0.8rem] w-full text-center py-0.5 z-1000"
+        >
+          <i class="pi-bars pi align-middle !text-[0.8rem]"></i
+          >长按拖拽或者点击底部按钮变换位置
+        </div>
+        <div
+          v-if="activeIds.currHover == ind"
+          class="absolute right-0 bottom-0 bg-blue-600 text-[0.8rem] w-auto z-1000 rounded-6px"
+        >
+          <Button
+            icon="pi pi-trash text-white text-[0.5rem]"
+            variant="text"
+            class="!hover:bg-blue-300"
+            size="small"
+            @click="cardSchema.splice(ind, 1)"
+          ></Button>
+          <Button
+            icon="pi pi-chevron-up text-white text-[0.5rem]"
+            variant="text"
+            class="!hover:bg-blue-300"
+            size="small"
+            :disabled="ind == 0"
+            @click="
+              cardSchema.splice(
+                ind - 1,
+                2,
+                cardSchema[ind],
+                cardSchema[ind - 1]
+              )
+            "
+          ></Button>
+          <Button
+            icon="pi pi-chevron-down text-white text-[0.5rem]"
+            variant="text"
+            class="!hover:bg-blue-300"
+            size="small"
+            :disabled="ind == cardSchema.length - 1"
+            @click="
+              cardSchema.splice(ind, 2, cardSchema[ind + 1], cardSchema[ind])
+            "
+          ></Button>
+        </div>
+        <component :is="list[card.component]" :height="card.height" style="position: relative;">
+        </component>
       </div>
     </VueDraggable>
   </div>
@@ -188,13 +285,28 @@ watch(()=>props.hint,(n)=>{
 }
 .hint {
   width: 100%;
-  height: 90vh;
-  display:flex;
+  margin: auto;
+  height: auto;
+  display: flex;
   align-items: center;
+  justify-content: center;
+}
+.place {
+  background-color: rgb(19, 89, 241);
+  width: 100%;
+  text-align: center;
+  color: white;
+
+  font-style: italic;
+  font-family: "Courier New", Courier, monospace;
 }
 .iframe-container {
   /* width: 100%; */
   height: 100%;
   overflow: hidden;
 }
+/* 
+.sortable-chosen{
+  border: none;
+} */
 </style>

@@ -12,8 +12,7 @@
           <img
             :src="slotProps.item.itemImageSrc"
             :alt="slotProps.item.alt"
-            style="width: 100%; display: block"
-          :style="{height}"
+            style="width: 100%; display: block;height:30vh"
 
           />
         </template>
@@ -32,11 +31,6 @@
   
   <script setup>
   import { ref, onMounted } from "vue";
-  defineProps({
-    height:{
-        type:String
-    }
-})
   const images = ref([
     {
       thumbnailImageSrc:

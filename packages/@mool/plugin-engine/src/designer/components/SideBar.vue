@@ -22,6 +22,14 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  activeIds: {
+    type: Object as PropType<{
+      currActive: number | null;
+      currHover: number | null;
+      currRect: number | null;
+    }>,
+    default: () => ({ currActive: null, currHover: null }),
+  },
 });
 
 const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
@@ -66,7 +74,8 @@ const onStart = (e: SortableEvent) => {
     refs[_].hide(e);
   });
   curStatus.value = "dragStart";
-  pause.value = false;
+  activeIds.value.currHover = null;
+  activeIds.value.currActive = null;
 };
 /**
  * 监听拖拽结束
@@ -76,7 +85,7 @@ const onEnd = (e: SortableEvent) => {
   Object.keys(refs).forEach((_) => {
     refs[_].hide(e);
   });
-  if (e.data.id.includes("toolbar")) {
+  if (e.data.id.includes("navigationBar")) {
     e.item.classList.add("py-10");
   }
   e.item.style.display = "block";
@@ -85,32 +94,74 @@ const onEnd = (e: SortableEvent) => {
   hint.value = false;
 };
 const hint = defineModel("hint", { required: true });
-const pause = ref(false);
+const activeIds = defineModel("activeIds", {
+  type: Object as PropType<{
+    currActive: number | null;
+    currHover: number | null;
+    currRect: number | null;
+  }>,
+  default: () => ({ currActive: null, currHover: null,currRect: null }),
+});
 /**
  * 监听拖移动
  * @param e SortableEvent
  */
 const onMove = (e) => {
+  
   e.dragged.classList.remove("py-10");
   drawer!.value = false;
   curStatus.value = "draging";
   e.dragged.style.display = "none";
   hint.value = true;
   const { originalEvent, relatedRect, related } = e;
+  // if (!originalEvent.type) return;
 
-  if (!originalEvent.clientY) return;
-  if (originalEvent.clientY - (relatedRect?.height + relatedRect?.top) > 0) {
-    emit("place", {
-      el: related,
-      orientation: "after",
-    });
-  } else {
+  // if(originalEvent.clientY - relatedRect?.top > relatedRect?.height){
+  //   emit("place", {
+  //     el: related,
+  //     orientation: "after",
+  //   });
+  // }else{
+  //   emit("place", {
+  //     el: related,
+  //     orientation: "before",
+  //   });
+  // }
+  // 计算鼠标位置
+  if (activeIds.value.currRect) {
+    if (relatedRect?.top > activeIds.value.currRect) {
+      emit("place", {
+        el: related,
+        orientation: "after",
+      });
+      activeIds.value.currRect = relatedRect?.top;
+
+      return;
+    }
+    if (relatedRect?.top < activeIds.value.currRect) {
+      emit("place", {
+        el: related,
+        orientation: "before",
+      });
+      activeIds.value.currRect = relatedRect?.top;
+
+      return;
+    }
+  }
+  
+  if (originalEvent.clientY - relatedRect?.top < relatedRect?.height / 2) {
     emit("place", {
       el: related,
       orientation: "before",
     });
+  } else {
+    emit("place", {
+      el: related,
+      orientation: "after",
+    });
   }
-  pause.value = true;
+  activeIds.value.currRect = relatedRect?.top;
+
 };
 /**
  * 添加内容
@@ -129,6 +180,7 @@ const clone = (item: any) => {
   };
 };
 </script>
+
 <template>
   <div class="sidebar-container">
     <nav
@@ -219,27 +271,24 @@ const clone = (item: any) => {
                   :clone="clone"
                   :animation="150"
                   :sort="false"
-                  :forceFallback="true"
-                  :fallbackOnBody="true"
-                  fallbackClass="fallback"
                   :group="{ name: 'blocks', pull: 'clone', put: false }"
-                  :class="[{ 'bg-gray-500 ': item.id.includes('toolbar') }]"
+                  :class="[
+                    { 'bg-gray-500 ': item.id.includes('navigationBar') },
+                  ]"
                 >
                   <div
-                    :class="[{ 'py-10': item.id.includes('toolbar') }, item.id]"
+                    :class="[
+                      { 'py-10': item.id.includes('navigationBar') },
+                      item.id,
+                    ]"
                   >
                     <component
-                      :height="item.popoverHeight"
                       :is="item.miniComponent"
                       @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
                       @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
                     ></component>
                     <Popover :ref="setRefs(item.id)">
-                      <component
-                        :is="item.component"
-                        class="w-100"
-                        :height="item.popoverHeight"
-                      />
+                      <component :is="item.popoverComponent" class="w-100" />
                     </Popover>
                   </div>
                 </VueDraggable>
@@ -450,8 +499,5 @@ const clone = (item: any) => {
 
 .active-button {
   border-right: 2px solid #409eff;
-}
-.ghost {
-  opacity: 1;
 }
 </style>

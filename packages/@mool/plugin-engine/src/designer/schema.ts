@@ -1,23 +1,26 @@
 import { uuid } from 'mooljs';
 export const componentLibrary = [
   {
-    name: "顶部导航", // 显示名称
-    type: "Toolbar", // 组件类型，用于渲染逻辑
+    name: "navigation bar", // 显示名称
+    type: "navigationBar", // 组件类型，用于渲染逻辑
     compList: [
       {
         height: 'auto',
         popoverHeight: 'auto',
-        id: `toolbar`, // 唯一标识符，用于查找和引用
+        id: `navigationBar`, // 唯一标识符，用于查找和引用
         // 组件引用
-        component: defineAsyncComponent(() => import("./blocks/Toolbar.vue")), // 实际组件
+        component: defineAsyncComponent(() => import("./blocks/navigationBar/bar1/normal.vue")), // 实际组件
         miniComponent: defineAsyncComponent(
-          () => import("./blocks/miniToolbar.vue")
+          () => import("./blocks/navigationBar/bar1/mini.vue")
+        ), // 侧边栏预览组件
+        popoverComponent: defineAsyncComponent(
+          () => import("./blocks/navigationBar/bar1/popover.vue")
         ), // 侧边栏预览组件
         schema: [
           {
             // 基本信息
-            id: `toolbar_${uuid({})}`, // 唯一标识符，用于查找和引用
-            component:'toolbar',
+            id: `navigationBar_${uuid({})}`, // 唯一标识符，用于查找和引用
+            component:'navigationBar',
             height: 'auto',
             // 默认属性
             defaultProps: {
@@ -92,24 +95,27 @@ export const componentLibrary = [
     name: "carousel", // 显示名称
     type: "Carousel", // 组件类型，用于渲染逻辑
     compList: [
-      {
-        // 组件引用
-        id: `carousel`, // 唯一标识符，用于查找和引用
-        height: '60vh',
-        popoverHeight: '15vh',
-        component: defineAsyncComponent(() => import("./blocks/carousel.vue")), // 实际组件
-        miniComponent: defineAsyncComponent(
-          () => import("./blocks/miniCarousel.vue")
-        ), // 侧边栏预览组件
-        schema: [
-          {
-            // 基本信息
-            id: `carousel_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: '60vh',
-            component:'carousel'
-          }
-        ]
-      },
+      // {
+      //   // 组件引用
+      //   id: `carousel`, // 唯一标识符，用于查找和引用
+      //   height: '60vh',
+      //   popoverHeight: '15vh',
+      //   component: defineAsyncComponent(() => import("./blocks/carousel/carousel1/normal.vue")), // 实际组件
+      //   miniComponent: defineAsyncComponent(
+      //     () => import("./blocks/carousel/carousel1/mini.vue")
+      //   ), // 侧边栏预览组件
+      //   popoverComponent: defineAsyncComponent(
+      //     () => import("./blocks/carousel/carousel1/popover.vue")
+      //   ), // 侧边栏预览组件
+      //   schema: [
+      //     {
+      //       // 基本信息
+      //       id: `carousel_${uuid({})}`, // 唯一标识符，用于查找和引用
+      //       height: '60vh',
+      //       component:'carousel'
+      //     }
+      //   ]
+      // },
       {
         schema: [
           {
@@ -123,9 +129,12 @@ export const componentLibrary = [
         popoverHeight: '15vh',
         id: `galleria`, // 唯一标识符，用于查找和引用
         // 组件引用
-        component: defineAsyncComponent(() => import("./blocks/galleria.vue")), // 实际组件
+        component: defineAsyncComponent(() => import("./blocks/carousel/carousel2/normal.vue")), // 实际组件
         miniComponent: defineAsyncComponent(
-          () => import("./blocks/miniGalleria.vue")
+          () => import("./blocks/carousel/carousel2/mini.vue")
+        ), // 侧边栏预览组件
+        popoverComponent: defineAsyncComponent(
+          () => import("./blocks/carousel/carousel2/popover.vue")
         ), // 侧边栏预览组件
       }
     ]
@@ -139,9 +148,12 @@ export const componentLibrary = [
         id: `banner`, // 唯一标识符，用于查找和引用
         height: '60vh',
         popoverHeight: '15vh',
-        component: defineAsyncComponent(() => import("./blocks/banner.vue")), // 实际组件
+        component: defineAsyncComponent(() => import("./blocks/banner/banner1/normal.vue")), // 实际组件
         miniComponent: defineAsyncComponent(
-          () => import("./blocks/miniBanner.vue")
+          () => import("./blocks/banner/banner1/mini.vue")
+        ), // 侧边栏预览组件
+        popoverComponent: defineAsyncComponent(
+          () => import("./blocks/banner/banner1/popover.vue")
         ), // 侧边栏预览组件
         schema: [
           {
