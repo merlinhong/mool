@@ -6,7 +6,7 @@
       <Accordion :activeIndex="0" class="dark-accordion">
         <!-- 基础属性组 -->
         <AccordionTab header="基础属性">
-          <div class="property-group">
+          <div class="property-group  h-[20vh] lg:h-[50vh]">
             <div
               class="property-item"
               v-for="prop in basicProps"
@@ -56,19 +56,20 @@
               />
 
               <!-- 开关 -->
-              <InputSwitch
+              <!-- <InputSwitch
                 v-else-if="prop.type === 'boolean'"
                 :id="prop.name"
                 v-model="modelValues[prop.name]"
                 class="dark-switch"
-              />
+              /> -->
+              <ToggleSwitch v-model="modelValues[prop.name]" />
             </div>
           </div>
         </AccordionTab>
 
         <!-- 样式属性组 -->
         <AccordionTab header="样式属性">
-          <div class="property-group">
+          <div class="property-group h-[20vh] lg:h-[50vh]">
             <div
               class="property-item"
               v-for="prop in styleProps"
@@ -136,7 +137,7 @@
 
         <!-- 布局属性组 -->
         <AccordionTab header="布局属性">
-          <div class="property-group">
+          <div class="property-group h-[20vh] lg:h-[50vh]">
             <div
               class="property-item"
               v-for="prop in layoutProps"
@@ -194,7 +195,7 @@
 
         <!-- 高级属性组 -->
         <AccordionTab header="高级属性">
-          <div class="property-group">
+          <div class="property-group h-[20vh] lg:h-[50vh]">
             <div
               class="property-item"
               v-for="prop in advancedProps"
@@ -236,21 +237,7 @@
         </AccordionTab>
       </Accordion>
 
-      <!-- 操作按钮 -->
-      <div class="actions">
-        <Button
-          label="应用"
-          icon="pi pi-check"
-          @click="toggleDarkMode()"
-          class="dark-button p-button-primary"
-        />
-        <Button
-          label="重置"
-          icon="pi pi-refresh"
-          @click="resetChanges"
-          class="dark-button p-button-outlined"
-        />
-      </div>
+      
 
       <!-- JSON编辑对话框 -->
       <Dialog
@@ -308,14 +295,7 @@
         </template>
       </Dialog>
     </div>
-
-    <!-- 预览区域 -->
-    <div class="preview-container card dark-card">
-      <h2 class="title">预览</h2>
-      <div class="preview-content" :style="previewStyles">
-        <component :is="previewComponent" v-bind="modelValues"></component>
-      </div>
-    </div>
+   
   </div>
 </template>
 
@@ -667,6 +647,8 @@ const previewStyles = computed(() => {
   display: flex;
   gap: 1rem;
   color: #e1e1e1;
+  height: calc(100vh - 4rem);
+  overflow-y: hidden;
 }
 
 .card {
@@ -689,9 +671,11 @@ const previewStyles = computed(() => {
 }
 
 .property-group {
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  scrollbar-width: none; /* 隐藏滚动条 */
 }
 
 .property-item {

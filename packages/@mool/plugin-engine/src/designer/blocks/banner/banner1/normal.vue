@@ -4,12 +4,12 @@
             <div class="relative flex-1 z-20 flex items-center justify-center">
                 <div class="flex items-center justify-center h-full">
                     <div class="w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left">
-                        <h3 class="text-xl xl:text-5xl font-bold text-surface-0 lg:text-surface-900 dark:text-surface-0 mb-6 !leading-tight">
-                            <span class="block">Create the screens your</span>
+                        <h3 class=" text-xl xl:text-5xl font-bold text-primary-900 mb-6 !leading-tight">
+                            <span class="block">Create the screens your88</span>
                             <span class="block text-primary">visitors deserve to see</span>
                         </h3>
 
-                        <p class="text-surface-0/90 lg:text-surface-700 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none">
+                        <p contenteditable="true" class="text-surface-900/90 lg:text-surface-0 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         </p>
 

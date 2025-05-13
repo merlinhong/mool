@@ -155,9 +155,9 @@ const activeIds = defineModel("activeIds", {
 <template>
   <div
     v-on="$attrs"
-    class="bg-light-800 absolute w-[77vw] h-[93.5vh] left-4rem overflow-y-scroll"
+    class="bg-light-800 absolute  h-[94vh] left-4rem overflow-y-scroll"
     style="box-sizing: border-box"
-    :style="{ width: 'calc(100vw - 24rem)' }"
+    :style="{ width: '82vw' }"
   >
     
     <VueDraggable
@@ -193,7 +193,7 @@ const activeIds = defineModel("activeIds", {
     <div
       :class="[{ hint: cardSchema.length == 0, place: cardSchema.length > 0 ,'!h-full':!hint}]"
       ref="hintRef"
-      class="absolute z-100"
+      class="absolute z-100 text-black"
     >
       {{ !hint ? "从左边拖拽组件放到此处" : "放到此处" }}
     </div>
@@ -234,19 +234,19 @@ const activeIds = defineModel("activeIds", {
         </div>
         <div
           v-if="activeIds.currHover == ind"
-          class="absolute right-0 bottom-0 bg-blue-600 text-[0.8rem] w-auto z-1000 rounded-6px"
+          class="absolute right-0 bottom-0 bg-blue-600 text-[0.8rem] w-auto z-1000 rounded-5px"
         >
           <Button
             icon="pi pi-trash text-white text-[0.5rem]"
             variant="text"
-            class="!hover:bg-blue-300"
+            class="hover:bg-blue-300!"
             size="small"
             @click="cardSchema.splice(ind, 1)"
           ></Button>
           <Button
             icon="pi pi-chevron-up text-white text-[0.5rem]"
             variant="text"
-            class="!hover:bg-blue-300"
+            class="hover:bg-blue-300!"
             size="small"
             :disabled="ind == 0"
             @click="
@@ -261,7 +261,7 @@ const activeIds = defineModel("activeIds", {
           <Button
             icon="pi pi-chevron-down text-white text-[0.5rem]"
             variant="text"
-            class="!hover:bg-blue-300"
+            class="hover:bg-blue-300!"
             size="small"
             :disabled="ind == cardSchema.length - 1"
             @click="
@@ -286,7 +286,7 @@ const activeIds = defineModel("activeIds", {
 .hint {
   width: 100%;
   margin: auto;
-  height: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

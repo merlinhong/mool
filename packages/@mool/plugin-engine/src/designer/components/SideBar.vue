@@ -48,9 +48,15 @@ const emit = defineEmits(["change", "editPage", "place"]);
  * @param e MouseEvent
  * @param id String
  */
+const y = ref(0);
 const onPopoverEnter = (e: MouseEvent, id: string) => {
   if (curStatus.value == "normal") {
-    refs[id].show(e);
+    refs[id].classList.remove("out-in-fade");
+    refs[id].classList.add("fade-in-out");
+    refs[id].classList.remove("hidden");
+    const { height } = (e.target as HTMLElement)?.getBoundingClientRect();
+    const popoverHeight = +getComputedStyle(refs[id])?.height.replace("px", "");
+    y.value = (height - popoverHeight) / 2;
   }
 };
 
@@ -61,7 +67,13 @@ const onPopoverEnter = (e: MouseEvent, id: string) => {
  */
 const onPopoverLeave = (e: MouseEvent, id: string) => {
   if (curStatus.value == "normal") {
-    refs[id].hide(e);
+    refs[id].classList.add("out-in-fade");
+    refs[id].classList.remove("fade-in-out");
+    refs[id].addEventListener("animationend", (e) => {
+      if (e.target.classList.contains("out-in-fade")) {
+        refs[id].classList.add("hidden");
+      }
+    });
   }
 };
 
@@ -71,7 +83,8 @@ const onPopoverLeave = (e: MouseEvent, id: string) => {
  */
 const onStart = (e: SortableEvent) => {
   Object.keys(refs).forEach((_) => {
-    refs[_].hide(e);
+    refs[_].classList.add("out-in-fade");
+    refs[_].classList.remove("fade-in-out");
   });
   curStatus.value = "dragStart";
   activeIds.value.currHover = null;
@@ -82,9 +95,9 @@ const onStart = (e: SortableEvent) => {
  * @param e SortableEvent
  */
 const onEnd = (e: SortableEvent) => {
-  Object.keys(refs).forEach((_) => {
-    refs[_].hide(e);
-  });
+  // Object.keys(refs).forEach((_) => {
+  //   refs[_].hide(e);
+  // });
   if (e.data.id.includes("navigationBar")) {
     e.item.classList.add("py-10");
   }
@@ -100,14 +113,13 @@ const activeIds = defineModel("activeIds", {
     currHover: number | null;
     currRect: number | null;
   }>,
-  default: () => ({ currActive: null, currHover: null,currRect: null }),
+  default: () => ({ currActive: null, currHover: null, currRect: null }),
 });
 /**
  * 监听拖移动
  * @param e SortableEvent
  */
 const onMove = (e) => {
-  
   e.dragged.classList.remove("py-10");
   drawer!.value = false;
   curStatus.value = "draging";
@@ -148,7 +160,7 @@ const onMove = (e) => {
       return;
     }
   }
-  
+
   if (originalEvent.clientY - relatedRect?.top < relatedRect?.height / 2) {
     emit("place", {
       el: related,
@@ -161,7 +173,6 @@ const onMove = (e) => {
     });
   }
   activeIds.value.currRect = relatedRect?.top;
-
 };
 /**
  * 添加内容
@@ -184,7 +195,7 @@ const clone = (item: any) => {
 <template>
   <div class="sidebar-container">
     <nav
-      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1000 rounded-bl-[5px]"
+      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1002 rounded-bl-[5px]"
     >
       <div class="top-buttons">
         <div
@@ -233,7 +244,7 @@ const clone = (item: any) => {
     </nav>
     <Splitter
       class="relative !w-[30rem] bottom-[1px]"
-      style="z-index: 999; transition: transform 0.3s ease"
+      style="z-index: 1001; transition: transform 0.3s ease"
       :style="{
         ...(drawer
           ? { transform: 'translateX(0rem)' }
@@ -262,7 +273,7 @@ const clone = (item: any) => {
             </div>
 
             <div class="flex justify-between items-center flex-wrap">
-              <div v-for="item in _.compList" class="!w-[45%] box">
+              <div v-for="item in _.compList" class="!w-[45%] box relative">
                 <VueDraggable
                   v-model="item.schema"
                   @move="onMove"
@@ -275,6 +286,8 @@ const clone = (item: any) => {
                   :class="[
                     { 'bg-gray-500 ': item.id.includes('navigationBar') },
                   ]"
+                  @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
+                  @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
                 >
                   <div
                     :class="[
@@ -282,16 +295,17 @@ const clone = (item: any) => {
                       item.id,
                     ]"
                   >
-                    <component
-                      :is="item.miniComponent"
-                      @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
-                      @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
-                    ></component>
-                    <Popover :ref="setRefs(item.id)">
-                      <component :is="item.popoverComponent" class="w-100" />
-                    </Popover>
+                    <component :is="item.miniComponent"> </component>
                   </div>
                 </VueDraggable>
+                <div
+                  class="popover_container absolute opacity-0 bg-black p-2 w-100 hidden"
+                  :ref="setRefs(item.id)"
+                  :style="{ bottom: y + 'px' }"
+                >
+                  <div class="triangle absolute"></div>
+                  <component :is="item.popoverComponent" class="w-full" />
+                </div>
               </div>
             </div>
             <!-- 迷你工具栏 -->
@@ -499,5 +513,50 @@ const clone = (item: any) => {
 
 .active-button {
   border-right: 2px solid #409eff;
+}
+
+/* 定义淡入淡出动画 */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0; /* 完全透明 */
+  }
+  100% {
+    opacity: 1; /* 完全显示 */
+  }
+}
+/* 定义淡入淡出动画 */
+@keyframes outInFade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* 应用动画到元素 */
+.popover_container {
+  width: 25rem;
+  height: auto;
+  z-index: 10000;
+  right: -26rem !important;
+}
+.fade-in-out {
+  display: block !important;
+  opacity: 1;
+  animation: fadeInOut 0.8s; /* 动画持续3秒并无限循环 */
+}
+.out-in-fade {
+  opacity: 0;
+  animation: outInFade 0.2s; /* 动画持续3秒并无限循环 */
+}
+/* 创建一个三角形 */
+.triangle {
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 10px solid black; /* 右边设置颜色，形成向左的三角形 */
+  left: -5px;
+  top: calc((100% - 25px) / 2);
 }
 </style>

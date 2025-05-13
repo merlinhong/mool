@@ -175,7 +175,7 @@ const activeIds = ref({
           />
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <el-aside
-            class="page-design-config bg-zinc-700 !w-[20rem]"
+            class="page-design-config bg-zinc-700 !w-[18vw]"
             v-model:activeIds="activeIds"
           >
             <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"
@@ -196,6 +196,7 @@ const activeIds = ref({
 }
 .panel_container {
   height: calc((100% - 0.2rem)) !important;
+  background-color: #fff;
 }
 
 .common-layout {
