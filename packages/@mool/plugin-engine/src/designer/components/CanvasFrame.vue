@@ -5,7 +5,6 @@ import { useMagicKeys, useEventListener } from "@vueuse/core";
 import BasicPage from "./canvasContainer.vue";
 import { VueDraggable } from "vue-draggable-plus";
 import { componentLibrary } from "../schema";
-
 defineOptions({
   inheritAttrs: true,
 });
@@ -22,7 +21,11 @@ const props = defineProps<{
     el: HTMLElement;
     orientation: "after" | "before";
   };
-  activeIds: { currActive: number | null; currHover: number | null;currRect: number | null; };
+  activeIds: {
+    currActive: number | null;
+    currHover: number | null;
+    currRect: number | null;
+  };
 }>();
 
 const pageConfig = defineModel<any>("pageConfig");
@@ -119,7 +122,6 @@ const isDragging = ref(false);
 const change = (e) => {
   // e.item.classList.remove("w-[45%]");
   // isDragging.value = true;
-  
 };
 const list = computed<Record<string, any>>(() =>
   componentLibrary
@@ -148,18 +150,25 @@ const activeIds = defineModel("activeIds", {
     currActive: number | null;
     currHover: number | null;
     currRect: number | null;
+    currWrapper: number | null;
   }>,
-  default: () => ({ currActive: null, currHover: null, currRect: null }),
+  default: () => ({
+    currActive: null,
+    currHover: null,
+    currRect: null,
+    currWrapper: null,
+  }),
 });
+provide("activeIds", activeIds);
 </script>
 <template>
   <div
+    @click="activeIds.currWrapper = null"
     v-on="$attrs"
-    class="bg-light-800 absolute  h-[94vh] left-4rem overflow-y-scroll"
+    class="bg-light-800 absolute h-[94vh] left-4rem overflow-y-scroll"
     style="box-sizing: border-box"
     :style="{ width: '82vw' }"
   >
-    
     <VueDraggable
       v-model="cardSchema"
       :chosenClass="'sortable-chosen'"
@@ -190,24 +199,30 @@ const activeIds = defineModel("activeIds", {
         }
       "
     >
-    <div
-      :class="[{ hint: cardSchema.length == 0, place: cardSchema.length > 0 ,'!h-full':!hint}]"
-      ref="hintRef"
-      class="absolute z-100 text-black"
-    >
-      {{ !hint ? "从左边拖拽组件放到此处" : "放到此处" }}
-    </div>
+      <div
+        :class="[
+          {
+            hint: cardSchema.length == 0,
+            place: cardSchema.length > 0,
+            '!h-full': !hint,
+          },
+        ]"
+        ref="hintRef"
+        class="absolute z-100 text-black"
+      >
+        {{ !hint ? "从左边拖拽组件放到此处" : "放到此处" }}
+      </div>
       <div
         v-for="(card, ind) in cardSchema"
         :key="card.id"
         :class="[
           {
-            'border-1 border-black border-dashed':
+            'outline-1 outline-black outline-dashed':
               activeIds.currHover == ind && activeIds.currActive != ind,
-            'border-2 border-blue-600': activeIds.currActive == ind,
+            'outline-2 outline-blue-600': activeIds.currActive == ind,
           },
         ]"
-        class="relative"
+        class="relative my-0.5"
         @mouseenter="
           (e) => {
             !isDragging && !hint && (activeIds.currHover = ind);
@@ -269,7 +284,12 @@ const activeIds = defineModel("activeIds", {
             "
           ></Button>
         </div>
-        <component :is="list[card.component]" :height="card.height" style="position: relative;">
+        <component
+          :is="list[card.component]"
+          style="position: relative"
+          :props="card.props"
+          @click="activeIds.currWrapper = null"
+        >
         </component>
       </div>
     </VueDraggable>

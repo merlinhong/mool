@@ -160,7 +160,13 @@ export const componentLibrary = [
             // 基本信息
             id: `banner_${uuid({})}`, // 唯一标识符，用于查找和引用
             height: '60vh',
-            component:'banner'
+            component:'banner',
+            props:{
+              title:'Create the screens your88',
+              subTitle:'visitors deserve to see',
+              desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+              button:['Learn More','Live Demo']
+            }
           }
         ]
       },

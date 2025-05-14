@@ -140,6 +140,7 @@ const activeIds = ref({
   currActive: null,
   currHover: null,
   currRect: null,
+  currWrapper:null
 });
 </script>
 

@@ -27,8 +27,14 @@ defineProps({
       currActive: number | null;
       currHover: number | null;
       currRect: number | null;
+      currWrapper: number | null;
     }>,
-    default: () => ({ currActive: null, currHover: null }),
+    default: () => ({
+      currActive: null,
+      currHover: null,
+      currRect: null,
+      currWrapper: null,
+    }),
   },
 });
 
@@ -85,6 +91,11 @@ const onStart = (e: SortableEvent) => {
   Object.keys(refs).forEach((_) => {
     refs[_].classList.add("out-in-fade");
     refs[_].classList.remove("fade-in-out");
+    refs[_].addEventListener("animationend", (e) => {
+      if (e.target.classList.contains("out-in-fade")) {
+        refs[_].classList.add("hidden");
+      }
+    });
   });
   curStatus.value = "dragStart";
   activeIds.value.currHover = null;
@@ -112,8 +123,14 @@ const activeIds = defineModel("activeIds", {
     currActive: number | null;
     currHover: number | null;
     currRect: number | null;
+    currWrapper: number | null;
   }>,
-  default: () => ({ currActive: null, currHover: null, currRect: null }),
+  default: () => ({
+    currActive: null,
+    currHover: null,
+    currRect: null,
+    currWrapper: null,
+  }),
 });
 /**
  * 监听拖移动
@@ -185,10 +202,9 @@ const addContent = () => {
   }, 300);
 };
 const clone = (item: any) => {
-  return {
-    ...item,
-    // Hint:defineAsyncComponent(()=>import('../blocks/hint.vue'))
-  };
+  console.log(item,cloneDeep(item));
+  
+  return cloneDeep(item)
 };
 </script>
 
