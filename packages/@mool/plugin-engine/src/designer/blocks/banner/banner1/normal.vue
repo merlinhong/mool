@@ -10,30 +10,14 @@
           <div
             class="w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left"
           >
-            <EditorText
-              tag="div"
-              class="text-xl xl:text-5xl font-bold text-primary-900 mb-4"
-              v-model="props.title"
-            >
-            </EditorText>
-            <EditorText
-              tag="p"
-              class="text-surface-900/90 lg:text-surface-0 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none"
-              v-model="props.desc"
-            ></EditorText>
+            <div data-edit="title"></div>
+            <div data-edit="subTitle"></div>
+            <div data-edit="desc"></div>
             <div
               class="flex items-center gap-4 justify-center lg:justify-start"
             >
-              <EditorText
-                tag="Button"
-                v-model="props.button[0]"
-                type="button"
-              ></EditorText>
-              <EditorText
-                tag="Button"
-                v-model="props.button[1]"
-                type="button"
-              ></EditorText>
+              <div data-edit="button1"></div>
+              <div data-edit="button2"></div>
             </div>
           </div>
         </div>
@@ -53,18 +37,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// const emit = defineEmits(['update']);
-// const updateContent = (e)=>{
-//     emit('update',e)
-// }
-// const isEditing = ref(false);
-import EditorText from "../../../components/EditorText.vue";
-const prop = defineProps({
-  props: {
-    type: Object as Record<string, any>,
-    default: {},
-  },
- 
-});
-</script>
+<script setup lang="ts"></script>

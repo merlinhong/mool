@@ -1,15 +1,17 @@
-import { uuid } from 'mooljs';
+import { uuid } from "mooljs";
 export const componentLibrary = [
   {
     name: "navigation bar", // 显示名称
     type: "navigationBar", // 组件类型，用于渲染逻辑
     compList: [
       {
-        height: 'auto',
-        popoverHeight: 'auto',
+        height: "auto",
+        popoverHeight: "auto",
         id: `navigationBar`, // 唯一标识符，用于查找和引用
         // 组件引用
-        component: defineAsyncComponent(() => import("./blocks/navigationBar/bar1/normal.vue")), // 实际组件
+        component: defineAsyncComponent(
+          () => import("./blocks/navigationBar/bar1/normal.vue")
+        ), // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/navigationBar/bar1/mini.vue")
         ), // 侧边栏预览组件
@@ -20,35 +22,79 @@ export const componentLibrary = [
           {
             // 基本信息
             id: `navigationBar_${uuid({})}`, // 唯一标识符，用于查找和引用
-            component:'navigationBar',
-            height: 'auto',
-            // 默认属性
-            defaultProps: {
-              title: "卡片标题",
-              subtitle: "卡片副标题",
-              showFooter: true,
-              elevation: 1,
+            component: "navigationBar",
+            height: "auto",
+            config: {
+              menu_1: {
+                type: "Button",
+                label: "Files",
+                prop: {
+                  class: "!text-[12px] !text-black",
+                  text: true,
+                  plain: true,
+                },
+              },
+              menu_2: {
+                type: "Button",
+                label: "Edit",
+                prop: {
+                  class: "!text-[12px] !text-black",
+                  text: true,
+                  plain: true,
+                },
+              },
+              menu_3: {
+                type: "Button",
+                label: "View",
+                prop: {
+                  class: "!text-[12px] !text-black",
+                  text: true,
+                  plain: true,
+                },
+              },
             },
-
-            // 可配置属性定义（用于属性面板）
-            propDefinitions: [
-              {
-                name: "title",
-                label: "标题",
-                type: "string",
-                defaultValue: "卡片标题",
-                required: false,
+          },
+        ],
+      },
+      {
+        height: "auto",
+        popoverHeight: "auto",
+        id: `navigationBar2`, // 唯一标识符，用于查找和引用
+        // 组件引用
+        component: defineAsyncComponent(
+          () => import("./blocks/navigationBar/bar2/normal.vue")
+        ), // 实际组件
+        miniComponent: defineAsyncComponent(
+          () => import("./blocks/navigationBar/bar2/mini.vue")
+        ), // 侧边栏预览组件
+        popoverComponent: defineAsyncComponent(
+          () => import("./blocks/navigationBar/bar2/popover.vue")
+        ), // 侧边栏预览组件
+        schema: [
+          {
+            // 基本信息
+            id: `navigationBar2_${uuid({})}`, // 唯一标识符，用于查找和引用
+            component: "navigationBar2",
+            height: "auto",
+            config: {
+              menu: {
+                type: "Tab",
+                prop: {
+                  class: "!text-[12px] !text-black",
+                  text: true,
+                  plain: true,
+                },
+                loop: {
+                  value: [
+                    { label: "Tab 1", content: "Tab 1 Content", value: "0" },
+                    { label: "Tab 2", content: "Tab 2 Content", value: "1" },
+                    { label: "Tab 3", content: "Tab 3 Content", value: "2" },
+                  ]
+                },
               },
-              {
-                name: "subtitle",
-                label: "副标题",
-                type: "string",
-                defaultValue: "卡片副标题",
-                required: false,
-              },
-            ],
-          }
-        ]
+            },
+          },
+        ],
       },
     ],
 
@@ -95,49 +141,30 @@ export const componentLibrary = [
     name: "carousel", // 显示名称
     type: "Carousel", // 组件类型，用于渲染逻辑
     compList: [
-      // {
-      //   // 组件引用
-      //   id: `carousel`, // 唯一标识符，用于查找和引用
-      //   height: '60vh',
-      //   popoverHeight: '15vh',
-      //   component: defineAsyncComponent(() => import("./blocks/carousel/carousel1/normal.vue")), // 实际组件
-      //   miniComponent: defineAsyncComponent(
-      //     () => import("./blocks/carousel/carousel1/mini.vue")
-      //   ), // 侧边栏预览组件
-      //   popoverComponent: defineAsyncComponent(
-      //     () => import("./blocks/carousel/carousel1/popover.vue")
-      //   ), // 侧边栏预览组件
-      //   schema: [
-      //     {
-      //       // 基本信息
-      //       id: `carousel_${uuid({})}`, // 唯一标识符，用于查找和引用
-      //       height: '60vh',
-      //       component:'carousel'
-      //     }
-      //   ]
-      // },
       {
         schema: [
           {
             // 基本信息
             id: `galleria_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: '60vh',
-            component:'galleria'
-          }
+            height: "60vh",
+            component: "galleria",
+          },
         ],
-        height: '60vh',
-        popoverHeight: '15vh',
+        height: "60vh",
+        popoverHeight: "15vh",
         id: `galleria`, // 唯一标识符，用于查找和引用
         // 组件引用
-        component: defineAsyncComponent(() => import("./blocks/carousel/carousel2/normal.vue")), // 实际组件
+        component: defineAsyncComponent(
+          () => import("./blocks/carousel/carousel2/normal.vue")
+        ), // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/carousel/carousel2/mini.vue")
         ), // 侧边栏预览组件
         popoverComponent: defineAsyncComponent(
           () => import("./blocks/carousel/carousel2/popover.vue")
         ), // 侧边栏预览组件
-      }
-    ]
+      },
+    ],
   },
   {
     name: "banner", // 显示名称
@@ -146,9 +173,11 @@ export const componentLibrary = [
       {
         // 组件引用
         id: `banner`, // 唯一标识符，用于查找和引用
-        height: '60vh',
-        popoverHeight: '15vh',
-        component: defineAsyncComponent(() => import("./blocks/banner/banner1/normal.vue")), // 实际组件
+        height: "60vh",
+        popoverHeight: "15vh",
+        component: defineAsyncComponent(
+          () => import("./blocks/banner/banner1/normal.vue")
+        ), // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/banner/banner1/mini.vue")
         ), // 侧边栏预览组件
@@ -159,19 +188,54 @@ export const componentLibrary = [
           {
             // 基本信息
             id: `banner_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: '60vh',
-            component:'banner',
-            props:{
-              title:'Create the screens your88',
-              subTitle:'visitors deserve to see',
-              desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-              button:['Learn More','Live Demo']
-            }
-          }
-        ]
+            height: "60vh",
+            component: "banner",
+            config: {
+              title: {
+                prop: {
+                  class: "text-xl xl:text-5xl font-bold text-primary-900 mb-4",
+                },
+                type: "div",
+                label: "Create the screens your",
+              },
+              subTitle: {
+                type: "p",
+                label: "visitors deserve to see",
+                prop: {
+                  class: "text-xl xl:text-5xl font-bold text-primary-900 mb-4",
+                },
+              },
+              desc: {
+                type: "p",
+                label:
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                prop: {
+                  class:
+                    "text-surface-900/90 lg:text-surface-0 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
+                },
+              },
+              // button:['Learn More','Live Demo']
+              button1: {
+                type: "Button",
+                label: "Leran More",
+                prop: {
+                  class: "",
+                  type: "button",
+                },
+              },
+              button2: {
+                type: "Button",
+                label: "Live Demo",
+                prop: {
+                  class: "",
+                  type: "button",
+                  outlined: true,
+                },
+              },
+            },
+          },
+        ],
       },
-     
-    ]
-  }
-
+    ],
+  },
 ];

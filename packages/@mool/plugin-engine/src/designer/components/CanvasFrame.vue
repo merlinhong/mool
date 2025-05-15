@@ -5,6 +5,7 @@ import { useMagicKeys, useEventListener } from "@vueuse/core";
 import BasicPage from "./canvasContainer.vue";
 import { VueDraggable } from "vue-draggable-plus";
 import { componentLibrary } from "../schema";
+import CompWrapper from "./CompWrapper.vue";
 defineOptions({
   inheritAttrs: true,
 });
@@ -165,9 +166,9 @@ provide("activeIds", activeIds);
   <div
     @click="activeIds.currWrapper = null"
     v-on="$attrs"
-    class="bg-light-800 absolute h-[94vh] left-4rem overflow-y-scroll"
+    class="bg-light-800 absolute h-[94vh] !left-[4.0rem] overflow-y-scroll canvas_container"
     style="box-sizing: border-box"
-    :style="{ width: '82vw' }"
+    :style="{ width: '79vw' }"
   >
     <VueDraggable
       v-model="cardSchema"
@@ -230,7 +231,7 @@ provide("activeIds", activeIds);
         "
         @mouseleave="
           (e) => {
-            !isDragging && !hint && (activeIds.currHover = null);
+            // !isDragging && !hint && (activeIds.currHover = null);
           }
         "
         @click="
@@ -242,26 +243,26 @@ provide("activeIds", activeIds);
         <!-- <component :is="card.Hint" v-if="hint"/> -->
         <div
           v-if="activeIds.currHover == ind"
-          class="absolute top-0 bg-blue-300 text-white text-[0.8rem] w-full text-center py-0.5 z-1000"
+          class="absolute top-0 bg-blue-300 text-white text-[0.8rem] w-full text-center py-0.5 z-999"
         >
           <i class="pi-bars pi align-middle !text-[0.8rem]"></i
           >长按拖拽或者点击底部按钮变换位置
         </div>
         <div
           v-if="activeIds.currHover == ind"
-          class="absolute right-0 bottom-0 bg-blue-600 text-[0.8rem] w-auto z-1000 rounded-5px"
+          class="absolute right-0 bottom-0 bg-blue-600 text-[0.8rem] w-auto h-auto z-9999 rounded-5px"
         >
           <Button
-            icon="pi pi-trash text-white text-[0.5rem]"
+            icon="pi pi-trash text-white !text-[0.6rem]"
             variant="text"
-            class="hover:bg-blue-300!"
+            class="hover:bg-blue-300! h-3"
             size="small"
             @click="cardSchema.splice(ind, 1)"
           ></Button>
           <Button
-            icon="pi pi-chevron-up text-white text-[0.5rem]"
+            icon="pi pi-chevron-up text-white !text-[0.6rem]"
             variant="text"
-            class="hover:bg-blue-300!"
+            class="hover:bg-blue-300! h-3"
             size="small"
             :disabled="ind == 0"
             @click="
@@ -274,9 +275,9 @@ provide("activeIds", activeIds);
             "
           ></Button>
           <Button
-            icon="pi pi-chevron-down text-white text-[0.5rem]"
+            icon="pi pi-chevron-down text-white !text-[0.6rem]"
             variant="text"
-            class="hover:bg-blue-300!"
+            class="hover:bg-blue-300! h-3"
             size="small"
             :disabled="ind == cardSchema.length - 1"
             @click="
@@ -284,13 +285,13 @@ provide("activeIds", activeIds);
             "
           ></Button>
         </div>
-        <component
-          :is="list[card.component]"
-          style="position: relative"
-          :props="card.props"
+        <CompWrapper
+          :props="card.config"
           @click="activeIds.currWrapper = null"
+          style="position: relative"
+          :is="list[card.component]"
         >
-        </component>
+        </CompWrapper>
       </div>
     </VueDraggable>
   </div>

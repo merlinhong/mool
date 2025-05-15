@@ -6,7 +6,7 @@
         'outline-1 outline-black outline-dashed': isEnter,
         'outline-2 outline-blue-600': isSelectWrapper.currWrapper == id,
       },
-      'w-auto p-0.5 relative',
+      'w-auto p-0.5 relative z-1000',
     ]"
     @mouseenter="isSelectWrapper.currWrapper != id && (isEnter = true)"
     @mouseleave="isEnter = false"
@@ -14,7 +14,7 @@
     <template v-if="!isEditing">
       <component
         v-bind="$attrs"
-        :is="tag"
+        :is="Node"
         :class="[className]"
         @click.stop="clickWrapper"
         @dblclick="
@@ -39,7 +39,7 @@
         v-html="modelValue"
         class="!text-surface-0 pb-5 pr-10"
         @click.stop
-      /> 
+      />
     </template>
     <div
       v-if="isSelectWrapper.currWrapper == id"
@@ -58,8 +58,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref, nextTick, watch } from "vue";
+<script setup lang="ts">
+import { ref, nextTick, watch, DefineComponent } from "vue";
 import TSvg from "../source/svg/t.svg";
 import { uuid } from "mooljs";
 const props = defineProps({
@@ -74,12 +74,19 @@ const props = defineProps({
   className: {
     type: String,
     default: "",
-  },
+  }
+
 });
+const Node =
+  typeof resolveComponent(props.tag) == "string"
+    ? props.tag
+    : resolveComponent(props.tag);
+
 const isEnter = ref(false);
-const id = uuid();
-const isSelectWrapper = inject("activeIds", { currWrapper: null }).value;
-console.log(isSelectWrapper);
+const id = uuid({});
+const isSelectWrapper = inject("activeIds", {
+  value: { currWrapper: null },
+}).value;
 const emit = defineEmits(["update:modelValue"]);
 
 const isEditing = ref(false);
@@ -87,6 +94,7 @@ const editableElement = ref(null);
 const clickWrapper = () => {
   isSelectWrapper.currWrapper = id;
   isEnter.value = false;
+  isSelectWrapper.currHover = null;
 };
 const startEditing = () => {
   isEditing.value = true;
