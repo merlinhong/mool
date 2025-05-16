@@ -1,53 +1,55 @@
 <template>
   <div
-    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-50 rounded-tl-md ml-[1px] h-[6vh]">
+    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-50 rounded-tl-md ml-[1px] h-[6vh]"
+  >
     <span class="text-xs text-blue-400 font-bold">查看新手引导</span>
 
     <!--PC/移动端切换图标-->
     <div class="flex items-center cursor-pointer">
-      <i class="pi pi-desktop text-white mr-4" @click="switchToPC(0)" :class="{ 'icon-active': isPC }"></i>
-      <i class="pi pi-mobile text-white" @click="switchToMobile(0)" :class="{ 'icon-active': !isPC }"></i>
+      <i
+        class="pi pi-desktop text-white mr-4"
+        @click="switchToPC(0)"
+        :class="{ 'icon-active': isPC }"
+      ></i>
+      <i
+        class="pi pi-mobile text-white"
+        @click="switchToMobile(0)"
+        :class="{ 'icon-active': !isPC }"
+      ></i>
     </div>
 
     <div class="flex items-center space-x-1">
       <!-- 创建页面 -->
-      <i v-tooltip.bottom="'近期所建'" class="pi pi-file pi-file-plus text-white"></i>
-      <Popover>
-        ff
-      </Popover>
-      
+      <i
+        v-tooltip.bottom="'近期所建'"
+        class="pi pi-file pi-file-plus text-white"
+      ></i>
+      <Popover> ff </Popover>
+
       <span class="mx-2 text-gray-400">|</span>
 
-      <i v-tooltip.bottom="'回退'" class="pi-arrow-left pi text-white !mr-4"></i>
-      <i v-tooltip.bottom="'下一步'" class="pi-arrow-right pi text-white !mr-4"></i>
+      <i
+        v-tooltip.bottom="'回退'"
+        class="pi-arrow-left pi text-white !mr-4"
+      ></i>
+      <i
+        v-tooltip.bottom="'下一步'"
+        class="pi-arrow-right pi text-white !mr-4"
+      ></i>
       <i v-tooltip.bottom="'重置'" class="pi-refresh pi text-white !mr-4"></i>
       <i v-tooltip.bottom="'预览'" class="pi-eye pi text-white !mr-4"></i>
       <i v-tooltip.bottom="'保存'" class="pi-save pi text-white !mr-4"></i>
-      <i v-tooltip.bottom="'下载'" class="pi-download pi text-white"></i>
+      <i
+        v-tooltip.bottom="'下载'"
+        class="pi-download pi text-white"
+        @click="genCode"
+      ></i>
     </div>
-  </div>
-  <div class="">
-    <el-result class="w-80 absolute bg-white left-1/2 top-[40%] -translate-x-1/2 z-50 border border-gray-200"
-      v-if="generateCoding" :icon="statuIcon" :title="statuTitle">
-      <template #extra v-if="statuIcon == 'success'">
-        <el-button type="primary" @click="generateCoding = false">好的</el-button>
-      </template>
-    </el-result>
   </div>
 </template>
 
 <script setup lang="tsx">
 import { ref, Ref, PropType, watch } from "vue";
-import {
-  Monitor,
-  Iphone,
-  RefreshLeft,
-  RefreshRight,
-  View,
-  Download,
-  Upload,
-  DocumentAdd,
-} from "@element-plus/icons-vue";
 
 const PCSize = "100%";
 const MobileSize = "25%";
@@ -58,10 +60,6 @@ const statuIcon = ref<"info" | "success" | "warning" | "error">("info");
 
 const statuTitle = ref("正在出码，请稍等....");
 const generateCoding = ref(false);
-
-const previewRef = ref(false);
-
-const ctx = ref<Function>(function () { });
 
 const genCode = async () => {
   try {
@@ -81,20 +79,12 @@ const genCode = async () => {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({
-          pageInfo: {
-            name: "page",
-            schema: PageSchema.value,
-          },
-
-          blocksData: [],
-        }),
+        body: JSON.stringify({}),
       }
     )
       .then((response) => {
         return response.json();
       })
-
       .then(async (res) => {
         const pageCode = res.data[0].panelValue
 

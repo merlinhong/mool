@@ -1,61 +1,80 @@
 <!-- EditableText.vue -->
 <template>
-  <div
-    :class="[
-      {
-        'outline-1 outline-black outline-dashed': isEnter,
-        'outline-2 outline-blue-600': isSelectWrapper.currWrapper == id,
-      },
-      'w-auto p-0.5 relative z-1000',
-    ]"
-    @mouseenter="isSelectWrapper.currWrapper != id && (isEnter = true)"
-    @mouseleave="isEnter = false"
-  >
-    <template v-if="!isEditing">
-      <component
-        v-bind="$attrs"
-        :is="Node"
-        :class="[className]"
-        @click.stop="clickWrapper"
-        @dblclick="
-          () => {
-            isSelectWrapper.currWrapper == id && startEditing();
-          }
-        "
-      >
-        <div
-          @click.stop="clickWrapper"
-          v-if="isSelectWrapper.currWrapper == id"
-          v-html="modelValue"
-        ></div>
-        <slot v-else>{{ modelValue }}</slot>
-      </component>
-    </template>
-    <template v-else>
-      <p
-        contenteditable="true"
-        @keydown.enter.prevent="finishEditing"
-        ref="editableElement"
-        v-html="modelValue"
-        class="!text-surface-0 pb-5 pr-10"
-        @click.stop
-      />
-    </template>
-    <div
-      v-if="isSelectWrapper.currWrapper == id"
-      class="absolute right-[-0.6rem] top-[-2rem] bg-blue-600 h-[auto] w-auto z-1000 !rounded-[3px]"
-      style="transform: scale(0.6)"
+  <!-- <template
+    
+  > -->
+  <template v-if="!isEditing">
+    <component
+      v-bind="$attrs"
+      :is="Node"
+      @click.stop="clickWrapper"
+      @dblclick="
+        () => {
+          console.log(2345);
+
+          isSelectWrapper.currWrapper == id && startEditing();
+          console.log(isEditing);
+        }
+      "
+      :class="[
+        {
+          '!outline-1 !outline-black !outline-dashed': isEnter,
+          '!outline-2 !outline-blue-600': isSelectWrapper.currWrapper == id,
+        },
+        'w-auto p-2 relative z-1000',
+        className,
+      ]"
+      @mouseenter="
+        isSelectWrapper.currHover = null;
+        isSelectWrapper.currWrapper != id && (isEnter = true);
+      "
+      @mouseleave="isEnter = false"
     >
-      <Button
-        variant="text"
-        class="hover:bg-blue-300!"
-        size="small"
-        @click.stop="startEditing"
-      >
-        <TSvg class="w-4 h-4" />
-      </Button>
-    </div>
+      <div
+        @click.stop="clickWrapper"
+        v-if="isSelectWrapper.currWrapper == id"
+        v-html="modelValue"
+      ></div>
+      <slot v-else>{{ modelValue }}</slot>
+    </component>
+  </template>
+  <template v-else>
+    <component
+      :is="Node"
+      contenteditable="true"
+      @keydown.enter.prevent="finishEditing"
+      ref="editableElement"
+      class="!text-surface-0"
+      @click.stop
+      :class="[
+        {
+          '!outline-1 !outline-black !outline-dashed': isEnter,
+          '!outline-2 !outline-blue-600': isSelectWrapper.currWrapper == id,
+        },
+        'w-auto p-2 relative z-1000 my-4',
+        className,
+      ]"
+      @mouseenter="isSelectWrapper.currWrapper != id && (isEnter = true)"
+      @mouseleave="isEnter = false"
+    >
+      {{ modelValue }}
+    </component>
+  </template>
+  <div
+    v-if="isSelectWrapper.currWrapper == id"
+    class="absolute right-[-0.6rem] top-[-2rem] bg-blue-600 h-[auto] w-auto z-1000 !rounded-[3px]"
+    style="transform: scale(0.6)"
+  >
+    <Button
+      variant="text"
+      class="hover:bg-blue-300!"
+      size="small"
+      @click.stop="startEditing"
+    >
+      <TSvg class="w-4 h-4" />
+    </Button>
   </div>
+  <!-- </template> -->
 </template>
 
 <script setup lang="ts">
@@ -74,8 +93,7 @@ const props = defineProps({
   className: {
     type: String,
     default: "",
-  }
-
+  },
 });
 const Node =
   typeof resolveComponent(props.tag) == "string"
@@ -98,6 +116,8 @@ const clickWrapper = () => {
 };
 const startEditing = () => {
   isEditing.value = true;
+  console.log(isEditing);
+
   nextTick(() => {
     if (editableElement.value) {
       editableElement.value.focus();

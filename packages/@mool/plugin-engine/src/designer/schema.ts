@@ -78,9 +78,9 @@ export const componentLibrary = [
             height: "auto",
             config: {
               menu: {
-                type: "Tab",
+                type: "div",
                 prop: {
-                  class: "!text-[12px] !text-black",
+                  class: "p-5 box-border bottom text-surface-0",
                   text: true,
                   plain: true,
                 },
@@ -91,7 +91,18 @@ export const componentLibrary = [
                     { label: "Tab 3", content: "Tab 3 Content", value: "2" },
                   ]
                 },
+                events: ['mouseenter', 'mouseleave']
               },
+              pulldown_content: {
+                type: "p",
+                label: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat`,
+                prop: {
+                  class: 'text-surface-0',
+                }
+              }
             },
           },
         ],

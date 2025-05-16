@@ -19,37 +19,12 @@
         </svg>
       </template>
       <template #center>
-        <div class="w-auto">
-          <Tabs
-            :value="tabInd"
-            unstyled
-            class="text-surface-0"
-            @update:value="(e) => (tabInd = e)"
-          >
-            <TabList>
-              <Tab
-                data-edit="menu"
-                @mouseenter="
-                  () => {
-                    tabInd = ind;
-                    menuDrawer.classList.remove('my-fadeout');
-                    menuDrawer.classList.add('my-fadein');
-                    menuDrawer.classList.remove('hidden');
-                    menuDrawer.classList.remove('pointer-events-none');
-
-                    inactive = false;
-                  }
-                "
-                @mouseleave="
-                  tabInd = null;
-                  inactive = true;
-                "
-                :class="[{ active: ind == tabInd }, 'p-5 box-border bottom']"
-              >
-              </Tab>
-            </TabList>
-          </Tabs>
-        </div>
+        <div
+          data-edit="menu"
+          @mouseenter="(e) => mouseenter(e,index)"
+          @mouseleave="(e) => mouseleave(e,index)"
+          :class="['p-5 box-border bottom']"
+        ></div>
       </template>
 
       <template #end>
@@ -72,16 +47,20 @@
       @mouseenter="
         () => {
           // // tabInd = ind;
+          elRef.classList.add('active');
           menuDrawer.classList.remove('my-fadeout');
           menuDrawer.classList.add('my-fadein');
           menuDrawer.classList.remove('hidden');
           menuDrawer.classList.remove('pointer-events-none');
           inactive = false;
+          el.classList.add('modal-overlay');
         }
       "
       @mouseleave="
         tabInd = null;
         inactive = true;
+        elRef.classList.remove('active');
+        el.classList.remove('modal-overlay');
       "
       @animationend="
         (e) => {
@@ -94,22 +73,112 @@
           }
         }
       "
-      class="w-full h-[0] bg-surface-900 outline-1 outline-surface-0/10 text-surface-0 font-bold p-4 opacity-0 absolute top-[66px] !z-1001 hidden"
+      class="w-full  h-[0] bg-white outline-1 overflow-hidden outline-surface-0/10 text-surface-0 font-bold  absolute top-[66px] !z-1001 hidden"
     >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat
+      <div class="flex p-4" :class="[{'content-fadein':!inactive,'content-fadeout':inactive}]">>
+        <div class="!w-[20%]">
+          <div v-for="item in cities" class="w-full hover:!bg-surface-900">
+            <a
+              v-if="item.root"
+              class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase"
+              style="border-radius: 2rem"
+            >
+              <span>{{ item.label }}</span>
+            </a>
+            <a
+              v-else-if="!item.image"
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+            >
+              <span
+                class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
+              >
+                <i :class="[item.icon, 'text-lg']"></i>
+              </span>
+              <span class="inline-flex flex-col gap-1">
+                <span class="font-bold text-lg">{{ item.label }}</span>
+                <span class="whitespace-nowrap">{{ item.subtext }}</span>
+              </span>
+            </a>
+            <div v-else class="flex flex-col items-start gap-4 p-2">
+              <img alt="megamenu-demo" :src="item.image" class="w-full" />
+              <span>{{ item.subtext }}</span>
+              <Button :label="item.label" outlined />
+            </div>
+          </div>
+        </div>
+        <div class="!w-[20%]">
+          <div v-for="item in cities" class="w-full hover:!bg-surface-900">
+            <a
+              v-if="item.root"
+              class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase"
+              style="border-radius: 2rem"
+            >
+              <span>{{ item.label }}</span>
+            </a>
+            <a
+              v-else-if="!item.image"
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+            >
+              <span
+                class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
+              >
+                <i :class="[item.icon, 'text-lg']"></i>
+              </span>
+              <span class="inline-flex flex-col gap-1">
+                <span class="font-bold text-lg">{{ item.label }}</span>
+                <span class="whitespace-nowrap">{{ item.subtext }}</span>
+              </span>
+            </a>
+            <div v-else class="flex flex-col items-start gap-4 p-2">
+              <img alt="megamenu-demo" :src="item.image" class="w-full" />
+              <span>{{ item.subtext }}</span>
+              <Button :label="item.label" outlined />
+            </div>
+          </div>
+        </div>
+        <div class="!w-[20%]">
+          <div v-for="item in cities" class="w-full hover:!bg-surface-900">
+            <a
+              v-if="item.root"
+              class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase"
+              style="border-radius: 2rem"
+            >
+              <span>{{ item.label }}</span>
+            </a>
+            <a
+              v-else-if="!item.image"
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+            >
+              <span
+                class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
+              >
+                <i :class="[item.icon, 'text-lg']"></i>
+              </span>
+              <span class="inline-flex flex-col gap-1">
+                <span class="font-bold text-lg">{{ item.label }}</span>
+                <span class="whitespace-nowrap">{{ item.subtext }}</span>
+              </span>
+            </a>
+            <div v-else class="flex flex-col items-start gap-4 p-2">
+              <img alt="megamenu-demo" :src="item.image" class="w-full" />
+              <span>{{ item.subtext }}</span>
+              <Button :label="item.label" outlined />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup>
-const tabs = ref([
-  { title: "Tab 1", content: "Tab 1 Content", value: "0" },
-  { title: "Tab 2", content: "Tab 2 Content", value: "1" },
-  { title: "Tab 3", content: "Tab 3 Content", value: "2" },
+<script setup lang="ts">
+const selectedCity = ref();
+const cities = ref([
+  { label: "Features", icon: "pi pi-list", subtext: "Subtext of item" },
+  { label: "Customers", icon: "pi pi-users", subtext: "Subtext of item" },
+  { label: "Case Studies", icon: "pi pi-file", subtext: "Subtext of item" },
 ]);
+
 const menuDrawer = ref();
 const tabInd = ref(null);
 const inactive = ref(false);
@@ -120,6 +189,28 @@ window.addEventListener("mousemove", () => {
     menuDrawer.value.classList.add("my-fadeout");
     menuDrawer.value.classList.remove("my-fadein");
   }
+});
+const elRef = ref();
+const mouseenterMenu = (e, ind) => {
+  tabInd.value = ind;
+  e.classList.add("active");
+  elRef.value = e;
+  menuDrawer.value.classList.remove("my-fadeout");
+  menuDrawer.value.classList.add("my-fadein");
+  menuDrawer.value.classList.remove("hidden");
+  menuDrawer.value.classList.remove("pointer-events-none");
+  inactive.value = false;
+  el.classList.add("modal-overlay");
+};
+const mouseleaveMenu = (e, ind) => {
+  e.classList.remove("active");
+  elRef.value.classList.remove("active");
+  tabInd.value = null;
+  inactive.value = true;
+  el.classList.remove("modal-overlay");
+};
+defineExpose({
+  menu: [mouseenterMenu, mouseleaveMenu],
 });
 </script>
 <style>
@@ -135,6 +226,7 @@ window.addEventListener("mousemove", () => {
   transform-origin: center;
   transition: transform 0.5s ease;
 }
+
 .active {
   &::after {
     transform: scaleX(1);
@@ -146,35 +238,67 @@ window.addEventListener("mousemove", () => {
   0% {
     height: 0;
 
-    opacity: 0; /* 完全透明 */
+    /* 完全透明 */
   }
+
   100% {
-    opacity: 1; /* 完全显示 */
+    /* 完全显示 */
     height: 40vh;
   }
 }
+
 /* 定义淡入淡出动画 */
 @keyframes outInFade {
   0% {
     height: 40vh;
-    opacity: 1;
   }
+
   100% {
     height: 0;
+  }
+}
+/* 定义淡入淡出动画 */
+@keyframes outInFadeContent {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
     opacity: 0;
   }
 }
-.my-fadein {
-  display: block !important;
-  opacity: 1;
-  height: 40vh;
-  animation: fadeInOut 0.8s; /* 动画持续3秒并无限循环 */
+/* 定义淡入淡出动画 */
+@keyframes fadeInOutContent {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
+.content-fadein{
+opacity:1;
+animation: fadeInOutContent 0.8s;
+}
+.content-fadeout{
+  opacity: 0;
+  animation: outInFadeContent 0.8s;
+}
+.my-fadein {
+  display: block;
+  height: 40vh;
+  animation: fadeInOut 0.8s;
+  /* 动画持续3秒并无限循环 */
+}
+
 .my-fadeout {
   height: 0;
-  opacity: 0;
-  animation: outInFade 0.8s; /* 动画持续3秒并无限循环 */
+  /* opacity: 0; */
+  animation: outInFade 0.8s;
+  /* 动画持续3秒并无限循环 */
 }
+
 .modal-overlay {
   &::after {
     content: "";
@@ -182,8 +306,10 @@ window.addEventListener("mousemove", () => {
     inset: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
-    z-index: 999; /* 确保遮罩层在最上层 */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 半透明黑色背景 */
+    z-index: 100;
+    /* 确保遮罩层在最上层 */
   }
 }
 
