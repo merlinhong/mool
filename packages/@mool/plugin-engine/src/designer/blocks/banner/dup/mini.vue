@@ -15,8 +15,7 @@
         <img
           :src="slotProps.item.itemImageSrc"
           :alt="slotProps.item.alt"
-          style="width: 100%; display: block;"
-          :style="{height}"
+          style="width: 100%; display: block;height:12vh"
          
         />
       </template>
@@ -25,7 +24,7 @@
           <img
             :src="slotProps.item.thumbnailImageSrc"
             :alt="slotProps.item.alt"
-            style="width: 100%; display: block"
+            style="width: 100%; display: block;"
           />
         </div>
       </template>
@@ -35,12 +34,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-defineProps({
-    height:{
-        type:String,
-        default:'20vh'
-    }
-})
+
 const images = ref([
   {
     thumbnailImageSrc:

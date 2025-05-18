@@ -1,6 +1,6 @@
 <template>
-  <div class="card relative z-998">
-    <Toolbar class="!bg-white !py-0">
+  <div class="card relative z-1001">
+    <Toolbar class="!bg-white !py-0 ">
       <template #start>
         <svg
           viewBox="0 0 35 40"
@@ -21,8 +21,7 @@
       <template #center>
         <div
           data-edit="menu"
-          @mouseenter="(e) => mouseenter(e,index)"
-          @mouseleave="(e) => mouseleave(e,index)"
+
           :class="['p-5 box-border bottom']"
         ></div>
       </template>
@@ -53,29 +52,32 @@
           menuDrawer.classList.remove('hidden');
           menuDrawer.classList.remove('pointer-events-none');
           inactive = false;
-          el.classList.add('modal-overlay');
+          el?.classList.add('modal-overlay');
         }
       "
       @mouseleave="
         tabInd = null;
         inactive = true;
         elRef.classList.remove('active');
-        el.classList.remove('modal-overlay');
+        el?.classList.remove('modal-overlay');
       "
       @animationend="
         (e) => {
           if (e.animationName == 'outInFade') {
-            e.target.classList.add('hidden');
-            e.target.classList.remove('pointer-events-none');
+            e.target?.classList.add('hidden');
+            e.target?.classList.remove('pointer-events-none');
           }
           if (e.animationName == 'fadeInOut') {
-            e.target.classList.remove('hidden');
+            e.target?.classList.remove('hidden');
           }
         }
       "
-      class="w-full  h-[0] bg-white outline-1 overflow-hidden outline-surface-0/10 text-surface-0 font-bold  absolute top-[66px] !z-1001 hidden"
+      class="w-full h-[0] bg-white outline-1 overflow-hidden outline-surface-0/10 text-surface-0 font-bold absolute top-[66px] !z-2000 hidden"
     >
-      <div class="flex p-4" :class="[{'content-fadein':!inactive,'content-fadeout':inactive}]">>
+      <div
+        class="flex p-4"
+        :class="[{ 'content-fadein': !inactive, 'content-fadeout': inactive }]"
+      >
         <div class="!w-[20%]">
           <div v-for="item in cities" class="w-full hover:!bg-surface-900">
             <a
@@ -87,7 +89,7 @@
             </a>
             <a
               v-else-if="!item.image"
-              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3"
             >
               <span
                 class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
@@ -117,7 +119,7 @@
             </a>
             <a
               v-else-if="!item.image"
-              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3"
             >
               <span
                 class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
@@ -147,7 +149,7 @@
             </a>
             <a
               v-else-if="!item.image"
-              class="flex items-center p-4 cursor-pointer mb-2 gap-3 "
+              class="flex items-center p-4 cursor-pointer mb-2 gap-3"
             >
               <span
                 class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12"
@@ -172,6 +174,7 @@
 </template>
 
 <script setup lang="ts">
+
 const selectedCity = ref();
 const cities = ref([
   { label: "Features", icon: "pi pi-list", subtext: "Subtext of item" },
@@ -180,18 +183,27 @@ const cities = ref([
 ]);
 
 const menuDrawer = ref();
-const tabInd = ref(null);
+const tabInd = ref<number|null>(null);
 const inactive = ref(false);
 const el = document.querySelector(".canvas_container");
-window.addEventListener("mousemove", () => {
-  if (inactive.value) {
-    menuDrawer.value.classList.add("pointer-events-none");
-    menuDrawer.value.classList.add("my-fadeout");
-    menuDrawer.value.classList.remove("my-fadein");
-  }
-});
+
+const AbortSignal = new AbortController();
+window.addEventListener(
+  "mousemove",
+  () => {
+    if (inactive.value) {
+      menuDrawer.value.classList.add("pointer-events-none");
+      menuDrawer.value.classList.add("my-fadeout");
+      menuDrawer.value.classList.remove("my-fadein");
+    }
+  },
+  { signal: AbortSignal.signal }
+);
+onUnmounted((() => {
+  AbortSignal.abort();
+}))
 const elRef = ref();
-const mouseenterMenu = (e, ind) => {
+const mouseenterMenu = (e:HTMLElement, ind:number) => {
   tabInd.value = ind;
   e.classList.add("active");
   elRef.value = e;
@@ -200,14 +212,14 @@ const mouseenterMenu = (e, ind) => {
   menuDrawer.value.classList.remove("hidden");
   menuDrawer.value.classList.remove("pointer-events-none");
   inactive.value = false;
-  el.classList.add("modal-overlay");
+  el?.classList.add("modal-overlay");
 };
-const mouseleaveMenu = (e, ind) => {
+const mouseleaveMenu = (e:HTMLElement, ind:number) => {
   e.classList.remove("active");
   elRef.value.classList.remove("active");
   tabInd.value = null;
   inactive.value = true;
-  el.classList.remove("modal-overlay");
+  el?.classList.remove("modal-overlay");
 };
 defineExpose({
   menu: [mouseenterMenu, mouseleaveMenu],
@@ -277,11 +289,11 @@ defineExpose({
     opacity: 1;
   }
 }
-.content-fadein{
-opacity:1;
-animation: fadeInOutContent 0.8s;
+.content-fadein {
+  opacity: 1;
+  animation: fadeInOutContent 0.8s;
 }
-.content-fadeout{
+.content-fadeout {
   opacity: 0;
   animation: outInFadeContent 0.8s;
 }

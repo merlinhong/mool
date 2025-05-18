@@ -10,27 +10,18 @@ const router = useRouter();
 
 const { loading, setLoading } = useLoading(true);
 // const { canvas } = useStore();
-const canvasFrameRef = ref<InstanceType<typeof CanvasFrame> | null>(null);
+// const canvasFrameRef = ref<InstanceType<typeof CanvasFrame> | null>(null);
 
-const projectName = ref("");
 const pageName = ref("");
 
-const pageConfig = ref({
-  children: [],
-  id: "55ty4epk",
-  css: "",
-});
-const clonePageConfig = { ...pageConfig.value };
-const containerStyle = ref<{ width?: string; margin?: string }>({});
-const hasActive = ref(false);
+const pageSchema = ref<any[]>([]);
 
-const openBar = (arr: [boolean, string]) => {
-  hasActive.value = arr[0];
-  containerStyle.value.margin = arr[1];
-};
-const changeSize = (option: { size: string; isPC: boolean }) => {
-  containerStyle.value.width = option.size;
-};
+// const containerStyle = ref<{ width?: string; margin?: string }>({});
+
+
+// const changeSize = (option: { size: string; isPC: boolean }) => {
+//   containerStyle.value.width = option.size;
+// };
 watch(
   () => route.query,
   (n, o) => {
@@ -93,14 +84,6 @@ const undo = () => {
   }
 };
 
-// 监听 pageConfig 的变化
-watch(
-  () => pageConfig.value,
-  (newValue) => {
-    saveToHistory(newValue);
-  },
-  { deep: true }
-);
 const handleKeyDown = (e: KeyboardEvent) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
     console.log("Undo triggered");
@@ -110,17 +93,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     // 在这里添加保存逻辑
   }
 };
-// 修改组件挂载逻辑
-onMounted(() => {
-  projectName.value = route.query?.projectName as string;
-  pageName.value = route.query?.pageName as string;
-  // querySchema(route.query?.id as string);
-});
 
-const openPanel = ref<Record<"js" | "ref", boolean>>({
-  js: false,
-  ref: false,
-});
 const back = () => {
   router.push({
     path: "apply",
@@ -130,7 +103,6 @@ const back = () => {
   });
 };
 const drawer = ref(false);
-provide("drawer", drawer);
 const onMouseenter = () => {
   drawer.value = false;
 };
@@ -142,11 +114,13 @@ const activeIds = ref({
   currRect: null,
   currWrapper:null
 });
+provide("drawer", drawer);
+
 </script>
 
 <template>
   <div class="h-[100vh] flex flex-col">
-    <TopBar v-model:pageConfig="pageConfig" @changeSize="changeSize" />
+    <TopBar v-model:pageSchema="pageSchema" @changeSize="changeSize" />
     <Splitter class="h-[100%]">
       <SplitterPanel>
         <div class="flex panel_container justify-between">
@@ -154,10 +128,7 @@ const activeIds = ref({
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
           <!-- @change 事件用于监听侧边栏的打开或关闭 -->
           <SideBar
-            v-model:pageConfig="pageConfig"
-            @change="openBar"
-            @editPage="openPage"
-            v-model:openPanel="openPanel"
+            v-model:pageSchema="pageSchema"
             v-model:hint="hint"
             v-model:activeIds="activeIds"
             @place="
@@ -173,6 +144,7 @@ const activeIds = ref({
             :hint="hint"
             :place="place"
             v-model:activeIds="activeIds"
+            v-model:pageSchema="pageSchema"
           />
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <el-aside

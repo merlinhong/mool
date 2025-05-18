@@ -55,7 +55,7 @@ const PCSize = "100%";
 const MobileSize = "25%";
 
 const emit = defineEmits(["changeSize"]);
-const PageSchema = defineModel("pageConfig", { required: true });
+const PageSchema = defineModel<any[]>("pageSchema", { required: true });
 const statuIcon = ref<"info" | "success" | "warning" | "error">("info");
 
 const statuTitle = ref("正在出码，请稍等....");
@@ -67,8 +67,18 @@ const genCode = async () => {
 
     const folderHandle = await self.showDirectoryPicker();
 
-    generateCoding.value = true;
-
+    // generateCoding.value = true;
+    console.log(PageSchema.value);
+    console.log(Object.entries(PageSchema.value));
+    
+    const schema = {
+      modules:Object.entries(toRaw(PageSchema.value)).reduce((acc, [key, value]) => {
+        acc[value.template] = value.config;
+        return acc;
+      }, {} as Record<string, any>),
+    }
+    console.log(schema);
+    
     fetch(
       "/api/generate-code",
 
@@ -79,7 +89,7 @@ const genCode = async () => {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({}),
+        body: JSON.stringify(schema),
       }
     )
       .then((response) => {

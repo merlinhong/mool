@@ -6,10 +6,6 @@ import { useRefs } from "mooljs";
 import { cloneDeep } from "mooljs";
 const { refs, setRefs } = useRefs();
 defineProps({
-  pageConfig: {
-    type: Object as PropType<any>,
-    required: true,
-  },
   width: {
     type: String,
     default: "100%",
@@ -109,7 +105,7 @@ const onEnd = (e: SortableEvent) => {
   // Object.keys(refs).forEach((_) => {
   //   refs[_].hide(e);
   // });
-  if (e.data.id.includes("navigationBar")) {
+  if (e.data.id.includes("bar")) {
     e.item.classList.add("py-10");
   }
   e.item.style.display = "block";
@@ -202,16 +198,14 @@ const addContent = () => {
   }, 300);
 };
 const clone = (item: any) => {
-  console.log(item,cloneDeep(item));
-  
-  return cloneDeep(item)
+  return JSON.parse(JSON.stringify(item));
 };
 </script>
 
 <template>
   <div class="sidebar-container">
     <nav
-      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1002 rounded-bl-[5px]"
+      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1003 rounded-bl-[5px]"
     >
       <div class="top-buttons">
         <div
@@ -260,7 +254,7 @@ const clone = (item: any) => {
     </nav>
     <Splitter
       class="relative !w-[30rem] bottom-[1px]"
-      style="z-index: 1001; transition: transform 0.3s ease"
+      style="z-index: 1002; transition: transform 0.3s ease"
       :style="{
         ...(drawer
           ? { transform: 'translateX(0rem)' }
@@ -289,7 +283,7 @@ const clone = (item: any) => {
             </div>
 
             <div class="flex justify-between items-center flex-wrap">
-              <div v-for="item in _.compList" class="!w-[45%] box relative">
+              <div v-for="item in _.compList" class="!w-[45%] box relative !mb-12">
                 <VueDraggable
                   v-model="item.schema"
                   @move="onMove"
@@ -300,20 +294,22 @@ const clone = (item: any) => {
                   :sort="false"
                   :group="{ name: 'blocks', pull: 'clone', put: false }"
                   :class="[
-                    { 'bg-gray-500 ': item.id.includes('navigationBar') },
+                    { 'bg-gray-500 ': item.id.includes('bar') },
+                    
                   ]"
                   @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
                   @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
                 >
                   <div
                     :class="[
-                      { 'py-10': item.id.includes('navigationBar') },
+                      { 'py-10': item.id.includes('bar')},
                       item.id,
                     ]"
                   >
                     <component :is="item.miniComponent"> </component>
                   </div>
                 </VueDraggable>
+                <div class="text-white absolute bottom-[-25px]">{{ item.desc }}</div>
                 <div
                   class="popover_container absolute opacity-0 bg-black p-2 w-100 hidden"
                   :ref="setRefs(item.id)"

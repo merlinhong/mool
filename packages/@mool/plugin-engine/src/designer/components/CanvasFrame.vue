@@ -10,7 +10,7 @@ defineOptions({
   inheritAttrs: true,
 });
 const props = defineProps<{
-  // pageConfig: any;
+  pageSchema: any[];
   // currentConf?: any;
   // hasActive?: boolean;
   // customStyle?: { width?: string; margin?: string };
@@ -29,24 +29,24 @@ const props = defineProps<{
   };
 }>();
 
-const pageConfig = defineModel<any>("pageConfig");
-const currentConf = defineModel<any | null>("current");
+const pageSchema = defineModel<any>("pageSchema");
+// const currentConf = defineModel<any | null>("current");
 const emit = defineEmits<{
-  (e: "update:pageConfig", value: Page): void;
+  (e: "update:pageConfig", value: any): void;
   (e: "active", value: any): void;
   (e: "resize", width: number, height: number): void; // 新增 resize 事件
 }>();
 
 const iframeRef = ref<HTMLIFrameElement | null>(null);
-const canvasRef = ref<InstanceType<typeof BasicCanvas> | null>(null);
+// const canvasRef = ref<InstanceType<typeof BasicCanvas> | null>(null);
 
-const injectTailwindCSS = (doc: Document) => {
-  const Script = doc.createElement("script");
-  Script.src = new URL("../js/tailwind.js", import.meta.url).href;
-  doc.head.appendChild(Script);
-};
+// const injectTailwindCSS = (doc: Document) => {
+//   const Script = doc.createElement("script");
+//   Script.src = new URL("../js/tailwind.js", import.meta.url).href;
+//   doc.head.appendChild(Script);
+// };
 // 添加这些新的 ref
-const history = ref<Page[]>([]);
+const history = ref<any[]>([]);
 const historyIndex = ref(-1);
 
 // 添加一个新的函数来保存历史记录
@@ -81,49 +81,45 @@ const redo = () => {
 // 粘贴板
 const pasteIframe = ref<Col | null>(null);
 
-const del = () => {
-  if (currentConf.value) {
-    currentConf.value.children = currentConf.value.children?.filter(
-      (item) => item.id !== currentConf.value?.id
-    );
-  }
-};
-const copy = () => {
-  pasteIframe.value = JSON.parse(JSON.stringify(currentConf.value));
-};
-const paste = () => {
-  if (pasteIframe.value) {
-    currentConf.value?.children?.push({
-      ...pasteIframe.value,
-      id: Date.now().toString().substring(8),
-    });
-  }
-};
-watch(
-  () => props.pageConfig,
-  (newValue) => {
-    nextTick(() => {
-      if (canvasRef.value) {
-        canvasRef.value.init(props.pageConfig);
-      }
-      // 只有当新值与当前历史记录的最后一项不同时，才保存到历史记录
-      if (
-        JSON.stringify(newValue) !==
-        JSON.stringify(history.value[historyIndex.value])
-      ) {
-        saveToHistory(newValue);
-      }
-    });
-  },
-  { deep: true }
-);
+// const del = () => {
+//   if (currentConf.value) {
+//     currentConf.value.children = currentConf.value.children?.filter(
+//       (item) => item.id !== currentConf.value?.id
+//     );
+//   }
+// };
+// const copy = () => {
+//   pasteIframe.value = JSON.parse(JSON.stringify(currentConf.value));
+// };
+// const paste = () => {
+//   if (pasteIframe.value) {
+//     currentConf.value?.children?.push({
+//       ...pasteIframe.value,
+//       id: Date.now().toString().substring(8),
+//     });
+//   }
+// };
+// watch(
+//   () => props.pageConfig,
+//   (newValue) => {
+//     nextTick(() => {
+//       if (canvasRef.value) {
+//         canvasRef.value.init(props.pageConfig);
+//       }
+//       // 只有当新值与当前历史记录的最后一项不同时，才保存到历史记录
+//       if (
+//         JSON.stringify(newValue) !==
+//         JSON.stringify(history.value[historyIndex.value])
+//       ) {
+//         saveToHistory(newValue);
+//       }
+//     });
+//   },
+//   { deep: true }
+// );
 
-const cardSchema = ref<any[]>([]);
-const isDragging = ref(false);
-const change = (e) => {
-  // e.item.classList.remove("w-[45%]");
-  // isDragging.value = true;
-};
+
+
 const list = computed<Record<string, any>>(() =>
   componentLibrary
     .map((_) => _.compList)
@@ -136,7 +132,7 @@ watch(
   () => props.place,
   (item) => {
     nextTick(() => {
-      if (!cardSchema.value.length) return;
+      if (!pageSchema.value.length) return;
       if (item.orientation == "before") {
         item.el?.insertBefore(hintRef.value, item.el.firstChild);
       } else {
@@ -168,26 +164,18 @@ provide("activeIds", activeIds);
     v-on="$attrs"
     class="bg-light-800 absolute h-[94vh] !left-[4.0rem] overflow-y-scroll canvas_container"
     style="box-sizing: border-box"
-    :style="{ width: '79vw' }"
+    :style="{ width: '78vw' }"
   >
     <VueDraggable
-      v-model="cardSchema"
+      v-model="pageSchema"
       :chosenClass="'sortable-chosen'"
       :animation="150"
       group="blocks"
-      :class="{ '!ml-[0]': isDragging }"
       class="h-[100%]"
-      @sort="change"
       forceFallBack
       fallBackOnBody
-      @start="
-        () => {
-          isDragging = true;
-        }
-      "
       @end="
         (e) => {
-          isDragging = false;
           activeIds.currActive = null;
           activeIds.currHover = null;
         }
@@ -203,18 +191,18 @@ provide("activeIds", activeIds);
       <div
         :class="[
           {
-            hint: cardSchema.length == 0,
-            place: cardSchema.length > 0,
+            hint: pageSchema.length == 0,
+            place: pageSchema.length > 0,
             '!h-full': !hint,
           },
         ]"
         ref="hintRef"
-        class="absolute z-100 text-black"
+        class="absolute z-1000 text-black"
       >
         {{ !hint ? "从左边拖拽组件放到此处" : "放到此处" }}
       </div>
       <div
-        v-for="(card, ind) in cardSchema"
+        v-for="(card, ind) in pageSchema"
         :key="card.id"
         :class="[
           {
@@ -226,7 +214,7 @@ provide("activeIds", activeIds);
         class="relative my-0.5"
         @mouseenter="
           (e) => {
-            !isDragging && !hint && (activeIds.currHover = ind);
+            !hint && (activeIds.currHover = ind);
           }
         "
         @mouseleave="
@@ -236,7 +224,7 @@ provide("activeIds", activeIds);
         "
         @click="
           (e) => {
-            !isDragging && !hint && (activeIds.currActive = ind);
+            !hint && (activeIds.currActive = ind);
           }
         "
       >
@@ -257,7 +245,7 @@ provide("activeIds", activeIds);
             variant="text"
             class="hover:bg-blue-300! h-3"
             size="small"
-            @click="cardSchema.splice(ind, 1)"
+            @click="pageSchema.splice(ind, 1)"
           ></Button>
           <Button
             icon="pi pi-chevron-up text-white !text-[0.6rem]"
@@ -266,11 +254,11 @@ provide("activeIds", activeIds);
             size="small"
             :disabled="ind == 0"
             @click="
-              cardSchema.splice(
+              pageSchema.splice(
                 ind - 1,
                 2,
-                cardSchema[ind],
-                cardSchema[ind - 1]
+                pageSchema[ind],
+                pageSchema[ind - 1]
               )
             "
           ></Button>
@@ -279,9 +267,9 @@ provide("activeIds", activeIds);
             variant="text"
             class="hover:bg-blue-300! h-3"
             size="small"
-            :disabled="ind == cardSchema.length - 1"
+            :disabled="ind == pageSchema.length - 1"
             @click="
-              cardSchema.splice(ind, 2, cardSchema[ind + 1], cardSchema[ind])
+              pageSchema.splice(ind, 2, pageSchema[ind + 1], pageSchema[ind])
             "
           ></Button>
         </div>
@@ -289,8 +277,9 @@ provide("activeIds", activeIds);
           :props="card.config"
           @click="activeIds.currWrapper = null"
           style="position: relative"
-          :is="list[card.component]"
+          :is="list[card.template]"
         >
+        
         </CompWrapper>
       </div>
     </VueDraggable>

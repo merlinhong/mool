@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card relative z-10">
     <Toolbar class="!p-2 !bg-white">
       <template #start>
         <svg

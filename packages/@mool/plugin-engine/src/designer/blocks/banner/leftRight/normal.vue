@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative min-h-[12rem] lg:min-h-0 bg-surface-0 dark:bg-surface-900 flex lg:flex-row flex-col bg-white"
+    class="relative min-h-[12rem] lg:min-h-0 bg-surface-0 dark:bg-surface-900 flex lg:flex-row flex-col bg-white z-10"
   >
     <div
       class="flex lg:flex lg:flex-row flex-col justify-center md:justify-normal h-full flex-1"

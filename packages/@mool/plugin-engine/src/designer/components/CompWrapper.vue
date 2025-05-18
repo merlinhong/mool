@@ -24,6 +24,8 @@ const prop = defineProps({
     type: Object as PropType<DefineComponent>,
   },
 });
+console.log(prop.is);
+
 const childRef = ref(null);
 const activeIds = inject("activeIds", {});
 const renderKey = ref(0);
@@ -48,33 +50,33 @@ const childOnMounted = (e) => {
     const type = element.getAttribute("data-edit") as string;
 
     // 创建一个 Vue 应用实例，用于设置 appContext
-    const { loop, label, events } = prop.props[type];
+    const { loop, events, label } = toRefs(prop.props[type]);
     const Comp = () => (
       <div>
         {loop ? (
-          loop.value?.map((item) => (
+          loop.value.data?.map((item) => (
             <EditorText
               value={item.value}
-              key={item.label}
+              key={item.value}
               modelValue={item.label}
               tag={prop.props[type].type}
-              {...prop.props[type].prop}
+              {...prop.props[type].props}
               onUpdate:modelValue={(e) => {
-                app._instance!.props.modelValue = e;
                 item.label = e;
               }}
-            ></EditorText>
+            >
+            </EditorText>
           ))
         ) : (
           <EditorText
-            modelValue={label}
+            modelValue={label.value}
             tag={prop.props[type].type}
-            {...prop.props[type].prop}
+            {...prop.props[type].props}
             onUpdate:modelValue={(e) => {
-              app._instance!.props.modelValue = e;
-              prop.props[type].label = e;
+              label.value = e;
             }}
-          ></EditorText>
+          >
+          </EditorText>
         )}
       </div>
     );
@@ -96,15 +98,13 @@ const childOnMounted = (e) => {
       // 移除旧节点
       // 将多个新节点插入到旧节点的位置
       [...container.firstChild?.children].forEach((newNode, index) => {
-        
-        if (childRef.value) {
-          events?.forEach((name, ind) => {
+        if (childRef.value && events) {
+          events.value?.forEach((name, ind) => {
             newNode.addEventListener(name, () => {
-              childRef.value[type][ind](newNode,index);
+              childRef.value[type][ind](newNode, index);
             });
           });
         }
-
         element.parentNode?.insertBefore(newNode, element);
       });
       element.parentNode?.removeChild(element);
