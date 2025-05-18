@@ -4,6 +4,31 @@ const fs = require("fs");
 const path = require("path");
 const { parse, compileTemplate } = require("@vue/compiler-sfc");
 const cheerio = require("cheerio");
+
+/**
+ * 递归查找目录下所有符合条件的文件
+ * @param {string} dir - 要搜索的目录路径
+ * @param {function} filter - 过滤函数，接收文件名并返回布尔值
+ * @returns {string[]} - 符合条件的文件路径数组
+ */
+function findFilesRecursively(dir, filter, dirs, results = []) {
+  const items = fs.readdirSync(dir);
+  for (const item of items) {
+    const itemPath = path.join(dir, item);
+    const stat = fs.statSync(itemPath);
+    if (stat.isDirectory()) {
+      findFilesRecursively(itemPath, filter, dirs, results);
+    } else if (
+      stat.isFile() &&
+      filter(item) &&
+      dirs.some((dir) => itemPath.includes(dir))
+    ) {
+      results.push(itemPath);
+    }
+  }
+  return results;
+}
+
 /**
  * 根据配置生成 Vue 模块的源代码
  * @param {string} modulesDir - 模块目录路径
@@ -15,19 +40,20 @@ async function generateSourceCode(modulesDir, configPath, outputDir) {
   const config = configPath;
   const blocksDir = path.resolve(process.cwd(), modulesDir);
   // 2. 确保输出目录存在
-  console.log(fs.existsSync(blocksDir));
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-
-  // 3. 获取所有模块文件
-  const moduleFiles = fs
-    .readdirSync(modulesDir)
-    .filter((file) => file.endsWith(".vue"));
+  // 使用递归函数替换原来的代码
+  const dirs = Object.keys(config.modules);
+  const moduleFiles = findFilesRecursively(
+    modulesDir,
+    (file) => file == "normal.vue",
+    dirs
+  );
 
   // 4. 处理每个模块文件
   for (const moduleFile of moduleFiles) {
-    const modulePath = path.join(modulesDir, moduleFile);
+    const modulePath = path.join(process.cwd(), moduleFile);
     const moduleContent = fs.readFileSync(modulePath, "utf-8");
 
     // 5. 解析 Vue 单文件组件
@@ -41,80 +67,94 @@ async function generateSourceCode(modulesDir, configPath, outputDir) {
       xmlMode: true,
       decodeEntities: false,
     });
-
+    const templateName = dirs.filter((dir) => moduleFile.includes(dir))[0];
     // 8. 获取模块配置
-    const moduleConfig = config.modules[moduleFile] || {};
+    const moduleConfig = config.modules[templateName] || {};
 
     // 9. 处理可编辑元素
     $("[data-edit]").each((index, element) => {
       const $element = $(element);
       const editKey = $element.attr("data-edit");
-      console.log(moduleConfig[editKey],editKey);
+
+      let $newElement = null;
       // 如果配置中存在该编辑键
       if (moduleConfig[editKey]) {
         const elementConfig = moduleConfig[editKey];
+        if (elementConfig.type) {
+          const attributes = $element.attr(); // 获取所有属性
+          const content = $element.html(); // 获取内部内容
+          // 创建新的 Button 元素
+          $newElement = $(`<${elementConfig.type}>`);
+          // 复制所有属性
+          Object.keys(attributes).forEach((attr) => {
+            $newElement.attr(attr, attributes[attr]);
+          });
+          // 复制内部内容
+          $newElement.html(content);
 
+          // 替换原始元素
+          $element.replaceWith($newElement);
+        }else{
+          // 如果没有指定类型，直接使用原始元素
+          $newElement = $element;
+        }
         // 处理循环属性
         if (elementConfig.loop) {
           const loopConfig = elementConfig.loop;
-          $element.attr(
+          $newElement.attr(
             "v-for",
-            `(${loopConfig.item}, ${loopConfig.index}) in ${loopConfig.data}`
+            `(${loopConfig.item}, ${loopConfig.index}) in ${JSON.stringify(
+              loopConfig.data
+            )}`
           );
-          $element.attr(":key", loopConfig.key || loopConfig.index);
+          $newElement.attr(":key", loopConfig.key || loopConfig.index);
         }
 
         // 处理条件渲染
         if (elementConfig.condition) {
-          $element.attr("v-if", elementConfig.condition);
+          $newElement.attr("v-if", elementConfig.condition);
         }
 
         // 处理绑定属性
-        if (elementConfig.bindings) {
-          for (const [attr, binding] of Object.entries(
-            elementConfig.bindings
-          )) {
-            $element.attr(`:${attr}`, binding);
+        if (elementConfig.props) {
+          for (const [attr, binding] of Object.entries(elementConfig.props)) {
+            if (attr === "class") {
+              if (typeof binding === "string") {
+                const existingClasses = $newElement.attr("class") || "";
+                $newElement.attr("class", `${existingClasses} ${binding}`);
+              } else if (Array.isArray(elementConfig.classes)) {
+                $newElement.attr(":class", elementConfig.classes);
+              } else if (typeof binding === "object") {
+                $newElement.attr(
+                  ":class",
+                  JSON.stringify(binding).replace(/"/g, "'")
+                );
+              }
+            } else {
+              $newElement.attr(`:${attr}`, binding);
+            }
           }
         }
 
         // 处理事件
         if (elementConfig.events) {
           for (const [event, handler] of Object.entries(elementConfig.events)) {
-            $element.attr(`@${event}`, handler);
+            $newElement.attr(`@${event}`, handler);
           }
         }
 
         // 处理内容
-        if (elementConfig.content) {
-          if (elementConfig.content.type === "text") {
-            $element.text(`{{ ${elementConfig.content.value} }}`);
-          } else if (elementConfig.content.type === "html") {
-            $element.attr("v-html", elementConfig.content.value);
-          }
-        }
+        if (elementConfig.label) {
+          // if (elementConfig.content.type === "text") {
 
-        // 处理类名
-        if (elementConfig.classes) {
-          if (typeof elementConfig.classes === "string") {
-            $element.attr(":class", elementConfig.classes);
-          } else if (Array.isArray(elementConfig.classes)) {
-            const existingClasses = $element.attr("class") || "";
-            $element.attr(
-              "class",
-              `${existingClasses} ${elementConfig.classes.join(" ")}`
-            );
-          } else if (typeof elementConfig.classes === "object") {
-            $element.attr(
-              ":class",
-              JSON.stringify(elementConfig.classes).replace(/"/g, "'")
-            );
-          }
+          // } else if (elementConfig.content.type === "html") {
+          //   $newElement.attr("v-html", elementConfig.content.value);
+          // }
+          $newElement.text(`{{ '${elementConfig.label}' }}`);
         }
-
         // 处理样式
         if (elementConfig.styles) {
-          $element.attr(
+          $newElement.attr(
             ":style",
             JSON.stringify(elementConfig.styles).replace(/"/g, "'")
           );
@@ -122,14 +162,16 @@ async function generateSourceCode(modulesDir, configPath, outputDir) {
       }
 
       // 移除 data-edit 属性，因为它只是用于标记可编辑元素
-      $element.removeAttr("data-edit");
+      $newElement.removeAttr("data-edit");
     });
 
     // 10. 更新模板
     template = $.html();
 
     // 11. 处理脚本部分
-    let script = descriptor.script ? descriptor.script.content : descriptor.scriptSetup&&descriptor.scriptSetup.content;
+    let script = descriptor.script
+      ? descriptor.script.content
+      : descriptor.scriptSetup && descriptor.scriptSetup.content;
     // 如果没有脚本部分，创建一个基本的
     if (!script) {
       script = `
@@ -213,7 +255,7 @@ data() {
 ${template}
 </template>
 
-<script>
+<script setup lang='ts'>
 ${script}
 </script>
 
@@ -227,9 +269,8 @@ ${style}
 `;
 
     // 17. 写入输出文件
-    const outputPath = path.join(outputDir, moduleFile);
+    const outputPath = path.join(outputDir, templateName + ".vue");
     fs.writeFileSync(outputPath, finalContent);
-
     console.log(`Generated: ${outputPath}`);
   }
 
@@ -362,9 +403,9 @@ const exampleConfig = {
     "normal.vue": {
       menu: {
         classes: "p-5 box-border bottom text-surface-0",
-        bindings:{
-          text:true,
-          plain:true
+        bindings: {
+          text: true,
+          plain: true,
         },
         loop: {
           data: "navItems",
@@ -437,11 +478,12 @@ const exampleConfig = {
 };
 router.post("/generate-code", (req, res) => {
   // 获取请求体
-  // const requestBody = req.body;
+  const requestBody = req.body;
+  console.log(requestBody);
 
   generateSourceCode(
-    "./src/pages/designer/blocks/navigationBar/bar2",
-    exampleConfig,
+    "./src/pages/designer/blocks",
+    requestBody,
     path.resolve(process.cwd(), "dist")
   );
   // 使用示例
