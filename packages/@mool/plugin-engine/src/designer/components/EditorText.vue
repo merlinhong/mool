@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, DefineComponent } from "vue";
+import { ref, nextTick, watch } from "vue";
 import TSvg from "../source/t.svg";
 import Plus from "../source/plus.svg";
 import { uuid } from "mooljs";
@@ -142,7 +142,6 @@ const startEditing = () => {
 
 const finishEditing = () => {
   if (editableElement.value) {
-    console.log(editableElement.value);
     const $el = editableElement.value.$el
       ? editableElement.value.$el
       : editableElement.value;
@@ -150,7 +149,6 @@ const finishEditing = () => {
   }
   isEditing.value = false;
   isSelectWrapper.currWrapper = null;
-  console.log(isEditing.value, isSelectWrapper.currWrapper);
 };
 
 watch(

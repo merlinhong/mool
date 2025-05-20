@@ -200,7 +200,7 @@ export const componentLibrary = [
             config: {
               title: {
                 props: {
-                  class: "text-6xl font-bold text-surface-900 mb-4",
+                  class: "text-6xl font-bold text-surface-900 mb-4 animate-enter fade-in-10 slide-in-from-b-10 animate-duration-500",
                 },
                 type: "div",
                 label: "Create the screens your",
@@ -211,7 +211,7 @@ export const componentLibrary = [
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 props: {
                   class:
-                    "text-surface-200 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
+                    "text-surface-200  dark:text-surface-200  text-xl leading-normal mb-8 max-w-xl lg:max-w-none animate-enter fade-in-10 slide-in-from-b-15 animate-duration-1000",
                 },
               },
               // button:['Learn More','Live Demo']

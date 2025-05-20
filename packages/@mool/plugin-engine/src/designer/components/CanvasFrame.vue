@@ -118,8 +118,6 @@ const pasteIframe = ref<Col | null>(null);
 //   { deep: true }
 // );
 
-
-
 const list = computed<Record<string, any>>(() =>
   componentLibrary
     .map((_) => _.compList)
@@ -194,6 +192,7 @@ provide("activeIds", activeIds);
             hint: pageSchema.length == 0,
             place: pageSchema.length > 0,
             '!h-full': !hint,
+            'z-9999': hint,
           },
         ]"
         ref="hintRef"
@@ -231,7 +230,7 @@ provide("activeIds", activeIds);
         <!-- <component :is="card.Hint" v-if="hint"/> -->
         <div
           v-if="activeIds.currHover == ind"
-          class="absolute top-0 bg-blue-300 text-white text-[0.8rem] w-full text-center py-0.5 z-999"
+          class="absolute top-0 bg-blue-300 text-white text-[0.8rem] w-full text-center py-0.5 z-1200"
         >
           <i class="pi-bars pi align-middle !text-[0.8rem]"></i
           >长按拖拽或者点击底部按钮变换位置
@@ -279,7 +278,6 @@ provide("activeIds", activeIds);
           style="position: relative"
           :is="list[card.template]"
         >
-        
         </CompWrapper>
       </div>
     </VueDraggable>

@@ -21,11 +21,9 @@
       <template #center>
         <div
           data-edit="menu"
-
           :class="['p-5 box-border bottom']"
         ></div>
       </template>
-
       <template #end>
         <div class="flex items-center gap-2">
           <Button
