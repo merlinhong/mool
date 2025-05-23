@@ -1,6 +1,6 @@
 <template>
   <div
-    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-50 rounded-tl-md ml-[1px] h-[6vh]"
+    class="toolbar shadow-xl flex justify-between items-center bg-zinc-700 py-2.5 px-5 sticky inset-0 z-9999 rounded-tl-md ml-[1px] h-[6vh]"
   >
     <span class="text-xs text-blue-400 font-bold">查看新手引导</span>
 

@@ -30,6 +30,7 @@
       isSelectWrapper.currWrapper != id && (isEnter = true);
     "
     @mouseleave="isEnter = false"
+    @blur="blur"
   >
     <template v-if="isSelectWrapper.currWrapper == id">
       <!-- <div @click.stop="clickWrapper" v-html="modelValue"></div> -->
@@ -39,41 +40,69 @@
   </component>
   <teleport to="body">
     <div
-      v-if="isSelectWrapper.currWrapper == id"
+      v-if="isSelectWrapper.currWrapper == id && !showToolbar"
       ref="toolbarRef"
-      class="fixed h-[2rem] right-[-0.6rem] bg-blue-600 w-fit z-9999 !rounded-[3px] flex"
-      style="transform: scale(0.8)"
+      class="fixed h-[2rem] bg-blue-600 w-fit z-2000 !rounded-[3px] flex"
       :style="{
         left: toolbar.x + 'px',
         top: toolbar.y + 'px',
         // 'top-[-2rem]': !isDown,
       }"
     >
-      <Button
-        variant="text"
-        class="hover:bg-blue-300!"
-        size="small"
-        @click.stop="startEditing"
-      >
-        <Plus class="w-4 h-4 !text-surface-900" />
-      </Button>
-      <Button
-        variant="text"
-        class="hover:bg-blue-300!"
-        size="small"
-        @click.stop="startEditing"
-      >
-        <TSvg class="w-4 h-4" />
-      </Button>
+      <ButtonGroup>
+        <Button
+          variant="text"
+          class="hover:bg-blue-300!"
+          size="small"
+          @click.stop="startEditing"
+        >
+          <Plus class="w-4 h-4 !text-surface-900" />
+        </Button>
+        <Button
+          variant="text"
+          class="hover:bg-blue-300!"
+          size="small"
+          @click.stop="startEditing"
+        >
+          <T class="w-3 h-3" />
+        </Button>
+      </ButtonGroup>
       <!-- </div> -->
+    </div>
+    <div
+      v-else-if="showToolbar"
+      ref="toolbarRef"
+      class="fixed z-2001"
+      :style="{
+        left: toolbar.x + 'px',
+        top: toolbar.y + 'px',
+        // 'top-[-2rem]': !isDown,
+      }"
+    >
+      <ButtonGroup @click="showToolbar=true">
+        <Button>
+          <B />
+        </Button>
+        <Button>
+          <U />
+        </Button>
+        <Button>
+          <span>{{ "/" }}</span>
+        </Button>
+        <Button>
+          <H2 />
+        </Button>
+        <Button>
+          <H3 />
+        </Button>
+      </ButtonGroup>
     </div>
   </teleport>
 </template>
 
 <script setup lang="ts">
 import { ref, nextTick, watch } from "vue";
-import TSvg from "../source/t.svg";
-import Plus from "../source/plus.svg";
+import { T, Plus, U, B, H2, H3 } from "../source";
 import { uuid } from "mooljs";
 const props = defineProps({
   modelValue: {
@@ -100,30 +129,55 @@ const toolbar = ref({
   x: 0,
   y: 0,
 });
-const isSelectWrapper = inject("activeIds", {
-  value: { currWrapper: null },
-}).value;
+const isSelectWrapper = inject<{
+  value: { currWrapper: null | string; currHover: null | string };
+}>("activeIds", { value: { currWrapper: null, currHover: null } }).value;
 const emit = defineEmits(["update:modelValue"]);
 
 const isEditing = ref(false);
+const showToolbar = ref(false);
 const editableElement = ref(null);
 const toolbarRef = ref(null);
+const currentRect = ref({
+  top: 0,
+  right: 0,
+  bottom: 0,
+});
+const blur = ()=>{
+  showToolbar.value = false;
+  toolbar.value = {x:0,y:0}
+}
 const clickWrapper = (e) => {
+  showToolbar.value = false;
   isSelectWrapper.currWrapper = id;
   isSelectWrapper.currHover = null;
   nextTick(() => {
     const { top, right, bottom } = e.target.getBoundingClientRect();
+    currentRect.value = { top, right, bottom };
     const { width, height } = getComputedStyle(toolbarRef.value! as Element);
     toolbar.value.x = right - +width?.replace("px", "");
     toolbar.value.y = top < 60 ? bottom : top - +height.replace("px", "");
     isEnter.value = false;
   });
 };
-const startEditing = () => {
+const canvasEl = document.querySelector(".canvas_container");
+onMounted(() => {
+  let top = 0;
+  canvasEl?.addEventListener("scroll", (e) => {
+    toolbar.value.y -= (e.target as HTMLElement)?.scrollTop - top;
+    top = (e.target as HTMLElement)?.scrollTop;
+  });
+});
+const startEditing = (e) => {
+  showToolbar.value = true;
   isEditing.value = true;
-  console.log(isEditing);
 
   nextTick(() => {
+    const { top, right, bottom } = currentRect.value;
+    const { width, height } = getComputedStyle(toolbarRef.value! as Element);
+    toolbar.value.x = right - +width?.replace("px", "");
+    toolbar.value.y = top < 60 ? bottom : top - +height.replace("px", "");
+    isEnter.value = false;
     if (editableElement.value) {
       // editableElement.value.focus?.();
       // 选择所有文本
@@ -134,8 +188,8 @@ const startEditing = () => {
 
       range.selectNodeContents($el);
       const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
     }
   });
 };
