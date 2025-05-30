@@ -5,8 +5,6 @@ export const componentLibrary = [
     type: "navigationBar", // 组件类型，用于渲染逻辑
     compList: [
       {
-        height: "auto",
-        popoverHeight: "auto",
         id: `bar1`, // 唯一标识符，用于查找和引用
         desc:'普通菜单导航栏',
         // 组件引用
@@ -24,7 +22,6 @@ export const componentLibrary = [
             // 基本信息
             id: `bar1_${uuid({})}`, // 唯一标识符，用于查找和引用
             template: "bar1",
-            height: "auto",
             config: {
               menu_1: {
                 type: "Button",
@@ -58,8 +55,6 @@ export const componentLibrary = [
         ],
       },
       {
-        height: "auto",
-        popoverHeight: "auto",
         desc:'hover弹出式菜单导航栏',
         id: `bar2`, // 唯一标识符，用于查找和引用
         // 组件引用
@@ -77,7 +72,6 @@ export const componentLibrary = [
             // 基本信息
             id: `bar2_${uuid({})}`, // 唯一标识符，用于查找和引用
             template: "bar2",
-            height: "auto",
             config: {
               menu: {
                 type: "div",
@@ -112,8 +106,6 @@ export const componentLibrary = [
       {
         // 组件引用
         id: `leftRight`, // 唯一标识符，用于查找和引用
-        height: "60vh",
-        popoverHeight: "15vh",
         component: defineAsyncComponent(
           () => import("./blocks/banner/leftRight/normal.vue")
         ), // 实际组件
@@ -128,7 +120,6 @@ export const componentLibrary = [
           {
             // 基本信息
             id: `leftRight_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: "60vh",
             template: "leftRight",
             config: {
               title: {
@@ -179,8 +170,6 @@ export const componentLibrary = [
       {
         // 组件引用
         id: `single`, // 唯一标识符，用于查找和引用
-        height: "60vh",
-        popoverHeight: "15vh",
         component: defineAsyncComponent(
           () => import("./blocks/banner/single/normal.vue")
         ), // 实际组件
@@ -194,8 +183,7 @@ export const componentLibrary = [
         schema: [
           {
             // 基本信息
-            id: `banner2_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: "60vh",
+            id: `single_${uuid({})}`, // 唯一标识符，用于查找和引用
             template: "single",
             config: {
               title: {
@@ -243,12 +231,9 @@ export const componentLibrary = [
           {
             // 基本信息
             id: `dup_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: "60vh",
             template: "dup",
           },
         ],
-        height: "60vh",
-        popoverHeight: "15vh",
         id: `dup`, // 唯一标识符，用于查找和引用
         desc:'多图轮播型',
         // 组件引用
@@ -267,12 +252,9 @@ export const componentLibrary = [
           {
             // 基本信息
             id: `product_${uuid({})}`, // 唯一标识符，用于查找和引用
-            height: "60vh",
             template: "product",
           },
         ],
-        height: "60vh",
-        popoverHeight: "15vh",
         id: `product`, // 唯一标识符，用于查找和引用
         desc:'产品型',
         // 组件引用

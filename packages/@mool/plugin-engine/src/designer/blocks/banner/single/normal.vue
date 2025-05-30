@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative min-h-[12rem] lg:min-h-0 h-[80vh] flex lg:flex-row flex-col z-10"
+    class="relative min-h-[12rem] lg:min-h-0 h-[80vh] flex lg:flex-row flex-col z-10 overflow-hidden"
   >
     <div
       class="absolute inset-0 brightness-55 bg-[url('https://primefaces.org/cdn/templates/genesis/pages/e-learning/hero-background.jpg')] bg-cover bg-center bg-no-repeat"

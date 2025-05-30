@@ -73,7 +73,7 @@ const genCode = async () => {
     
     const schema = {
       modules:Object.entries(toRaw(PageSchema.value)).reduce((acc, [key, value]) => {
-        acc[value.template] = value.config;
+        acc[value.template] = toRaw(value.config);
         return acc;
       }, {} as Record<string, any>),
     }

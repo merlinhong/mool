@@ -97,6 +97,7 @@ const onStart = (e: SortableEvent) => {
   activeIds.value.currHover = null;
   activeIds.value.currActive = null;
 };
+
 /**
  * 监听拖拽结束
  * @param e SortableEvent
@@ -205,7 +206,7 @@ const clone = (item: any) => {
 <template>
   <div class="sidebar-container">
     <nav
-      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-1003 rounded-bl-[5px]"
+      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-2001 rounded-bl-[5px]"
     >
       <div class="top-buttons">
         <div
@@ -254,7 +255,7 @@ const clone = (item: any) => {
     </nav>
     <Splitter
       class="relative !w-[30rem] bottom-[1px]"
-      style="z-index: 1002; transition: transform 0.3s ease"
+      style="z-index: 2000; transition: transform 0.3s ease"
       :style="{
         ...(drawer
           ? { transform: 'translateX(0rem)' }

@@ -1,9 +1,5 @@
 <!-- EditableText.vue -->
 <template>
-  <!-- <template
-    <t
-  > -->
-  <!-- <div class="relative"> -->
   <component
     v-bind="$attrs"
     :is="Node"
@@ -31,6 +27,11 @@
     "
     @mouseleave="isEnter = false"
     @blur="blur"
+    @input="
+      (e) => {
+        setLocation(e)
+      }
+    "
   >
     <template v-if="isSelectWrapper.currWrapper == id">
       <!-- <div @click.stop="clickWrapper" v-html="modelValue"></div> -->
@@ -39,64 +40,65 @@
     <slot v-else>{{ modelValue }}</slot>
   </component>
   <teleport to="body">
-    <div
-      v-if="isSelectWrapper.currWrapper == id && !showToolbar"
-      ref="toolbarRef"
-      class="fixed h-[2rem] bg-blue-600 w-fit z-2000 !rounded-[3px] flex"
-      :style="{
-        left: toolbar.x + 'px',
-        top: toolbar.y + 'px',
-        // 'top-[-2rem]': !isDown,
-      }"
-    >
-      <ButtonGroup>
-        <Button
-          variant="text"
-          class="hover:bg-blue-300!"
-          size="small"
-          @click.stop="startEditing"
-        >
-          <Plus class="w-4 h-4 !text-surface-900" />
-        </Button>
-        <Button
-          variant="text"
-          class="hover:bg-blue-300!"
-          size="small"
-          @click.stop="startEditing"
-        >
-          <T class="w-3 h-3" />
-        </Button>
-      </ButtonGroup>
-      <!-- </div> -->
-    </div>
-    <div
-      v-else-if="showToolbar"
-      ref="toolbarRef"
-      class="fixed z-2001"
-      :style="{
-        left: toolbar.x + 'px',
-        top: toolbar.y + 'px',
-        // 'top-[-2rem]': !isDown,
-      }"
-    >
-      <ButtonGroup @click="showToolbar=true">
-        <Button>
-          <B />
-        </Button>
-        <Button>
-          <U />
-        </Button>
-        <Button>
-          <span>{{ "/" }}</span>
-        </Button>
-        <Button>
-          <H2 />
-        </Button>
-        <Button>
-          <H3 />
-        </Button>
-      </ButtonGroup>
-    </div>
+    <template v-if="isSelectWrapper.currWrapper == id">
+      <div
+        v-if="showOpBtns"
+        ref="toolbarRef"
+        class="fixed h-[2rem] bg-blue-600 w-fit z-2000 !rounded-[3px] flex"
+        :style="{
+          left: toolbar.x + 'px',
+          top: toolbar.y + 'px',
+          // 'top-[-2rem]': !isDown,
+        }"
+      >
+        <ButtonGroup>
+          <Button
+            variant="text"
+            class="hover:bg-blue-300!"
+            size="small"
+            @click.stop="startEditing"
+          >
+            <Plus class="w-4 h-4 !text-surface-900" />
+          </Button>
+          <Button
+            variant="text"
+            class="hover:bg-blue-300!"
+            size="small"
+            @click.stop="startEditing"
+          >
+            <T class="w-3 h-3" />
+          </Button>
+        </ButtonGroup>
+        <!-- </div> -->
+      </div>
+      <div
+        v-if="showToolbar"
+        ref="toolbarRef"
+        class="fixed z-2001"
+        :style="{
+          left: toolbar.x + 'px',
+          top: toolbar.y + 'px',
+        }"
+      >
+        <ButtonGroup @click="showToolbar = true">
+          <Button>
+            <B />
+          </Button>
+          <Button>
+            <U />
+          </Button>
+          <Button>
+            <span>{{ "/" }}</span>
+          </Button>
+          <Button>
+            <H2 />
+          </Button>
+          <Button>
+            <H3 />
+          </Button>
+        </ButtonGroup>
+      </div>
+    </template>
   </teleport>
 </template>
 
@@ -136,29 +138,34 @@ const emit = defineEmits(["update:modelValue"]);
 
 const isEditing = ref(false);
 const showToolbar = ref(false);
+const showOpBtns = ref(true);
 const editableElement = ref(null);
 const toolbarRef = ref(null);
 const currentRect = ref({
   top: 0,
-  right: 0,
+  left: 0,
   bottom: 0,
 });
-const blur = ()=>{
-  showToolbar.value = false;
-  toolbar.value = {x:0,y:0}
-}
+const blur = () => {
+  // showOpBtns.value = false;
+  // showToolbar.value = false
+};
 const clickWrapper = (e) => {
+  showOpBtns.value = true;
   showToolbar.value = false;
   isSelectWrapper.currWrapper = id;
   isSelectWrapper.currHover = null;
   nextTick(() => {
-    const { top, right, bottom } = e.target.getBoundingClientRect();
-    currentRect.value = { top, right, bottom };
-    const { width, height } = getComputedStyle(toolbarRef.value! as Element);
-    toolbar.value.x = right - +width?.replace("px", "");
-    toolbar.value.y = top < 60 ? bottom : top - +height.replace("px", "");
-    isEnter.value = false;
+    setLocation(e);
   });
+};
+const setLocation = (e) => {
+  const { top, right, bottom, left } = e.target.getBoundingClientRect();
+  currentRect.value = { top, bottom, left };
+  const { width, height } = getComputedStyle(toolbarRef.value! as Element);
+  toolbar.value.x = right - +width?.replace("px", "");
+  toolbar.value.y = top < 66 ? bottom : top - +height.replace("px", "");
+  isEnter.value = false;
 };
 const canvasEl = document.querySelector(".canvas_container");
 onMounted(() => {
@@ -168,15 +175,17 @@ onMounted(() => {
     top = (e.target as HTMLElement)?.scrollTop;
   });
 });
-const startEditing = (e) => {
+const startEditing = () => {
   showToolbar.value = true;
   isEditing.value = true;
 
   nextTick(() => {
-    const { top, right, bottom } = currentRect.value;
-    const { width, height } = getComputedStyle(toolbarRef.value! as Element);
-    toolbar.value.x = right - +width?.replace("px", "");
-    toolbar.value.y = top < 60 ? bottom : top - +height.replace("px", "");
+    console.log(currentRect.value);
+
+    const { top, bottom, left } = currentRect.value;
+    const { height } = getComputedStyle(toolbarRef.value! as Element);
+    toolbar.value.x = left;
+    toolbar.value.y = top < 66 ? bottom : top - +height.replace("px", "");
     isEnter.value = false;
     if (editableElement.value) {
       // editableElement.value.focus?.();
