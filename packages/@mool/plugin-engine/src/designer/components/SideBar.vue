@@ -206,7 +206,8 @@ const clone = (item: any) => {
 <template>
   <div class="sidebar-container">
     <nav
-      class="sidebar-nav !bg-zinc-700 border-r border-zinc-800 z-2001 rounded-bl-[5px]"
+      class="sidebar-nav border-r border-zinc-800 z-2001 rounded-bl-[5px]"
+      style="background-color: var(--surface-ground);"
     >
       <div class="top-buttons">
         <div
@@ -225,7 +226,6 @@ const clone = (item: any) => {
               text-align: center;
               border-radius: 5px;
               padding: 5px 0;
-              color: rgb(230, 228, 228);
             "
             class="border !border-zinc-500"
           >

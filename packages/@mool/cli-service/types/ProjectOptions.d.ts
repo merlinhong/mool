@@ -4,6 +4,7 @@ import { InlineConfig, ProxyOptions } from "vite";
 import { OutputOptions } from "rollup";
 import {type UserOptions as layoutOpt} from "vite-plugin-vue-layouts";
 import { I18nOptions } from 'vue-i18n';
+import AutoImport from 'unplugin-auto-import/vite';
 
 interface ProjectOptions {
   /**
@@ -64,21 +65,33 @@ interface ProjectOptions {
   alias: {};
 
   /**
-   * windicss
+   * enable windicss
    */
   windicss: {};
 
+  /**
+   * enable tailwindcss
+   */
+  tailwind:{},
   /**
    * layout option
    */
   layout: layoutOpt;
   /**
-   * 自动导入组件库的api
-   * @example
-   * autoImport:['ep'、'antd']
-   */
-
-  autoImport: string[];
+   * 自动导入选项，默认会深度合并
+   * @default
+   * autoImport:{
+       imports: [
+        "vue",
+        "vue-router",
+        {
+          [`@/service/index`]: ["service"],
+        },
+       ],
+      dts: "types/auto-imports.d.ts",
+     }
+  */
+  autoImport: Parameters<typeof AutoImport>[0];
   /**
    * Default `false`;
    * Whether to generate a source map file after construction

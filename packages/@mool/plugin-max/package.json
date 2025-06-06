@@ -30,7 +30,7 @@
       "@mooljs/plugin-access": "^0.3.0",
       "@mooljs/plugin-store": "^1.2.0",
       "@mooljs/plugin-locale": "^0.2.0",
-      "@mooljs/plugin-ep": "^0.1.0",
+      "@mooljs/plugin-prime": "^0.1.0",
       "@mooljs/plugin-service": "^0.1.0"
     },
     "devDependencies": {

@@ -34,6 +34,9 @@ const schema = createSchema(joi => joi.object({
   windicss:joi.alternatives().try(
     joi.object(),
   ),
+  tailwind:joi.alternatives().try(
+    joi.object(),
+  ),
   souremap:joi.any().valid(true, false),
   // webpack
   chainVite: joi.func(),
@@ -67,7 +70,7 @@ const schema = createSchema(joi => joi.object({
   // known runtime options for built-in plugins
   lintOnSave: joi.any().valid(true, false, 'error', 'warning', 'default'),
   autoImport:joi.alternatives().try(
-    joi.array(),
+    joi.object(),
   )
 }))
 

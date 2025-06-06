@@ -69,26 +69,14 @@ module.exports = (api, options) => {
         codeSplitting,
       } = options;
       const optimizeDepsIncludes = ['vue', 'vue-router', 'mooljs','axios'];
-      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx'];
+      const HMR_INCLUDES = ['.moolrc.ts','src/app.tsx','src/config/routes.ts'];
       if(options.access){
         HMR_INCLUDES.push('src/access.ts')
       }
       if (existsSync(api.resolve("src/locale"))) {
         optimizeDepsIncludes.push('vue-i18n');
       }
-      try {
-        require.resolve('element-plus');
-        optimizeDepsIncludes.push("element-plus", "@element-plus/icons-vue", "element-plus/es");
-        readdirSync("node_modules/element-plus/es/components").map((dirname) => {
-          try {
-            accessSync(`node_modules/element-plus/es/components/${dirname}/style/css.mjs`, constants.R_OK | constants.W_OK);
-            let path = `element-plus/es/components/${dirname}/style/css`;
-            optimizeDepsIncludes.push(path);
-          } catch (error) {
-          }
-        })
-      } catch (error) {
-      }
+      
       const viteServer = await createServer(
         mergeConfig(
           {

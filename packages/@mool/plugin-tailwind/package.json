@@ -1,33 +1,33 @@
 {
-  "name": "@mooljs/plugin-ep",
-  "version": "0.1.0",
-  "description": "element-plus autoImport plugin for mool",
+  "name": "@mooljs/plugin-tailwind",
+  "version": "0.0.1",
+  "description": "windicss plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-ep"
+    "directory": "packages/@mool/plugin-tailwind"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "element-plus",
-    "autoImport"
+    "tailwindicss",
+    "css"
   ],
   "author": "Merlin Hong",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-ep#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-tailwind#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "element-plus": "^2.5.3"
-  },
-  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.6",
+    "tailwindcss": "^4.1.6",
+    "tailwindcss-primeui": "^0.6.1"
   }
 }

@@ -3,7 +3,7 @@
     <div class="card dark-card">
       <h2 class="title">属性设计器</h2>
 
-      <Accordion :activeIndex="0" class="dark-accordion">
+      <Accordion :activeIndex="0">
         <!-- 基础属性组 -->
         <AccordionTab header="基础属性">
           <div class="property-group  h-[20vh] lg:h-[50vh]">
@@ -658,9 +658,9 @@ const previewStyles = computed(() => {
 }
 
 .dark-card {
-  background: #1e1e1e;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border: 1px solid #333;
+  /* background: #1e1e1e; */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
+  /* border: 1px solid #333; */
 }
 
 .title {
@@ -687,7 +687,6 @@ const previewStyles = computed(() => {
 .property-item label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #b9bbbe;
 }
 
 .actions {
@@ -799,7 +798,7 @@ const previewStyles = computed(() => {
   background-color: #333 !important;
 }
 
-:deep(
+/* :deep(
     .p-accordion
       .p-accordion-header:not(.p-highlight):not(.p-disabled):hover
       .p-accordion-header-link
@@ -807,9 +806,9 @@ const previewStyles = computed(() => {
   background-color: #333 !important;
   border-color: #444 !important;
   color: #e1e1e1 !important;
-}
+} */
 
-:deep(.dark-input) {
+/* :deep(.dark-input) {
   background-color: #2a2a2a !important;
   color: #e1e1e1 !important;
   border-color: #444 !important;
@@ -818,7 +817,7 @@ const previewStyles = computed(() => {
 :deep(.dark-input):focus {
   border-color: #7289da !important;
   box-shadow: 0 0 0 1px #7289da40 !important;
-}
+} */
 
 :deep(.dark-dropdown) .p-dropdown-label,
 :deep(.dark-dropdown) .p-dropdown-trigger {

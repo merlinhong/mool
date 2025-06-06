@@ -9,7 +9,7 @@ module.exports = (api, options) => {
     config.plugins.push(
       Mount(api, options),
       viteRestart({
-        reload: ['src/locale', 'src/app.tsx'],
+        reload: ['src/locale', 'src/app.tsx','src/config/routes.ts'],
         restart: ['src/locale', 'src/store'],
       }),
       createHtmlPlugin({

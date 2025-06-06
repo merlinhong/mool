@@ -115,7 +115,7 @@ const activeIds = ref({
   currWrapper:null
 });
 provide("drawer", drawer);
-
+const checked = ref(false);
 </script>
 
 <template>
@@ -148,7 +148,8 @@ provide("drawer", drawer);
           />
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <el-aside
-            class="page-design-config bg-zinc-700 !w-[18vw]"
+            class="page-design-config !w-[18vw]"
+            style="background-color: var(--surface-ground);"
             v-model:activeIds="activeIds"
           >
             <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"

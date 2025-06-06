@@ -1,14 +1,11 @@
 const AutoImport = require("unplugin-auto-import/vite").default;
-const {
-  ElementPlusResolver,
-  AntDesignVueResolver,
-  ArcoResolver,
-} = require("unplugin-vue-components/resolvers");
-const resolvers = {
-  ep: ElementPlusResolver(),
-  antd: AntDesignVueResolver(),
-  arco: ArcoResolver(),
-}
+const mergeWith = require("lodash.mergeWith");
+const customizer = (objValue, srcValue) => {
+  if (Array.isArray(objValue)) {
+    // 合并数组
+    return objValue.concat(srcValue);
+  }
+};
 module.exports = (api, options) => {
   const autoImportPluginOption = {
     imports: [
@@ -19,12 +16,10 @@ module.exports = (api, options) => {
       },
     ],
     dts: "types/auto-imports.d.ts",
-    resolvers: options.autoImport?.map((item) => resolvers[item]),
-
   };
   api.chainVite((config) => {
     config.plugins.push(
-      AutoImport(autoImportPluginOption)
+      AutoImport(mergeWith(autoImportPluginOption, options.autoImport, customizer))
     );
   });
 };

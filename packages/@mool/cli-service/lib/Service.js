@@ -90,20 +90,13 @@ module.exports = class Service {
     const userOptions = this.loadUserOptions();
     const loadedCallback = async (loadedUserOptions) => {
       this.projectOptions = defaultsDeep(loadedUserOptions, defaults());
-      const file = await checkFiles();
       const config = {};
-      if(file){
-        const appconfig = (await bundleRequire({
-          filepath: path.resolve(process.cwd(), `src/${file}`),
+      if(await checkFiles(['config/routes.ts'])){
+        const routes = (await bundleRequire({
+          filepath: path.resolve(process.cwd(), `src/config/routes.ts`),
+          format:'esm',
         })).mod;
-        config.routes = appconfig.routes;
-      }
-      if(await checkFiles(['src/access.ts'])){
-        const accessConfig = (await bundleRequire({
-          filepath: path.resolve(process.cwd(), 'src/access.ts'),
-        })).mod;
-        const access = accessConfig.default?.(appconfig.getInitialState?.()??{});
-        config.access = access;
+        config.routes = routes.default;
       }
       this.projectOptions = defaultsDeep(this.projectOptions,config)
 
@@ -229,8 +222,8 @@ module.exports = class Service {
         '@mooljs/plugin-access',
         '@mooljs/plugin-layout',
         '@mooljs/plugin-service',
-        '@mooljs/plugin-windicss',
-        '@mooljs/plugin-ep'
+        '@mooljs/plugin-tailwind',
+        '@mooljs/plugin-prime'
       )
     } catch (error) {
       

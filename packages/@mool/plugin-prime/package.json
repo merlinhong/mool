@@ -1,18 +1,18 @@
 {
-  "name": "@mooljs/plugin-antd",
-  "version": "0.0.2",
-  "description": "antdesign vue autoImport plugin for mool",
+  "name": "@mooljs/plugin-prime",
+  "version": "0.1.0",
+  "description": "primevue autoImport plugin for mool",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/merlinhong/mool.git",
-    "directory": "packages/@mool/plugin-antd"
+    "directory": "packages/@mool/plugin-prime"
   },
   "keywords": [
     "vue3",
     "mool",
     "cli",
-    "antdesign vue",
+    "primevue",
     "autoImport"
   ],
   "author": "Merlin Hong",
@@ -20,12 +20,15 @@
   "bugs": {
     "url": "https://github.com/merlinhong/mool/issues"
   },
-  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-antd#readme",
+  "homepage": "https://github.com/merlinhong/mool/tree/dev/packages/@mool/plugin-prime#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@vue/cli-shared-utils": "^5.0.8",
-    "ant-design-vue": "~4.2.5"
+    "@primevue/auto-import-resolver": "^4.3.5"
+  },
+  "devDependencies": {
+    
   }
 }
