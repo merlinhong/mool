@@ -24,7 +24,7 @@ const props = defineProps({
     default: () => ({
       backgroundColor: "#001529",
       textColor: "#fff",
-      activeTextColor: "#ffd04b",
+      activeTextColor: "red",
       uniqueOpened: true,
       router: true,
     }),
@@ -69,14 +69,11 @@ const props = defineProps({
     default: () => [],
   },
 });
-const expand = ref(false);
 const displayIcon = ref(false);
-const sideBarRef = ref();
 const width = ref("300px");
 </script>
 
 <template>
-  <Button @click="expand = !expand">切换</Button>
   <Transition
     name="expand-menu"
     @after-leave="displayIcon = true"
@@ -84,7 +81,7 @@ const width = ref("300px");
   >
     <div
       class="layout-sidebar"
-      v-if="!expand"
+      v-if="!collapsed"
       :style="{ width, background: menuProps.backgroundColor }"
     >
       <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
@@ -93,14 +90,21 @@ const width = ref("300px");
             v-if="!item.separator"
             :item="item"
             :index="i"
-            :style="{ color: menuProps.textColor }"
+            :style="{
+              color: menuProps.textColor,
+              '--active-color-text': menuProps.activeTextColor,
+            }"
           ></app-menu-item>
           <li v-if="item.separator" class="menu-separator"></li>
         </template>
       </ul>
     </div>
   </Transition>
-  <div class="layout-sidebar !w-[85px]" v-if="displayIcon" :style="{background: menuProps.backgroundColor }">
+  <div
+    class="layout-sidebar !w-[85px]"
+    v-if="displayIcon"
+    :style="{ background: menuProps.backgroundColor }"
+  >
     <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
       <template v-for="(item, i) in menuData" :key="item">
         <app-menu-item
@@ -108,7 +112,10 @@ const width = ref("300px");
           :item="item"
           :index="i"
           :hidden="displayIcon"
-          :style="{ color: menuProps.textColor }"
+          :style="{
+            color: menuProps.textColor,
+            '--active-color-text': menuProps.activeTextColor,
+          }"
         ></app-menu-item>
         <li v-if="item.separator" class="menu-separator"></li>
       </template>

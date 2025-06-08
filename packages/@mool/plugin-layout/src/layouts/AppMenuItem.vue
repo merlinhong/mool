@@ -48,9 +48,13 @@ onBeforeMount(() => {
 watch(
   () => layoutState.activeMenuItem,
   (newVal) => {
-    console.log(newVal);
+    console.log("Active menu item changed:", newVal, itemKey.value);
+    
     isActiveMenu.value =
+
       newVal === itemKey.value || newVal?.startsWith(itemKey.value + "-");
+      console.log("Is active menu:", isActiveMenu.value);
+      
   }
 );
 
@@ -60,16 +64,6 @@ function itemClick(event, item) {
     return;
   }
 
-  // if (
-  //   (item.to || item.url) &&
-  //   (layoutState.staticMenuMobileActive || layoutState.overlayMenuActive)
-  // ) {
-  //   toggleMenu();
-  // }
-
-  // if (item.command) {
-  //   item.command({ originalEvent: event, item: item });
-  // }
 
   const foundItemKey = item.routes
     ? isActiveMenu.value
@@ -78,25 +72,74 @@ function itemClick(event, item) {
     : itemKey.value;
   setActiveMenuItem(foundItemKey);
 }
-
-function checkActiveRoute(item) {
-  return route.path === item.to;
+// 递归深层嵌套routes的path是否与当前路由匹
+function isRouteMatch(route, item) {
+  if (route.path === item.path) {
+    return true;
+  }
+  if (item.routes) {
+    return (
+      item.routes.some((child) => isRouteMatch(route, child))
+    );
+  }
+  return false;
 }
+
+function checkActiveRoute(event, item) {
+  return route.path === item.path || (item.routes && isRouteMatch(route, item));
+}
+watch(
+  () => route.path,
+  () => {
+    isActiveMenu.value = checkActiveRoute(null, props.item);
+  }
+);
+onMounted(() => {
+  isActiveMenu.value = checkActiveRoute(null, props.item);
+  if (props.item.routes) {
+    const activeChild = props.item.routes.find(
+      (child) => route.path === child.path
+    );
+    if (activeChild) {
+      setActiveMenuItem(
+        itemKey.value + "-" + props.item.routes.indexOf(activeChild)
+      );
+    }
+  }
+});
 </script>
 
 <template>
-  <li :class="{ 'active-menuitem': isActiveMenu }" >
+  <li :class="{ 'active-menuitem': isActiveMenu }">
     <router-link
-      @click="itemClick($event, item, index)"
-      :class="[item.class, { 'active-route': checkActiveRoute(item) },'!text-[inherit]']"
+      @click="itemClick($event, item)"
+      :class="[item.class, { 'active-route': checkActiveRoute($event, item) }]"
       tabindex="0"
       :to="item.routes ? '' : item.path"
-      
     >
-      <i :class="item.meta?.icon" class="layout-menuitem-icon"></i>
-      <span class="layout-menuitem-text w-full">{{ item.meta?.title }}</span>
       <i
-        class="pi pi-fw pi-angle-down layout-submenu-toggler"
+        :class="[
+          'layout-menuitem-icon',
+          { 'text-white': item.routes },
+          item.meta?.icon,
+        ]"
+      ></i>
+      <span
+        :class="[
+          'layout-menuitem-text',
+          'w-full',
+          { 'text-white': item.routes },
+        ]"
+        >{{ item.meta?.title }}</span
+      >
+      <i
+        :class="[
+          'pi',
+          'pi-fw',
+          'pi-angle-down',
+          'layout-submenu-toggler',
+          { 'text-white': item.routes },
+        ]"
         v-if="item.routes"
       ></i>
     </router-link>
@@ -118,4 +161,13 @@ function checkActiveRoute(item) {
   </li>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+li {
+  > a {
+    &.active-route {
+      font-weight: 700;
+      color: var(--active-color-text);
+    }
+  }
+}
+</style>

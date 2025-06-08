@@ -38,9 +38,24 @@ model.value = useMenuFromRoutes(
       routes: [
         {
           path: "/form/senior",
-          component: "/src/pages/form/senior.vue",
           meta: {
             title: "高级表单",
+          },
+          routes:[
+            {
+              path: "/form/basic",
+              component: "/src/pages/form/basic.vue",
+              meta: {
+                title: "分步表单",
+              }
+            }
+          ]
+        },
+        {
+          path: "/designer",
+          component: "/src/pages/designer/index.vue",
+          meta: {
+            title: "高级表单1",
           },
         },
       ],
