@@ -7,10 +7,6 @@ const props = defineProps({
     type: String,
     default: "ProLayout",
   },
-  logo: {
-    type: String,
-    default: "",
-  },
   collapsed: {
     type: Boolean,
     default: false,
@@ -25,74 +21,66 @@ const props = defineProps({
       backgroundColor: "#001529",
       textColor: "#fff",
       activeTextColor: "red",
-      uniqueOpened: true,
+      uniqueOpened: false,
       router: true,
     }),
   },
-
-  // 渲染控制
-  headerRender: {
-    type: [Boolean, Function],
-    default: true,
-  },
-  footerRender: {
-    type: [Boolean, Function],
-    default: true,
-  },
-  pageTitleRender: {
-    type: [Boolean, Function],
-    default: true,
-  },
-  // menuRender:{
-  //   type:Boolean,
-  //   default:true
-  // },
-  // 内容配置
-  pageTitle: {
+  logo: {
     type: String,
     default: "",
-  },
-  pageSubTitle: {
-    type: String,
-    default: "",
-  },
-  breadcrumb: {
-    type: Boolean,
-    default: true,
-  },
-  copyright: {
-    type: String,
-    default: "Copyright © 2023 ProLayout",
-  },
-  links: {
-    type: Array,
-    default: () => [],
   },
 });
+const defaultProps = computed(() =>
+  Object.assign(
+    {
+      backgroundColor: "#001529",
+      textColor: "#fff",
+      activeTextColor: "#fff",
+      activeBgColor: "#2878f0",
+      uniqueOpened: false,
+      hoverBgColor: "var(--p-primary-color)",
+      router: true,
+    },
+    props.menuProps
+  )
+);
+const width = ref("100%");
 const displayIcon = ref(false);
-const width = ref("300px");
+provide("uniqueOpened", defaultProps.value.uniqueOpened);
+const leave = () => {
+  setTimeout(() => {
+    displayIcon.value = true;
+  }, 200);
+};
 </script>
 
 <template>
-  <Transition
-    name="expand-menu"
-    @after-leave="displayIcon = true"
-    @enter="displayIcon = false"
-  >
+  <Transition name="expand-menu" @leave="leave" @enter="displayIcon = false">
     <div
       class="layout-sidebar"
-      v-if="!collapsed"
-      :style="{ width, background: menuProps.backgroundColor }"
+      v-show="!collapsed"
+      :style="{ background: defaultProps.backgroundColor }"
     >
+      <div class="logo-container">
+        <router-link to="/" class="flex">
+          <img v-if="logo" :src="logo" class="logo" alt="logo" />
+          <h1 v-if="logo && !collapsed" class="title text-white">
+            {{ title }}
+          </h1>
+        </router-link>
+      </div>
       <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
         <template v-for="(item, i) in menuData" :key="item">
           <app-menu-item
             v-if="!item.separator"
             :item="item"
             :index="i"
+            :hidden="displayIcon"
             :style="{
-              color: menuProps.textColor,
-              '--active-color-text': menuProps.activeTextColor,
+              color: defaultProps.textColor,
+              '--active-color-text': defaultProps.activeTextColor,
+              '--hover-bg-color': defaultProps.hoverBgColor,
+              '--active-bg-color': defaultProps.activeBgColor,
             }"
           ></app-menu-item>
           <li v-if="item.separator" class="menu-separator"></li>
@@ -101,10 +89,18 @@ const width = ref("300px");
     </div>
   </Transition>
   <div
-    class="layout-sidebar !w-[85px]"
-    v-if="displayIcon"
-    :style="{ background: menuProps.backgroundColor }"
+    class="layout-sidebar"
+    v-show="displayIcon"
+    :style="{ background: defaultProps.backgroundColor }"
   >
+    <div class="logo-container">
+      <router-link to="/">
+        <img v-if="logo" :src="logo" class="logo" alt="logo" />
+        <h1 v-if="!collapsed || !logo" class="title text-white">
+          {{ title }}
+        </h1>
+      </router-link>
+    </div>
     <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
       <template v-for="(item, i) in menuData" :key="item">
         <app-menu-item
@@ -113,8 +109,10 @@ const width = ref("300px");
           :index="i"
           :hidden="displayIcon"
           :style="{
-            color: menuProps.textColor,
-            '--active-color-text': menuProps.activeTextColor,
+            color: defaultProps.textColor,
+            '--active-color-text': defaultProps.activeTextColor,
+            '--hover-bg-color': defaultProps.hoverBgColor,
+            '--active-bg-color': defaultProps.activeBgColor,
           }"
         ></app-menu-item>
         <li v-if="item.separator" class="menu-separator"></li>
@@ -126,19 +124,34 @@ const width = ref("300px");
 <style lang="scss" scoped>
 .expand-menu-enter-from,
 .expand-menu-leave-to {
-  max-width: 85px;
+  max-width: 100%;
 }
 
 .expand-menu-enter-to,
 .expand-menu-leave-from {
-  max-width: v-bind("width");
+  max-width: 100%;
 }
 
 .expand-menu-leave-active {
-  transition: max-width 1s cubic-bezier(0, 1, 0, 1);
+  transition: max-width 0.5s cubic-bezier(0, 1, 0, 1);
 }
 
 .expand-menu-enter-active {
-  transition: max-width 1s cubic-bezier(0, 1, 0, 1);
+  transition: max-width 0.5s cubic-bezier(0, 1, 0, 1);
+}
+.logo-container {
+  height: 64px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo {
+  height: 25px;
+  width: 25px;
+  margin-right: 8px;
+  vertical-align: text-bottom;
 }
 </style>

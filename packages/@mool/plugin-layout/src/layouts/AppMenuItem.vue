@@ -31,8 +31,10 @@ const props = defineProps({
 
 const isActiveMenu = ref(false);
 const itemKey = ref(null);
-
+const uniqueOpened = inject("uniqueOpened", false);
 onBeforeMount(() => {
+  if (props.hidden) return;
+
   itemKey.value = props.parentItemKey
     ? props.parentItemKey + "-" + props.index
     : String(props.index);
@@ -45,32 +47,33 @@ onBeforeMount(() => {
       : false;
 });
 
-watch(
-  () => layoutState.activeMenuItem,
-  (newVal) => {
-    console.log("Active menu item changed:", newVal, itemKey.value);
-    
-    isActiveMenu.value =
+// watch(
+//   () => layoutState.activeMenuItem,
+//   (newVal) => {
+//     console.log(newVal,props.item,route.path);
+//     isActiveMenu.value =
+//       newVal === itemKey.value || newVal?.startsWith(itemKey.value + "-");
 
-      newVal === itemKey.value || newVal?.startsWith(itemKey.value + "-");
-      console.log("Is active menu:", isActiveMenu.value);
-      
-  }
-);
+//   }
+// );
 
 function itemClick(event, item) {
+  if (checkActiveRoute(event, item) && !item.routes) return;
   if (item.disabled) {
     event.preventDefault();
     return;
   }
-
 
   const foundItemKey = item.routes
     ? isActiveMenu.value
       ? props.parentItemKey
       : itemKey
     : itemKey.value;
-  setActiveMenuItem(foundItemKey);
+  // setActiveMenuItem(foundItemKey);
+  isActiveMenu.value =
+    unref(foundItemKey) === itemKey.value ||
+    unref(foundItemKey)?.startsWith(itemKey.value + "-");
+  console.log(isActiveMenu.value);
 }
 // 递归深层嵌套routes的path是否与当前路由匹
 function isRouteMatch(route, item) {
@@ -78,9 +81,7 @@ function isRouteMatch(route, item) {
     return true;
   }
   if (item.routes) {
-    return (
-      item.routes.some((child) => isRouteMatch(route, child))
-    );
+    return item.routes.some((child) => isRouteMatch(route, child));
   }
   return false;
 }
@@ -91,10 +92,12 @@ function checkActiveRoute(event, item) {
 watch(
   () => route.path,
   () => {
+    if (isActiveMenu.value && !uniqueOpened) return;
     isActiveMenu.value = checkActiveRoute(null, props.item);
   }
 );
 onMounted(() => {
+  if (props.hidden) return;
   isActiveMenu.value = checkActiveRoute(null, props.item);
   if (props.item.routes) {
     const activeChild = props.item.routes.find(
@@ -113,7 +116,10 @@ onMounted(() => {
   <li :class="{ 'active-menuitem': isActiveMenu }">
     <router-link
       @click="itemClick($event, item)"
-      :class="[item.class, { 'active-route': checkActiveRoute($event, item) }]"
+      :class="[
+        item.class,
+        { 'active-route': checkActiveRoute($event, item) && !item.routes },
+      ]"
       tabindex="0"
       :to="item.routes ? '' : item.path"
     >
@@ -128,7 +134,7 @@ onMounted(() => {
         :class="[
           'layout-menuitem-text',
           'w-full',
-          { 'text-white': item.routes },
+          { 'text-white': item.routes, 'opacity-0': hidden },
         ]"
         >{{ item.meta?.title }}</span
       >
@@ -138,7 +144,8 @@ onMounted(() => {
           'pi-fw',
           'pi-angle-down',
           'layout-submenu-toggler',
-          { 'text-white': item.routes },
+
+          { 'text-white': item.routes, 'opacity-0': hidden },
         ]"
         v-if="item.routes"
       ></i>
@@ -155,6 +162,7 @@ onMounted(() => {
           :item="child"
           :parentItemKey="itemKey"
           :root="false"
+          :uniqueOpened="uniqueOpened"
         ></app-menu-item>
       </ul>
     </Transition>
@@ -164,10 +172,16 @@ onMounted(() => {
 <style lang="scss" scoped>
 li {
   > a {
+    &:hover {
+      background-color: var(--hover-bg-color);
+    }
     &.active-route {
-      font-weight: 700;
       color: var(--active-color-text);
+      background-color: var(--active-bg-color);
     }
   }
+}
+.layout-submenu {
+  background-color: #000;
 }
 </style>

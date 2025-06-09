@@ -2,12 +2,28 @@
   <!-- <div>
         欢迎来到mooljs
     </div> -->
-  <Menu :menuData="model" />
-  <RouterView></RouterView>
+  <ProLayout
+    :menuData="model"
+    :menuProps="{
+      uniqueOpened: false,
+    }"
+    :collapsed="false"
+  >
+    <template #rightContentRender>
+      <RightRender />
+    </template>
+    <template #footerContent>
+      <FooterRender />
+    </template>
+    <template #headerContent>
+      <HeaderRender />
+    </template>
+    <RouterView />
+  </ProLayout>
 </template>
 
 <script setup lang="ts">
-import Menu from "./menu.vue";
+import ProLayout from "@/components/ProLayout.vue";
 import { useMenuFromRoutes } from "./useMenu";
 const model = ref();
 model.value = useMenuFromRoutes(
@@ -40,33 +56,18 @@ model.value = useMenuFromRoutes(
           path: "/form/senior",
           meta: {
             title: "高级表单",
+            icon: "pi pi-user",
           },
-          routes:[
-            {
-              path: "/form/basic",
-              component: "/src/pages/form/basic.vue",
-              meta: {
-                title: "分步表单",
-              }
-            }
-          ]
         },
         {
-          path: "/designer",
-          component: "/src/pages/designer/index.vue",
+          path: "/form/basic",
+          component: "/src/pages/form/basic.vue",
           meta: {
-            title: "高级表单1",
+            title: "分步表单",
+            icon: "pi pi-user",
           },
         },
       ],
-    },
-    {
-      path: "/user",
-      component: "/src/pages/user/index.vue",
-      meta: {
-        title: "用户中心",
-        icon: "pi pi-user",
-      },
     },
   ],
   {},
