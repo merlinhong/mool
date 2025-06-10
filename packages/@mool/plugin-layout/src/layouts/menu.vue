@@ -11,42 +11,44 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  menuData: {
+  data: {
     type: Array,
     default: () => [],
-  },
-  menuProps: {
-    type: Object,
-    default: () => ({
-      backgroundColor: "#001529",
-      textColor: "#fff",
-      activeTextColor: "red",
-      uniqueOpened: false,
-      router: true,
-    }),
   },
   logo: {
     type: String,
     default: "",
   },
+  activeTextColor: {
+    type: String,
+    default: "#fff",
+  },
+  backgroundColor: {
+    type: String,
+    default: "#001529",
+  },
+  activeBgColor: {
+    type: String,
+    default: "#2878f0",
+  },
+  textColor: {
+    type: String,
+    default: "#fff",
+  },
+  hoverBgColor: {
+    type: String,
+    default: "var(--p-primary-color)",
+  },
+  uniqueOpened: {
+    type: Boolean,
+    default: false,
+  },
 });
-const defaultProps = computed(() =>
-  Object.assign(
-    {
-      backgroundColor: "#001529",
-      textColor: "#fff",
-      activeTextColor: "#fff",
-      activeBgColor: "#2878f0",
-      uniqueOpened: false,
-      hoverBgColor: "var(--p-primary-color)",
-      router: true,
-    },
-    props.menuProps
-  )
-);
+
 const width = ref("100%");
 const displayIcon = ref(false);
-provide("uniqueOpened", defaultProps.value.uniqueOpened);
+const isCollapsed = ref(false);
+provide("uniqueOpened", props.uniqueOpened);
 const leave = () => {
   setTimeout(() => {
     displayIcon.value = true;
@@ -55,11 +57,16 @@ const leave = () => {
 </script>
 
 <template>
-  <Transition name="expand-menu" @leave="leave" @enter="displayIcon = false">
+  <Transition
+    name="expand-menu"
+    @leave="leave"
+    @enter="displayIcon = false"
+    @after-leave="isCollapsed = true"
+  >
     <div
       class="layout-sidebar"
       v-show="!collapsed"
-      :style="{ background: defaultProps.backgroundColor }"
+      :style="{ background: backgroundColor }"
     >
       <div class="logo-container">
         <router-link to="/" class="flex">
@@ -70,17 +77,17 @@ const leave = () => {
         </router-link>
       </div>
       <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
-        <template v-for="(item, i) in menuData" :key="item">
+        <template v-for="(item, i) in data" :key="item">
           <app-menu-item
             v-if="!item.separator"
             :item="item"
             :index="i"
             :hidden="displayIcon"
             :style="{
-              color: defaultProps.textColor,
-              '--active-color-text': defaultProps.activeTextColor,
-              '--hover-bg-color': defaultProps.hoverBgColor,
-              '--active-bg-color': defaultProps.activeBgColor,
+              color: textColor,
+              '--active-color-text': activeTextColor,
+              '--hover-bg-color': hoverBgColor,
+              '--active-bg-color': activeBgColor,
             }"
           ></app-menu-item>
           <li v-if="item.separator" class="menu-separator"></li>
@@ -91,7 +98,7 @@ const leave = () => {
   <div
     class="layout-sidebar"
     v-show="displayIcon"
-    :style="{ background: defaultProps.backgroundColor }"
+    :style="{ background: backgroundColor }"
   >
     <div class="logo-container">
       <router-link to="/">
@@ -102,19 +109,21 @@ const leave = () => {
       </router-link>
     </div>
     <ul class="layout-menu" style="white-space: nowrap; overflow: hidden">
-      <template v-for="(item, i) in menuData" :key="item">
+      <template v-for="(item, i) in data" :key="item">
         <app-menu-item
           v-if="!item.separator"
           :item="item"
           :index="i"
           :hidden="displayIcon"
+          :collapsed="isCollapsed"
           :style="{
-            color: defaultProps.textColor,
-            '--active-color-text': defaultProps.activeTextColor,
-            '--hover-bg-color': defaultProps.hoverBgColor,
-            '--active-bg-color': defaultProps.activeBgColor,
+            color: textColor,
+            '--active-color-text': activeTextColor,
+            '--hover-bg-color': hoverBgColor,
+            '--active-bg-color': activeBgColor,
           }"
-        ></app-menu-item>
+        >
+        </app-menu-item>
         <li v-if="item.separator" class="menu-separator"></li>
       </template>
     </ul>

@@ -27,6 +27,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const isActiveMenu = ref(false);
@@ -75,7 +79,7 @@ function itemClick(event, item) {
     unref(foundItemKey)?.startsWith(itemKey.value + "-");
   console.log(isActiveMenu.value);
 }
-// 递归深层嵌套routes的path是否与当前路由匹
+// 递归深层嵌套routes的path是否与当前路由匹配
 function isRouteMatch(route, item) {
   if (route.path === item.path) {
     return true;
@@ -87,13 +91,26 @@ function isRouteMatch(route, item) {
 }
 
 function checkActiveRoute(event, item) {
-  return route.path === item.path || (item.routes && isRouteMatch(route, item));
+  return (
+    route.path === (item.path ?? item.route) ||
+    ((item.routes ?? item.items) && isRouteMatch(route, item))
+  );
 }
 watch(
   () => route.path,
   () => {
-    if (isActiveMenu.value && !uniqueOpened) return;
+    if ((isActiveMenu.value && !uniqueOpened) || props.hidden) return;
     isActiveMenu.value = checkActiveRoute(null, props.item);
+  }
+);
+watch(
+  () => props.hidden,
+  (n) => {
+    if (n) {
+      isActiveMenu.value = false;
+    } else {
+      isActiveMenu.value = checkActiveRoute(null, props.item);
+    }
   }
 );
 onMounted(() => {
@@ -110,46 +127,114 @@ onMounted(() => {
     }
   }
 });
+
+const timer = ref(null);
+const menu = ref();
+const locxy = ref({
+  x: 0,
+  y: 0,
+});
+const show = (event) => {
+  if (!props.item.routes) return;
+  if (!locxy.value.x) {
+    const { top, right } = event.target.getBoundingClientRect();
+    locxy.value.x = right;
+    locxy.value.y = top;
+  }
+  if (timer.value) {
+    clearTimeout(timer.value);
+    timer.value = null;
+  }
+  menu.value.show(event);
+};
+const formatRoutes = (items) => {
+  if (!items) return null;
+  return items?.map((item) => ({
+    label: item.meta?.title,
+    icon: item.meta?.icon,
+    route: item.path,
+    items: formatRoutes(item.routes ?? ""),
+  }));
+};
+const hide = (event) => {
+  timer.value = setTimeout(() => {
+    menu.value.hide();
+  }, 150);
+};
 </script>
 
 <template>
-  <li :class="{ 'active-menuitem': isActiveMenu }">
-    <router-link
-      @click="itemClick($event, item)"
-      :class="[
-        item.class,
-        { 'active-route': checkActiveRoute($event, item) && !item.routes },
-      ]"
-      tabindex="0"
-      :to="item.routes ? '' : item.path"
-    >
-      <i
+  <li
+    :class="['relative li_container', { 'active-menuitem': isActiveMenu }]"
+    @mouseenter="show"
+    @mouseleave="hide"
+    v-tooltip="hidden && !item.routes ? item.meta?.title : ''"
+  >
+    <template v-if="!hidden">
+      <router-link
+        @click="itemClick($event, item)"
         :class="[
-          'layout-menuitem-icon',
-          { 'text-white': item.routes },
-          item.meta?.icon,
+          item.class,
+          'flex items-center',
+          {
+            'active-route': checkActiveRoute($event, item) && !item.routes,
+          },
         ]"
-      ></i>
-      <span
-        :class="[
-          'layout-menuitem-text',
-          'w-full',
-          { 'text-white': item.routes, 'opacity-0': hidden },
-        ]"
-        >{{ item.meta?.title }}</span
+        tabindex="0"
+        :to="item.routes ? '' : item.path"
       >
-      <i
+        <div class="!h-6">
+          <i
+            :class="[
+              'layout-menuitem-icon  !text-[1rem]',
+              { 'text-white': item.routes },
+              item.meta?.icon,
+            ]"
+          ></i>
+        </div>
+        <span
+          :class="[
+            'layout-menuitem-text',
+            'w-full',
+            '!text-[1rem]',
+            { 'text-white': item.routes },
+          ]"
+          >{{ item.meta?.title }}</span
+        >
+        <i
+          :class="[
+            'pi',
+            'pi-fw',
+            'pi-angle-down',
+            'layout-submenu-toggler',
+            { 'text-white': item.routes },
+          ]"
+          v-if="item.routes"
+        ></i>
+      </router-link>
+    </template>
+    <template v-else>
+      <router-link
         :class="[
-          'pi',
-          'pi-fw',
-          'pi-angle-down',
-          'layout-submenu-toggler',
-
-          { 'text-white': item.routes, 'opacity-0': hidden },
+          item.class,
+          {
+            'active-route': checkActiveRoute($event, item),
+          },
         ]"
-        v-if="item.routes"
-      ></i>
-    </router-link>
+        :to="item.routes ? '' : item.path"
+        tabindex="0"
+      >
+        <div class="!h-6">
+          <i
+            :class="[
+              'layout-menuitem-icon  !text-[1rem]',
+              { 'text-white': item.routes },
+              item.meta?.icon,
+            ]"
+          ></i>
+        </div>
+      </router-link>
+    </template>
     <Transition
       v-if="item.routes && item.visible !== false"
       name="layout-submenu"
@@ -166,12 +251,46 @@ onMounted(() => {
         ></app-menu-item>
       </ul>
     </Transition>
+    <TieredMenu
+      @mouseenter="show"
+      @mouseleave="hide"
+      v-if="collapsed"
+      :model="formatRoutes(item.routes)"
+      ref="menu"
+      id="overlay_tmenu"
+      popup
+      class="absolute w-fit h-fit"
+      :style="{
+        top: locxy.y + 'px',
+        left: locxy.x + 'px',
+        ...$attrs.style,
+      }"
+    >
+      <template #item="{ item, props, hasSubmenu }">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom
+          :class="[
+            {
+              'active-route': checkActiveRoute($event, item),
+            },
+          ]"
+        >
+          <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+            <span :class="item.icon" />
+            <span class="ml-2">{{ item.label }}</span>
+          </a>
+        </router-link>
+      </template>
+    </TieredMenu>
   </li>
 </template>
 
 <style lang="scss" scoped>
 li {
-  > a {
+  a {
     &:hover {
       background-color: var(--hover-bg-color);
     }
@@ -181,6 +300,7 @@ li {
     }
   }
 }
+
 .layout-submenu {
   background-color: #000;
 }

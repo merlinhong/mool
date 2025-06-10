@@ -2,41 +2,29 @@ import { SplitterPanel } from 'primevue'; import { SplitterPanel } from
 'primevue';
 <template>
   <div class="pro-layout" :class="{ 'is-collapsed': collapsed }">
-    <!-- 侧边栏 -->
-    <!-- <SplitterPanel class="pro-layout-sider flex-1" v-if="menuRender"> -->
-    <!-- <Menu
-            :default-active="activeMenu"
-            :collapse="collapsed"
-            :background-color="menuProps.backgroundColor || '#001529'"
-            :text-color="menuProps.textColor || '#fff'"
-            :active-text-color="menuProps.activeTextColor || '#ffd04b'"
-            :unique-opened="menuProps.uniqueOpened"
-            :collapse-transition="false"
-            :router="menuProps.router"
-            class="pro-menu"
-          >
-          </Menu> -->
-    <!-- </SplitterPanel> -->
-
-    <Splitter class="pro-layout-container" gutterSize="0">
+    <!-- 侧边栏菜单 -->
+    <Splitter class="pro-layout-container" :gutterSize="0">
       <!-- 头部 -->
       <SplitterPanel
-        :style="{ flexBasis: !isCollapsed ? size + '%' : '2.4%' }"
+        :style="{ flexBasis: size + '%' }"
         style="transition: flex-basis 0.3s ease-in-out"
       >
         <Menu
-          :menuData="menuData"
-          :menuProps="menuProps"
+          :data="menuData"
+          :background-color="menuProps.backgroundColor"
+          :text-color="menuProps.textColor || '#fff'"
+          :active-text-color="menuProps.activeTextColor"
+          :unique-opened="menuProps.uniqueOpened"
           title="ProLayout"
           logo="/src/assets/mooljs.png"
           :collapsed="isCollapsed"
         />
       </SplitterPanel>
       <SplitterPanel
-        :style="{ flexBasis: !isCollapsed ? 100 - size + '%' : '97.6%' }"
+        :style="{ flexBasis: 100 - size + '%' }"
         style="transition: flex-basis 0.3s ease-in-out"
       >
-        <Splitter layout="vertical" gutterSize="0">
+        <Splitter layout="vertical" :gutterSize="0">
           <SplitterPanel :size="6">
             <!-- 页面标题 -->
             <header
@@ -184,6 +172,11 @@ const breadcrumbItems = computed(() => {
 // 方法
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
+  if (!isCollapsed.value) {
+    size.value = 14;
+  } else {
+    size.value = 2.4;
+  }
   emit("update:collapsed", isCollapsed.value);
   emit("collapsedChange", isCollapsed.value);
 };
@@ -332,21 +325,5 @@ onMounted(() => {
     margin-left: 0;
   }
 }
-.expand-menu-enter-from,
-.expand-menu-leave-to {
-  flex-grow: 3%;
-}
 
-.expand-menu-enter-to,
-.expand-menu-leave-from {
-  flex-grow: 14%;
-}
-
-.expand-menu-leave-active {
-  transition: flex-grow 1s cubic-bezier(0, 1, 0, 1);
-}
-
-.expand-menu-enter-active {
-  transition: flex-basis 1s cubic-bezier(0, 1, 0, 1);
-}
 </style>
