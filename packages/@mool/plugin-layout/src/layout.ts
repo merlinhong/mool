@@ -27,8 +27,8 @@ function convertToObject(value) {
   return {};
 }
 export const getAppConfig = async (options: UseProviderOptions) => {
-  const { config = {} } = options;
-  const { routes = [], layout = {}, getInitialState } = config;
+  const { config = {},Routes = [] } = options;
+  const { layout = {}, getInitialState } = config;
 
   const initialState = (await getInitialState?.()) ?? {};
 
@@ -36,7 +36,7 @@ export const getAppConfig = async (options: UseProviderOptions) => {
     typeof layout === "function" ? layout(initialState) : layout;
 
   const menuRoutes =
-    (await (layoutConfig as LayoutConfig).menu?.request?.()) ?? routes;
+    (await (layoutConfig as LayoutConfig).menu?.request?.()) ?? Routes;
 
   return {
     routes: convertToArray(menuRoutes),

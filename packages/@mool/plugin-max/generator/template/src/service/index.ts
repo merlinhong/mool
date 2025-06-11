@@ -5,7 +5,7 @@ import {
   IRootKeys,
   IUrlConfig,
   createServiceWithModules,
-} from "mooljs";
+} from "@mooljs/plugin-service";
 
 const config = {
   env: import.meta.env,

@@ -27,12 +27,13 @@ module.exports = async (api, options) => {
         injectImports: (opt) => {
           return [
             `import { setupLayout, getAppConfig} from 'virtual:layout'; 
+             import Routes from '/src/config/routes;
             `,
           ];
         },
         // 运行时逻辑
         runtime: (ctx) => `
-            const {routes,layout} = await getAppConfig({config});
+            const {routes,layout} = await getAppConfig({config,Routes});
             app.use(setupLayout,{
               routes,
               layout

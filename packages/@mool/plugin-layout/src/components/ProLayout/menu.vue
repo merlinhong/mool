@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref,provide } from "vue";
 import AppMenuItem from "./AppMenuItem.vue";
 const props = defineProps({
   // 布局配置
@@ -44,14 +44,20 @@ const props = defineProps({
     default: false,
   },
 });
-
-const width = ref("100%");
+const emit = defineEmits(["enter", "leave"]);
 const displayIcon = ref(false);
 const isCollapsed = ref(false);
 provide("uniqueOpened", props.uniqueOpened);
 const leave = () => {
   setTimeout(() => {
     displayIcon.value = true;
+    emit("leave");
+  }, 200);
+};
+const enter = () => {
+  setTimeout(() => {
+    displayIcon.value = false;
+    emit("enter");
   }, 200);
 };
 </script>
@@ -60,11 +66,11 @@ const leave = () => {
   <Transition
     name="expand-menu"
     @leave="leave"
-    @enter="displayIcon = false"
+    @enter="enter"
     @after-leave="isCollapsed = true"
   >
     <div
-      class="layout-sidebar"
+      class="layout-sidebar relative"
       v-show="!collapsed"
       :style="{ background: backgroundColor }"
     >

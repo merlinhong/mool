@@ -1,11 +1,9 @@
 <script setup>
-import { useLayout } from "./layout";
+import { useLayout } from "../../utils/layout";
 import { useRoute } from "vue-router";
-
+import { ref,inject,onBeforeMount,watch,onMounted,unref } from "vue";
 const route = useRoute();
-
 const { layoutState, setActiveMenuItem, toggleMenu } = useLayout();
-
 const props = defineProps({
   item: {
     type: Object,
@@ -135,7 +133,7 @@ const locxy = ref({
   y: 0,
 });
 const show = (event) => {
-  if (!props.item.routes) return;
+  if (!props.collapsed||!props.item.routes) return;
   if (!locxy.value.x) {
     const { top, right } = event.target.getBoundingClientRect();
     locxy.value.x = right;
@@ -157,6 +155,7 @@ const formatRoutes = (items) => {
   }));
 };
 const hide = (event) => {
+  if (!props.collapsed||!props.item.routes) return;
   timer.value = setTimeout(() => {
     menu.value.hide();
   }, 150);
@@ -168,7 +167,7 @@ const hide = (event) => {
     :class="['relative li_container', { 'active-menuitem': isActiveMenu }]"
     @mouseenter="show"
     @mouseleave="hide"
-    v-tooltip="hidden && !item.routes ? item.meta?.title : ''"
+    v-tooltip="collapsed && !item.routes ? item.meta?.title : ''"
   >
     <template v-if="!hidden">
       <router-link
@@ -253,7 +252,6 @@ const hide = (event) => {
     </Transition>
     <TieredMenu
       @mouseenter="show"
-      @mouseleave="hide"
       v-if="collapsed"
       :model="formatRoutes(item.routes)"
       ref="menu"

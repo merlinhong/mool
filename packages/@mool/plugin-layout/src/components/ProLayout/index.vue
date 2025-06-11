@@ -1,161 +1,78 @@
+import { SplitterPanel } from 'primevue'; import { SplitterPanel } from
+'primevue';
 <template>
   <div class="pro-layout" :class="{ 'is-collapsed': collapsed }">
-    <!-- 侧边栏 -->
-    <el-aside width="10%" class="pro-layout-sider" v-if="menuRender">
-      <div class="logo-container">
-        <router-link to="/">
-          <img v-if="logo" :src="logo" class="logo" alt="logo" />
-          <h1 v-if="!collapsed || !logo" class="title">{{ title }}</h1>
-        </router-link>
-      </div>
-      <el-scrollbar>
-        <el-menu
-          :default-active="activeMenu"
-          :collapse="collapsed"
-          :background-color="menuProps.backgroundColor || '#001529'"
-          :text-color="menuProps.textColor || '#fff'"
-          :active-text-color="menuProps.activeTextColor || '#ffd04b'"
-          :unique-opened="menuProps.uniqueOpened"
-          :collapse-transition="false"
-          :router="menuProps.router"
-          class="pro-menu"
-        >
-          <template v-for="(item, index) in menuData" :key="index">
-            <template v-if="!item.hidden">
-              <el-sub-menu
-                v-if="item.routes && item.routes.length > 0"
-                :index="item.path"
-              >
-                <template #title>
-                  <el-icon v-if="item.meta && item.meta.icon">
-                    <component :is="item.meta.icon" />
-                  </el-icon>
-                  <span>{{ item.meta && item.meta.title }}</span>
-                </template>
-                <template
-                  v-for="(child, childIndex) in item.routes"
-                  :key="childIndex"
-                >
-                  <el-menu-item
-                    v-if="
-                      !child.hidden &&
-                      (!child.routes || child.routes.length === 0)
-                    "
-                    :index="child.path"
-                  >
-                    <el-icon v-if="child.meta && child.meta.icon">
-                      <component :is="child.meta.icon" />
-                    </el-icon>
-                    <template #title>{{
-                      child.meta && child.meta.title
-                    }}</template>
-                  </el-menu-item>
-                  <el-sub-menu v-else-if="!child.hidden" :index="child.path">
-                    <template #title>
-                      <el-icon v-if="child.meta && child.meta.icon">
-                        <component :is="child.meta.icon" />
-                      </el-icon>
-                      <span>{{ child.meta && child.meta.title }}</span>
-                    </template>
-                    <el-menu-item
-                      v-for="(grandChild, grandChildIndex) in child.routes"
-                      :key="grandChildIndex"
-                      :index="grandChild.path"
-                    >
-                      <el-icon v-if="grandChild.meta && grandChild.meta.icon">
-                        <component :is="grandChild.meta.icon" />
-                      </el-icon>
-                      <template #title>{{
-                        grandChild.meta && grandChild.meta.title
-                      }}</template>
-                    </el-menu-item>
-                  </el-sub-menu>
-                </template>
-              </el-sub-menu>
-              <el-menu-item
-                v-else-if="!item.children || item.children.length === 0"
-                :index="item.path"
-              >
-                <el-icon v-if="item.meta && item.meta.icon">
-                  <component :is="item.meta.icon" />
-                </el-icon>
-                <template #title>{{ item.meta && item.meta.title }}</template>
-              </el-menu-item>
-            </template>
-          </template>
-        </el-menu>
-      </el-scrollbar>
-    </el-aside>
-    <el-container class="pro-layout-container">
+    <!-- 侧边栏菜单 -->
+    <Splitter class="pro-layout-container" :gutterSize="0">
       <!-- 头部 -->
-      <el-header
-        v-if="headerRender !== false"
-        height="64px"
-        class="pro-layout-header"
+      <SplitterPanel
+        :style="{ flexBasis: size + '%' }"
+        style="transition: flex-basis 0.3s ease-in-out"
+        class="relative"
       >
-        <div class="header-left" v-if="menuRender">
-          <el-button type="text" class="toggle-button" @click="toggleCollapse">
-            <el-icon>
-              <Fold v-if="!collapsed" />
-              <Expand v-else />
-            </el-icon>
-          </el-button>
-
-          <!-- 面包屑 -->
-          <el-breadcrumb v-if="breadcrumb" separator="/">
-            <el-breadcrumb-item
-              v-for="(item, index) in breadcrumbItems"
-              :key="index"
-              :to="{ path: item.path }"
+        <Menu
+          :data="menuData"
+          :background-color="menuProps.backgroundColor"
+          :text-color="menuProps.textColor || '#fff'"
+          :active-text-color="menuProps.activeTextColor"
+          :unique-opened="menuProps.uniqueOpened"
+          title="ProLayout"
+          logo="/src/assets/mooljs.png"
+          :collapsed="isCollapsed"
+          @enter="isShowFooter = true"
+          @leave="isShowFooter = false"
+        />
+        <footer height="auto" class="pro-layout-footer absolute bottom-0 z-1000 text-sm border-t-1 border-gray-500" v-show="isShowFooter&&!isCollapsed">
+          {{ menuProps.copyright }}
+        </footer>
+      </SplitterPanel>
+      <SplitterPanel
+        :style="{ flexBasis: 100 - size + '%' }"
+        style="transition: flex-basis 0.3s ease-in-out"
+      >
+        <Splitter layout="vertical" :gutterSize="0">
+          <SplitterPanel :size="6">
+            <!-- 页面标题 -->
+            <header
+              v-if="headerRender !== false"
+              class="pro-layout-header h-full"
             >
-              {{ item.title }}
-            </el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-        <div class="header-center">
-          <slot name="headerContent"></slot>
-
-        </div>
-        <div class="header-right">
-          <slot name="rightContentRender"></slot>
-        </div>
-      </el-header>
-
-      <!-- 内容区域 -->
-      <el-main class="pro-layout-main">
-        <!-- 页面标题 -->
-        <div v-if="pageTitleRender !== false && pageTitle" class="page-header">
-          <h1 class="page-title">{{ pageTitle }}</h1>
-          <div v-if="pageSubTitle" class="page-subtitle">
-            {{ pageSubTitle }}
-          </div>
-        </div>
-
-        <!-- 主要内容 -->
-        <div class="main-content">
-          <slot></slot>
-        </div>
-      </el-main>
-
-      <!-- 页脚 -->
-      <el-footer
-        v-if="footerRender !== false"
-        height="auto"
-        class="pro-layout-footer"
-      >
-        <slot name="footerContent">
-        </slot>
-      </el-footer>
-    </el-container>
+              <div class="header-left">
+                <i
+                  @click="toggleCollapse"
+                  class="pi-align-justify pi cursor-pointer"
+                ></i>
+              </div>
+              <div class="header-center">
+                <slot name="headerContent"></slot>
+              </div>
+              <div class="header-right">
+                <slot name="rightContentRender"></slot>
+              </div>
+            </header>
+          </SplitterPanel>
+          <SplitterPanel class="pro-layout-main" :size="94">
+            <!-- 主要内容 -->
+            <div class="main-content h-full">
+              <slot></slot>
+            </div>
+          </SplitterPanel>
+          <!-- <SplitterPanel> -->
+          <!-- 页脚 -->
+          <!-- <footer height="auto" class="pro-layout-footer">
+              {{ "Copyright © 2023 ProLayout" }}
+            </footer> -->
+          <!-- </SplitterPanel> -->
+        </Splitter>
+      </SplitterPanel>
+    </Splitter>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref,computed,watch,onMounted} from 'vue';
-import { Fold, Expand } from "@element-plus/icons-vue";
-import {ElContainer,ElBreadcrumb,ElBreadcrumbItem,ElFooter,ElMenu,ElSubMenu,ElMenuItem,ElIcon,ElScrollbar,ElAside,ElButton,ElHeader,ElMain} from 'element-plus';
-import 'element-plus/dist/index.css';
-import {useRoute} from 'vue-router';
+import { ref, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import Menu from "./menu.vue";
 const props = defineProps({
   // 布局配置
   title: {
@@ -198,10 +115,6 @@ const props = defineProps({
     type: [Boolean, Function],
     default: true,
   },
-  // menuRender:{
-  //   type:Boolean,
-  //   default:true
-  // },
   // 内容配置
   pageTitle: {
     type: String,
@@ -227,16 +140,16 @@ const props = defineProps({
 
 const emit = defineEmits(["update:collapsed", "collapsedChange"]);
 
+const size = ref(14);
 // 响应式状态
 const isCollapsed = ref(props.collapsed);
-const menuRender = ref(true);
 const route = useRoute();
 
 // 计算属性
 const activeMenu = computed(() => {
   return route.path;
 });
-
+const isShowFooter = ref(true);
 const breadcrumbItems = computed(() => {
   // 根据当前路由生成面包屑
   const items = [];
@@ -266,6 +179,11 @@ const breadcrumbItems = computed(() => {
 // 方法
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
+  if (!isCollapsed.value) {
+    size.value = 14;
+  } else {
+    size.value = 2.4;
+  }
   emit("update:collapsed", isCollapsed.value);
   emit("collapsedChange", isCollapsed.value);
 };
@@ -277,9 +195,7 @@ watch(
     isCollapsed.value = newVal;
   }
 );
-watch(()=>route.meta,(newval)=>{
-    menuRender.value = newval.menuRender!==false;
-},{immediate:true});
+
 
 // 生命周期钩子
 onMounted(() => {
@@ -296,8 +212,7 @@ onMounted(() => {
 
 .pro-layout-sider {
   height: 100%;
-  background-color: #001529;
-  transition: width 0.2s;
+  /* transition: width 0.2s; */
   overflow: hidden;
 }
 
@@ -333,11 +248,8 @@ onMounted(() => {
 }
 
 .pro-layout-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+  flex: 6;
+  border: none;
 }
 
 .pro-layout-header {
@@ -352,6 +264,7 @@ onMounted(() => {
 .header-left {
   display: flex;
   align-items: center;
+  padding: 20px 10px;
 }
 
 .toggle-button {
@@ -365,9 +278,7 @@ onMounted(() => {
 }
 
 .pro-layout-main {
-  flex: 1;
   overflow: auto;
-  padding: 24px;
   background-color: #f0f2f5;
 }
 
@@ -388,15 +299,15 @@ onMounted(() => {
 }
 
 .main-content {
-  background-color: #fff;
   padding: 24px;
   border-radius: 2px;
 }
 
 .pro-layout-footer {
-  padding: 24px;
+  padding: 15px 30px;
   text-align: center;
-  background-color: #f0f2f5;
+  background-color: #001529;
+  color: #fff;
 }
 
 @media screen and (max-width: 768px) {
@@ -415,5 +326,22 @@ onMounted(() => {
   .pro-layout-container {
     margin-left: 0;
   }
+}
+.expand-menu-enter-from,
+.expand-menu-leave-to {
+  flex-grow: 3%;
+}
+
+.expand-menu-enter-to,
+.expand-menu-leave-from {
+  flex-grow: 14%;
+}
+
+.expand-menu-leave-active {
+  transition: flex-grow 1s cubic-bezier(0, 1, 0, 1);
+}
+
+.expand-menu-enter-active {
+  transition: flex-basis 1s cubic-bezier(0, 1, 0, 1);
 }
 </style>
