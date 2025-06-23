@@ -31,8 +31,8 @@ module.exports = (api, options) => {
           .map((file) => file.replace(".ts", ""));
         const moduleTypes = storeFiles
           .map(
-            (module) => `    ${module}: typeof import("src/store/${module}")['default'];\n`,
-          ).concat([`    '@@initialState':(typeof import("src/app.ts"))["getInitialState"]|(typeof import("src/app.tsx"))["getInitialState"];`])
+            (module) => `    ${module}: ReturnType<typeof import("src/store/${module}")["default"]>;\n`,
+          ).concat([`    '@@initialState':ReturnType<(typeof import("src/app.ts"))["getInitialState"]|(typeof import("src/app.tsx"))["getInitialState"]>;`])
           .join("");
         return [
           `  interface StoreModule {\n${moduleTypes}\n  }\n  export const useStore: <K extends keyof StoreModule>(_namespace: K) => StoreModule[K]`

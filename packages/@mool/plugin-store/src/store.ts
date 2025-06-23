@@ -15,7 +15,7 @@ export class StoreManager {
   private static instance: StoreManager;
   private modules: StoreModules = {};
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): StoreManager {
     if (!StoreManager.instance) {
@@ -41,11 +41,26 @@ export class StoreManager {
       }, // 明确指定导入内容 }
     );
 
+    const pageModuleFiles = import.meta.glob<{ default: ModuleInitializer }>(
+      `/src/pages/**/store/**/*.ts`,
+      {
+        eager: true,
+      }
+    );
     // 注册自动发现的模块
     Object.entries(moduleFiles).forEach(([path, module]) => {
       const moduleName = path.match(/([^/]+)\.ts$/)?.[1];
       if (moduleName) {
         this.register(moduleName, module.default);
+      }
+    });
+
+    // 注册自动发现的模块
+    Object.entries(pageModuleFiles).forEach(([path, module]) => {
+      // 假设路径格式为 /src/pages/页面名/store/xxx.ts
+      const moduleName = path.match(/\/src\/pages\/([^\/]+)\/store\/(.+)\.ts$/);
+      if (moduleName) {
+        this.register(`${moduleName[1]}.${moduleName[2].includes('/') ? moduleName[2].replace('/', '.') : moduleName[2]}`, module.default);
       }
     });
 
