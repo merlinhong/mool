@@ -43,8 +43,9 @@
 
 <script setup lang="tsx">
 import { ref, Ref, PropType, watch } from "vue";
+import { useLayout } from "@/layouts/layout";
 
-// const { toggleDarkMode, isDarkTheme } = useLayout();
+const { toggleDarkMode, isDarkTheme } = useLayout();
 const PCSize = "100%";
 const MobileSize = "25%";
 
