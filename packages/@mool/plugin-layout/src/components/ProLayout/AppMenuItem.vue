@@ -252,6 +252,7 @@ const hide = (event) => {
     </Transition>
     <TieredMenu
       @mouseenter="show"
+      @mouseleave="hide"
       v-if="collapsed"
       :model="formatRoutes(item.routes)"
       ref="menu"

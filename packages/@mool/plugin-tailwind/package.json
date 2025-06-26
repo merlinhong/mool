@@ -1,6 +1,6 @@
 {
   "name": "@mooljs/plugin-tailwind",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "windicss plugin for mool",
   "main": "index.js",
   "repository": {

@@ -9,7 +9,7 @@ module.exports = (api, options) => {
     dependencies: {
       vue: "^3.2.25",
       "vue-router": "^4.0.3",
-      mooljs: "^2.0.1.beta"
+      mooljs: "^2.0.1"
     },
     devDependencies: {
       "@types/node": "^20.11.6",

@@ -1,6 +1,6 @@
 {
   "name": "mooljs",
-  "version": "2.0.1-beta",
+  "version": "2.0.1",
   "description": "function tool library for mooljs",
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -179,8 +179,9 @@ const mouseenterMenu = (e: HTMLElement, ind?: number) => {
   if (e) {
     // tabInd.value = ind;
     if (ind !== undefined) {
-      e.classList.add("active");
+      elRef.value?.classList.remove("active");
       elRef.value = e;
+      e.classList.add("active");
     } else {
       elRef.value.classList.add("active");
     }
