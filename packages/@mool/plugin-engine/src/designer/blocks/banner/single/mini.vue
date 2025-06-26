@@ -12,30 +12,21 @@
         <div class="flex flex-col lg:items-center  gap-2">
           <div class="flex-grow">
             <h3
-              class="text-[0.5rem] font-bold text-surface-900 dark:text-surface-0 leading-tight"
+              class="text-[0.7rem] font-bold text-surface-0 dark:text-surface-0 leading-tight"
             >
             Create the screens your
             </h3>
             <p
-              class="text-surface-900/90 dark:text-surface-200 text-[0.3rem] lg:mt-0.5 max-w-md"
+              class="text-surface-0 dark:text-surface-200 text-[0.3rem] lg:mt-0.5 max-w-md"
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
           </div>
           <div class="flex gap-2 self-start">
-            <Button
-              label="Start"
-              severity="contrast"
-              size="small"
-              class="!text-[0.4rem] !p-[0.3rem] !bg-surface-900 !text-surface-0"
-            />
-            <Button
-              label="Demo"
-              outlined
-              size="small"
-              class="!text-[0.4rem] !p-[0.3rem] !text-suface-900"
-            />
+            
+            <Button label="Leran More" severity="contrast" size="small" class="!text-[0.4rem] !p-[0.1rem] "/>
+            <Button label="Live Demo" outlined size="small" class="!text-[0.4rem] !p-[0.1rem] "/>
           </div>
         </div>
       </div>

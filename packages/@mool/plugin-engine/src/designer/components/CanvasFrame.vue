@@ -162,7 +162,7 @@ provide("activeIds", activeIds);
     v-on="$attrs"
     class="bg-light-800 absolute h-[94vh] !left-[4.0rem] overflow-y-scroll canvas_container"
     style="box-sizing: border-box"
-    :style="{ width: 'calc(100% - 21vw)' }"
+    :style="{ width: 'calc(100% - 25rem)' }"
   >
     <VueDraggable
       v-model="pageSchema"

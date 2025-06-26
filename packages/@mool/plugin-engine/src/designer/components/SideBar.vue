@@ -262,7 +262,7 @@ const clone = (item: any) => {
           : { transform: 'translateX(-30rem)' }),
       }"
     >
-      <SplitterPanel class="rounded-br-[5px] !bg-zinc-700">
+      <SplitterPanel class="rounded-br-[5px] ">
         <div
           ref="aside"
           style="
@@ -273,13 +273,14 @@ const clone = (item: any) => {
             width: 100%;
             transition: transform 1s ease;
             z-index: 9999;
+            border-right:1px solid #999
           "
         >
           <div
             style="padding: 20px; font-size: 13px; color: #333"
             v-for="_ in componentLibrary"
           >
-            <div style="padding: 0px 10px; margin-bottom: 10px; color: #fff">
+            <div style="padding: 0px 10px; margin-bottom: 10px; color: var(--code-color)">
               {{ _.name }}
             </div>
 
@@ -310,7 +311,7 @@ const clone = (item: any) => {
                     <component :is="item.miniComponent"> </component>
                   </div>
                 </VueDraggable>
-                <div class="text-white absolute bottom-[-25px]">{{ item.desc }}</div>
+                <div class=" absolute bottom-[-25px] text-[var(--code-color)]">{{ item.desc }}</div>
                 <div
                   class="popover_container absolute opacity-0 bg-black p-2 w-100 hidden"
                   :ref="setRefs(item.id)"

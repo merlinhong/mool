@@ -148,7 +148,7 @@ const checked = ref(false);
           />
           <!-- 侧边栏组件，用于显示和编辑页面配置 -->
           <el-aside
-            class="page-design-config !w-[18vw]"
+            class="page-design-config !w-[21rem]"
             style="background-color: var(--surface-ground);"
             v-model:activeIds="activeIds"
           >

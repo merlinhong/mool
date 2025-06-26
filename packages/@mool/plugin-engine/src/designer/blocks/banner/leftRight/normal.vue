@@ -8,12 +8,14 @@
       <div class="relative flex-1 z-20 flex items-center justify-center">
         <div class="flex items-center justify-center h-full">
           <div
+            data-wrapper="true"
             class="w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left"
           >
             <div data-edit="title"></div>
             <div data-edit="subTitle"></div>
             <div data-edit="desc"></div>
             <div
+              data-wrapper="true"
               class="flex items-center gap-4 justify-center lg:justify-start"
             >
               <div data-edit="button1"></div>

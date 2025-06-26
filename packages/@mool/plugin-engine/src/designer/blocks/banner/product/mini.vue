@@ -8,11 +8,11 @@
         DISCORD
       </div>
       <div
-        class="text-surface-900 dark:text-surface-0 font-bold text-[0.3rem] leading-tight"
+        class="text-surface-0 dark:text-surface-0 font-bold text-[0.3rem] leading-tight"
       >
         Join our design community
       </div>
-      <Button label="Join Now" icon="pi pi-discord !text-[0.2rem]" size="small" class="!text-[0.2rem] !px-1 !py-0.5 !bg-blue-600" />
+      <Button label="Join Now" icon="pi pi-discord !text-[0.2rem]" size="small" class="!text-[0.3rem] !px-1 !py-0.5 !bg-blue-600" />
       <Image src="/src/pages/designer/source/product.png"></Image>
     </div>
     

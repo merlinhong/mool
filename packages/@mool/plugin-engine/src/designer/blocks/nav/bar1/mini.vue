@@ -13,9 +13,9 @@
         </svg>
         
         <!-- 简化的按钮 -->
-        <div class="text-[4px] text-gray-600 px-1">Files</div>
-        <div class="text-[4px] text-gray-600 px-1">Edit</div>
-        <div class="text-[4px] text-gray-600 px-1">View</div>
+        <div class="text-[4px] text-gray-600 px-1">Tab1</div>
+        <div class="text-[4px] text-gray-600 px-1">Tab2</div>
+        <div class="text-[4px] text-gray-600 px-1">Tab3</div>
       </div>
       
       <!-- 右侧内容 -->

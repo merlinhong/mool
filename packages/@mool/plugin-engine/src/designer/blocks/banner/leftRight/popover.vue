@@ -9,7 +9,7 @@
         <div class="flex flex-col lg:items-center w-full gap-2">
           <div class="flex-grow">
             <h3
-              class="text-[1.2rem] font-bold text-surface-0 lg:text-surface-0 dark:text-surface-0 leading-tight"
+              class="text-[1.2rem] font-bold text-surface-900 dark:text-surface-0 leading-tight"
             >
               Create amazing screens today
             </h3>
@@ -22,7 +22,7 @@
           </div>
           <div class="flex gap-2 self-start">
             <Button label="Start" severity="contrast" size="small" />
-            <Button label="Demo" outlined size="small" />
+            <Button label="More" outlined size="small" />
           </div>
         </div>
       </div>

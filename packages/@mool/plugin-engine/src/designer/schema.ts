@@ -6,7 +6,7 @@ export const componentLibrary = [
     compList: [
       {
         id: `bar1`, // 唯一标识符，用于查找和引用
-        desc:'普通菜单导航栏',
+        desc: '普通菜单导航栏',
         // 组件引用
         component: defineAsyncComponent(
           () => import("./blocks/nav/bar1/normal.vue")
@@ -55,7 +55,7 @@ export const componentLibrary = [
         ],
       },
       {
-        desc:'hover弹出式菜单导航栏',
+        desc: 'hover弹出式菜单导航栏',
         id: `bar2`, // 唯一标识符，用于查找和引用
         // 组件引用
         component: defineAsyncComponent(
@@ -76,13 +76,13 @@ export const componentLibrary = [
               menu: {
                 type: "div",
                 props: {
-                  class: "p-5 box-border bottom text-surface-0",
+                  class: "p-5 box-border bottom text-surface-900",
                   text: true,
                   plain: true,
                 },
                 loop: {
-                  item:'item',
-                  index:'index',
+                  item: 'item',
+                  index: 'index',
                   data: [
                     { label: "Tab 1", content: "Tab 1 Content", value: "0" },
                     { label: "Tab 2", content: "Tab 2 Content", value: "1" },
@@ -115,7 +115,7 @@ export const componentLibrary = [
         popoverComponent: defineAsyncComponent(
           () => import("./blocks/banner/leftRight/popover.vue")
         ), // 侧边栏预览组件
-        desc:'左右型',
+        desc: '左右型',
         schema: [
           {
             // 基本信息
@@ -124,7 +124,7 @@ export const componentLibrary = [
             config: {
               title: {
                 props: {
-                  class: "text-xl xl:text-5xl font-bold text-primary-900 mb-4",
+                  class: "text-xl xl:text-5xl font-bold text-surface-900 mb-4",
                 },
                 type: "div",
                 label: "Create the screens your",
@@ -133,7 +133,7 @@ export const componentLibrary = [
                 type: "p",
                 label: "visitors deserve to see",
                 props: {
-                  class: "text-xl xl:text-5xl font-bold text-primary-900 mb-4",
+                  class: "text-xl xl:text-5xl font-bold text-surface-900 mb-4",
                 },
               },
               desc: {
@@ -142,7 +142,7 @@ export const componentLibrary = [
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 props: {
                   class:
-                    "text-surface-900/90 lg:text-surface-0 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
+                    "text-surface-900 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
                 },
               },
               // button:['Learn More','Live Demo']
@@ -179,19 +179,25 @@ export const componentLibrary = [
         popoverComponent: defineAsyncComponent(
           () => import("./blocks/banner/single/popover.vue")
         ), // 侧边栏预览组件
-        desc:'单图背景型',
+        desc: '单图背景型',
         schema: [
           {
             // 基本信息
             id: `single_${uuid({})}`, // 唯一标识符，用于查找和引用
             template: "single",
             config: {
+              wrapper1: {
+                props: {
+                  class: 'w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left'
+                },
+                label: ''
+              },
               title: {
                 props: {
-                  class: "text-6xl font-bold text-surface-900 mb-4 animate-enter fade-in-10 slide-in-from-b-10 animate-duration-500",
+                  class: "text-6xl font-bold text-surface-0 mb-4 animate-enter fade-in-10 slide-in-from-b-10 animate-duration-500",
                 },
                 type: "div",
-                label: "Create the screens your",
+                label: "Create amazing screens today",
               },
               desc: {
                 type: "p",
@@ -202,24 +208,26 @@ export const componentLibrary = [
                     "text-surface-200  dark:text-surface-200  text-xl leading-normal mb-8 max-w-xl lg:max-w-none animate-enter fade-in-10 slide-in-from-b-15 animate-duration-1000",
                 },
               },
+              wrapper2: {
+                props: {
+                  class: 'flex items-center gap-4 justify-center lg:justify-start animate-enter fade-in-10 slide-in-from-b-40 animate-duration-1000'
+                }
+              },
               // button:['Learn More','Live Demo']
               button1: {
                 type: "Button",
                 label: "Leran More",
                 props: {
-                  class: "!bg-surface-900 !text-surface-0",
                   type: "button",
-                  rounded:true
+                  severity: 'contrast',
                 },
               },
               button2: {
                 type: "Button",
                 label: "Live Demo",
                 props: {
-                  class: "!text-surface-900 hover:!text-surface-0",
                   type: "button",
                   outlined: true,
-                  rounded:true
                 },
               },
             },
@@ -235,7 +243,7 @@ export const componentLibrary = [
           },
         ],
         id: `dup`, // 唯一标识符，用于查找和引用
-        desc:'多图轮播型',
+        desc: '多图轮播型',
         // 组件引用
         component: defineAsyncComponent(
           () => import("./blocks/banner/dup/normal.vue")
@@ -256,7 +264,7 @@ export const componentLibrary = [
           },
         ],
         id: `product`, // 唯一标识符，用于查找和引用
-        desc:'产品型',
+        desc: '产品型',
         // 组件引用
         component: defineAsyncComponent(
           () => import("./blocks/banner/product/normal.vue")

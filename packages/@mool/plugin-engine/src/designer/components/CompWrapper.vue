@@ -11,7 +11,7 @@
 <script setup lang="tsx">
 import { DefineComponent } from "vue";
 import EditorText from "./EditorText.vue";
-import { h, render } from "vue";
+import Wrapper from "./Wrapper.vue";
 import { PropType } from "vue";
 import * as primevue from "primevue";
 
@@ -29,7 +29,7 @@ console.log(prop.is);
 const childRef = ref(null);
 const activeIds = inject("activeIds", {});
 const renderKey = ref(0);
-const isreload = ref(false);
+
 // 是否是组件
 
 // 工具函数：将字符串首字母转换为小写
@@ -64,8 +64,7 @@ const childOnMounted = (e) => {
               onUpdate:modelValue={(e) => {
                 item.label = e;
               }}
-            >
-            </EditorText>
+            ></EditorText>
           ))
         ) : (
           <EditorText
@@ -75,8 +74,7 @@ const childOnMounted = (e) => {
             onUpdate:modelValue={(e) => {
               label.value = e;
             }}
-          >
-          </EditorText>
+          ></EditorText>
         )}
       </div>
     );
@@ -105,7 +103,10 @@ const childOnMounted = (e) => {
             });
           });
         }
+        console.log(element.parentNode);
+
         element.parentNode?.insertBefore(newNode, element);
+        // element.parentNode?.classList.add();
       });
       element.parentNode?.removeChild(element);
     } else {
@@ -114,6 +115,37 @@ const childOnMounted = (e) => {
     // renderKey.value++;
     // isreload.value = true;
     console.log(renderKey.value);
+  });
+  nextTick(() => {
+    const wrapperEls = document.querySelectorAll("[data-wrapper]");
+    console.log(wrapperEls);
+    wrapperEls.forEach((wrapper) => {
+      // 创建一个容器用于挂载组件
+      const container = document.createElement("div");
+      const type = wrapper.getAttribute("data-wrapper") as string;
+
+      // 创建一个 Vue 应用实例，用于设置 appContext
+      const { loop, events, label } = toRefs(prop.props["wrapper" + type]);
+      const Comp = () => (
+        <Wrapper tag={"div"} {...prop.props["wrapper" + type].props}>
+        </Wrapper>
+      );
+
+      const app = createApp(Comp);
+      // 设置 provide
+      app.provide("activeIds", activeIds);
+
+      for (const [key, component] of Object.entries(primevue)) {
+        app.component(key, component);
+      }
+      // const Module = (await import(`primevue/tab`)).default;
+      // app.component(prop.props[type].type, Module);
+      app.mount(container);
+      [...wrapper.children].forEach((child)=>{
+        container.firstChild?.appendChild(child)      
+      });
+      wrapper.parentNode?.replaceChild(container.firstChild!, wrapper);
+    });
   });
 };
 </script>

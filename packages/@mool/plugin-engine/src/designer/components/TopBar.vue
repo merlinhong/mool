@@ -55,7 +55,9 @@ const statuIcon = ref<"info" | "success" | "warning" | "error">("info");
 
 const statuTitle = ref("正在出码，请稍等....");
 const generateCoding = ref(false);
-
+onMounted(()=>{
+  toggleDarkMode()
+})
 const genCode = async () => {
   try {
     // 请求文件夹选择

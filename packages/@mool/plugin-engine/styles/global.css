@@ -1,7 +1,0 @@
-:root{
-    color-scheme: dark !important;
-    --p-surface-0:var(--p-primary-700) !important;
-    --p-surface-100:var(--p-surface-300) !important;
-    --p-surface-900:var(--p-surface-50) !important;
-    --p-surface-600:var(--p-surface-300) !important;
-}

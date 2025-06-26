@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-surface-0 dark:bg-surface-950 h-[35vh] ">
+  <div class="bg-surface-900 dark:bg-surface-950 h-[35vh] ">
     <div
-      class="text-surface-900 dark:text-surface-100 text-center flex flex-col items-center gap-1 "
+      class="dark:text-surface-100 text-center flex flex-col items-center gap-1 "
     >
-      <div class="text-surface-900 font-bold text-sm leading-tight">
+      <div class="text-surface-0 font-bold text-sm leading-tight">
         <i class="pi pi-discord !text-lg !leading-none" />&nbsp;POWERED BY
         DISCORD
       </div>
       <div
-        class="text-surface-900 dark:text-surface-0 font-bold text-xl leading-tight"
+        class="text-surface-0 dark:text-surface-0 font-bold text-xl leading-tight"
       >
         Join our design community
       </div>
