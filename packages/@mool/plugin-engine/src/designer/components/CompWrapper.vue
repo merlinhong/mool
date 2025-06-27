@@ -125,10 +125,20 @@ const childOnMounted = (e) => {
       const type = wrapper.getAttribute("data-wrapper") as string;
 
       // 创建一个 Vue 应用实例，用于设置 appContext
-      const { loop, events, label } = toRefs(prop.props["wrapper" + type]);
+      const { props } = toRefs(
+        prop.props["wrapper" + type]
+      );
       const Comp = () => (
-        <Wrapper tag={"div"} {...prop.props["wrapper" + type].props}>
-        </Wrapper>
+        <>
+          <Wrapper
+            tag={"div"}
+            {...prop.props["wrapper" + type].props}
+            onChange={(item) => {
+              props.value.class += ` ${item.class}`;
+              props.value.style = item.style;
+            }}
+          ></Wrapper>
+        </>
       );
 
       const app = createApp(Comp);
@@ -141,10 +151,12 @@ const childOnMounted = (e) => {
       // const Module = (await import(`primevue/tab`)).default;
       // app.component(prop.props[type].type, Module);
       app.mount(container);
-      [...wrapper.children].forEach((child)=>{
-        container.firstChild?.appendChild(child)      
+      console.log(container, container.children);
+
+      [...wrapper.children].forEach((child) => {
+        container.children[0]?.appendChild(child);
       });
-      wrapper.parentNode?.replaceChild(container.firstChild!, wrapper);
+      wrapper.parentNode?.replaceChild(container.children[0]!, wrapper);
     });
   });
 };

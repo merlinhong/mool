@@ -188,9 +188,8 @@ export const componentLibrary = [
             config: {
               wrapper1: {
                 props: {
-                  class: 'w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left'
+                  class: 'w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left',
                 },
-                label: ''
               },
               title: {
                 props: {
