@@ -134,8 +134,14 @@ const childOnMounted = (e) => {
             tag={"div"}
             {...prop.props["wrapper" + type].props}
             onChange={(item) => {
-              props.value.class += ` ${item.class}`;
-              props.value.style = item.style;
+              props.value.class += ` ${item.class??''}`;
+              console.log(item.style);
+              props.value.style = Object.assign(
+                props.value.style ?? {},
+                item.style ?? {}
+              );
+              console.log(props.value.style);
+              
             }}
           ></Wrapper>
         </>

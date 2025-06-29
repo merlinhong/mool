@@ -85,44 +85,51 @@ const toolbar = ref({
 const finalxy = {
   toolbarx: 0,
   toolbary: 0,
+  x: 0,
+  y: 0,
 };
+const clearInteract = ref<(() => void) | null>(null);
+watchEffect(() => {
+  if (isSelectWrapper.currWrapper != id) {
+    clearInteract.value?.();
+    isDrag.value = false;
+  }
+});
 
 const startDrag = () => {
-  useInteract(wrapper, {
+  const { clear } = useInteract(wrapper, {
     drag: {
-      move(e, { x, y }) {
-        console.log(x, y);
-        toolbar.value.x = finalxy.toolbarx + x;
-        toolbar.value.y = finalxy.toolbary + y;
-        console.log(toolbar.value);
+      move(e, { x, y,scale }) {
+        toolbarRef.value?.classList.add("hidden");
+        emit("change", {
+          style: {
+            transform: `translate(${x}px, ${y}px) scale(${scale})`,
+          },
+        });
       },
       end(e, { x, y }) {
-        finalxy.toolbarx = toolbar.value.x;
-        finalxy.toolbary = toolbar.value.y;
+        toolbarRef.value?.classList.remove("hidden");
+        // finalxy.toolbarx = toolbar.value.x;
+        // finalxy.toolbary = toolbar.value.y;
       },
     },
     resize: {
-      move(e, { scale, y, x }) {
-        toolbar.value.y = finalxy.toolbary + y;
-        toolbar.value.x = finalxy.toolbarx + x;
-        toolbarRef.value.style.transformOrigin = "right bottom";
-        toolbarRef.value.style.transform = `scale(${scale})`;
+      move(e, { scalex,scaley,origin,x,y }) {
+        toolbarRef.value?.classList.add("hidden");
         emit("change", {
           style: {
-            transform: `scale(${scale})`,
+            transform: `translate(${x}px, ${y}px) scale(${scalex}, ${scaley})`,
+            transformOrigin: origin,
           },
         });
       },
       end(e, { scale }) {
         console.log(scale);
-        emit("change", {
-          style: {
-            transform: `scale(${scale})`,
-          },
-        });
+        toolbarRef.value?.classList.remove("hidden");
       },
     },
   });
+  clearInteract.value = clear;
   isDrag.value = true;
 };
 

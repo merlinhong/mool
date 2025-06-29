@@ -9,7 +9,7 @@
     <!-- <div class="absolute inset-0 "></div> -->
     <div class="relative flex-1 z-20 flex items-center justify-start">
       <div class="flex items-end justify-center h-full">
-        <div data-wrapper="1" class="w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left">
+        <div data-wrapper="1">
           <div data-edit="title"></div>
           <div data-edit="desc"></div>
           <div
