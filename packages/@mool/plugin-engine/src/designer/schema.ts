@@ -1,4 +1,8 @@
 import { uuid } from "mooljs";
+import Single from "./blocks/banner/single/normal.vue";
+import LeftRight from "./blocks/banner/leftRight/normal.vue";
+import Bar1 from './blocks/nav/bar1/normal.vue';
+import Bar2 from './blocks/nav/bar2/normal.vue';
 export const componentLibrary = [
   {
     name: "navigation bar", // 显示名称
@@ -8,9 +12,7 @@ export const componentLibrary = [
         id: `bar1`, // 唯一标识符，用于查找和引用
         desc: '普通菜单导航栏',
         // 组件引用
-        component: defineAsyncComponent(
-          () => import("./blocks/nav/bar1/normal.vue")
-        ), // 实际组件
+        component: Bar1, // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/nav/bar1/mini.vue")
         ), // 侧边栏预览组件
@@ -106,9 +108,7 @@ export const componentLibrary = [
       {
         // 组件引用
         id: `leftRight`, // 唯一标识符，用于查找和引用
-        component: defineAsyncComponent(
-          () => import("./blocks/banner/leftRight/normal.vue")
-        ), // 实际组件
+        component: LeftRight, // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/banner/leftRight/mini.vue")
         ), // 侧边栏预览组件
@@ -122,27 +122,34 @@ export const componentLibrary = [
             id: `leftRight_${uuid({})}`, // 唯一标识符，用于查找和引用
             template: "leftRight",
             config: {
+              wrapper1:{
+                props:{
+                  class:"w-full max-w-2xl px-6 py-12 lg:p-12 xl:p-16 text-center lg:text-left"
+                }
+              },
+              wrapper2:{
+                props:{
+                  class:"flex items-center gap-4 justify-center lg:justify-start"
+                }
+              },
               title: {
                 props: {
-                  class: "text-xl xl:text-5xl font-bold text-surface-900 mb-4",
+                  class: "dark:text-surface-900 text-xl xl:text-5xl font-bold mb-4",
                 },
-                type: "div",
                 label: "Create the screens your",
               },
               subTitle: {
-                type: "p",
                 label: "visitors deserve to see",
                 props: {
-                  class: "text-xl xl:text-5xl font-bold text-surface-900 mb-4",
+                  class: "dark:text-surface-900 text-xl xl:text-5xl font-bold  mb-4",
                 },
               },
               desc: {
-                type: "p",
                 label:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 props: {
                   class:
-                    "text-surface-900 dark:text-surface-200 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
+                    "dark:text-surface-900 text-xl leading-normal mb-8 max-w-xl lg:max-w-none",
                 },
               },
               // button:['Learn More','Live Demo']
@@ -170,9 +177,7 @@ export const componentLibrary = [
       {
         // 组件引用
         id: `single`, // 唯一标识符，用于查找和引用
-        component: defineAsyncComponent(
-          () => import("./blocks/banner/single/normal.vue")
-        ), // 实际组件
+        component: Single, // 实际组件
         miniComponent: defineAsyncComponent(
           () => import("./blocks/banner/single/mini.vue")
         ), // 侧边栏预览组件
@@ -195,11 +200,9 @@ export const componentLibrary = [
                 props: {
                   class: "text-6xl font-bold text-surface-0 mb-4 animate-enter fade-in-10 slide-in-from-b-10 animate-duration-500",
                 },
-                type: "div",
                 label: "Create amazing screens today",
               },
               desc: {
-                type: "p",
                 label:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 props: {
