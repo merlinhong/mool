@@ -18,7 +18,7 @@
   >
     <slot></slot>
   </component>
-  <teleport to="body" v-if="isSelectWrapper.currWrapper == id">
+  <teleport :to="iframeWindow?.document.body"  v-if="isSelectWrapper.currWrapper == id&&iframeWindow">
     <div
       ref="toolbarRef"
       class="fixed h-[2rem] bg-blue-600 w-fit z-2000 !rounded-[3px] flex"
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { uuid } from "mooljs";
 import { Drag } from "../source";
-import { useInteract } from "../utils/useInteract";
+import { useInteract } from "../hooks/useInteract";
 const props = defineProps({
   tag: {
     type: String,
@@ -65,6 +65,7 @@ const Node =
 const isSelectWrapper = inject<{
   value: { currWrapper: null | string; currHover: null | string };
 }>("activeIds", { value: { currWrapper: null, currHover: null } }).value;
+const iframeWindow = inject<Window | null>("iframeWindow", null);
 const clickWrapper = (e) => {
   isSelectWrapper.currWrapper = id;
   isSelectWrapper.currHover = null;
@@ -88,48 +89,47 @@ const finalxy = {
   x: 0,
   y: 0,
 };
-const clearInteract = ref<(() => void) | null>(null);
+const { clear,start } = useInteract(wrapper, {
+  drag: {
+    move(e, { matrix }) {
+      toolbarRef.value?.classList.add("hidden");
+      emit("change", {
+        style: {
+          transform: matrix,
+        },
+      });
+    },
+    end(e, { x, y }) {
+      toolbarRef.value?.classList.remove("hidden");
+    },
+  },
+  resize: {
+    move(e, { matrix, origin }) {
+      toolbarRef.value?.classList.add("hidden");
+      emit("change", {
+        style: {
+          transform: matrix,
+          transformOrigin: origin,
+        },
+      });
+    },
+    end(e, { scale }) {
+      toolbarRef.value?.classList.remove("hidden");
+    },
+  },
+},iframeWindow);
+
 watchEffect(() => {
   if (isSelectWrapper.currWrapper != id) {
-    clearInteract.value?.();
+   if(isDrag.value){
+     clear();
+   }
     isDrag.value = false;
   }
 });
 
 const startDrag = () => {
-  const { clear } = useInteract(wrapper, {
-    drag: {
-      move(e, { x, y,scale }) {
-        toolbarRef.value?.classList.add("hidden");
-        emit("change", {
-          style: {
-            transform: `translate(${x}px, ${y}px) scale(${scale})`,
-          },
-        });
-      },
-      end(e, { x, y }) {
-        toolbarRef.value?.classList.remove("hidden");
-        // finalxy.toolbarx = toolbar.value.x;
-        // finalxy.toolbary = toolbar.value.y;
-      },
-    },
-    resize: {
-      move(e, { scalex,scaley,origin,x,y }) {
-        toolbarRef.value?.classList.add("hidden");
-        emit("change", {
-          style: {
-            transform: `translate(${x}px, ${y}px) scale(${scalex}, ${scaley})`,
-            transformOrigin: origin,
-          },
-        });
-      },
-      end(e, { scale }) {
-        console.log(scale);
-        toolbarRef.value?.classList.remove("hidden");
-      },
-    },
-  });
-  clearInteract.value = clear;
+  start();
   isDrag.value = true;
 };
 

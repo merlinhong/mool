@@ -55,7 +55,6 @@
     >
       <div
         class="flex p-4"
-        :class="[{ 'content-fadein': !inactive, 'content-fadeout': inactive }]"
       >
         <div class="!w-[20%]">
           <div v-for="item in cities" class="w-full hover:!bg-surface-100">
@@ -165,6 +164,7 @@ const tabInd = ref<number | null>(null);
 
 const el = document.querySelector(".canvas_container");
 
+
 const elRef = ref();
 const timer = ref<null | number>(null);
 const mouseenterMenu = (e: HTMLElement, ind?: number) => {
@@ -182,6 +182,8 @@ const mouseenterMenu = (e: HTMLElement, ind?: number) => {
       elRef.value?.classList.remove("active");
       elRef.value = e;
       e.classList.add("active");
+      console.log("elRef.value", elRef.value);
+      
     } else {
       elRef.value.classList.add("active");
     }
@@ -206,7 +208,7 @@ defineExpose({
   menu: [mouseenterMenu, mouseleaveMenu],
 });
 </script>
-<style>
+<style lang="scss" scoped>
 .bottom::after {
   content: "";
   display: block;

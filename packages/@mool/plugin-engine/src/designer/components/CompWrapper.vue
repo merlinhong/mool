@@ -23,11 +23,20 @@ const prop = defineProps({
   is: {
     type: Object as PropType<DefineComponent>,
   },
+  iframeRef: {
+    type: Object as PropType<HTMLIFrameElement>,
+    default: null,
+  },
 });
+console.log(prop.is);
+
 console.log(prop.is);
 
 const childRef = ref(null);
 const activeIds = inject("activeIds", {});
+
+console.log(activeIds);
+
 const renderKey = ref(0);
 
 // 是否是组件
@@ -40,11 +49,14 @@ function toLowerCaseFirst(str) {
 const childOnMounted = (e) => {
   // if (isreload.value) return;
   // 获取所有 data-replace="true" 的元素
-  const elements = document.querySelectorAll("[data-edit]");
+  const iframeDoc = prop.iframeRef?.contentDocument as Document;
+
+  const elements = iframeDoc?.querySelectorAll("[data-edit]");
+
   // 遍历并替换每个元素
-  elements.forEach(async (element) => {
+  elements?.forEach(async (element) => {
     // 创建一个容器用于挂载组件
-    const container = document.createElement("div");
+    const container = iframeDoc?.createElement("div");
 
     // 获取元素上的属性
     const type = element.getAttribute("data-edit") as string;
@@ -82,7 +94,7 @@ const childOnMounted = (e) => {
     const app = createApp(Comp);
     // 设置 provide
     app.provide("activeIds", activeIds);
-
+    app.provide("iframeWindow", prop.iframeRef?.contentWindow);
     for (const [key, component] of Object.entries(primevue)) {
       app.component(key, component);
     }
@@ -103,7 +115,6 @@ const childOnMounted = (e) => {
             });
           });
         }
-        console.log(element.parentNode);
 
         element.parentNode?.insertBefore(newNode, element);
         // element.parentNode?.classList.add();
@@ -112,36 +123,29 @@ const childOnMounted = (e) => {
     } else {
       console.error("旧节点不存在");
     }
-    // renderKey.value++;
-    // isreload.value = true;
-    console.log(renderKey.value);
   });
   nextTick(() => {
-    const wrapperEls = document.querySelectorAll("[data-wrapper]");
-    console.log(wrapperEls);
-    wrapperEls.forEach((wrapper) => {
+    const wrapperEls = iframeDoc?.querySelectorAll("[data-wrapper]");
+    wrapperEls?.forEach((wrapper) => {
       // 创建一个容器用于挂载组件
-      const container = document.createElement("div");
+      const container = iframeDoc?.createElement("div");
       const type = wrapper.getAttribute("data-wrapper") as string;
 
       // 创建一个 Vue 应用实例，用于设置 appContext
-      const { props } = toRefs(
-        prop.props["wrapper" + type]
-      );
+      const { props } = toRefs(prop.props["wrapper" + type]);
       const Comp = () => (
         <>
           <Wrapper
             tag={"div"}
             {...prop.props["wrapper" + type].props}
             onChange={(item) => {
-              props.value.class += ` ${item.class??''}`;
+              props.value.class += ` ${item.class ?? ""}`;
               console.log(item.style);
               props.value.style = Object.assign(
                 props.value.style ?? {},
                 item.style ?? {}
               );
               console.log(props.value.style);
-              
             }}
           ></Wrapper>
         </>
@@ -150,6 +154,7 @@ const childOnMounted = (e) => {
       const app = createApp(Comp);
       // 设置 provide
       app.provide("activeIds", activeIds);
+      app.provide("iframeWindow", prop.iframeRef?.contentWindow);
 
       for (const [key, component] of Object.entries(primevue)) {
         app.component(key, component);
@@ -157,8 +162,6 @@ const childOnMounted = (e) => {
       // const Module = (await import(`primevue/tab`)).default;
       // app.component(prop.props[type].type, Module);
       app.mount(container);
-      console.log(container, container.children);
-
       [...wrapper.children].forEach((child) => {
         container.children[0]?.appendChild(child);
       });
@@ -168,4 +171,5 @@ const childOnMounted = (e) => {
 };
 </script>
 
-<style></style>
+<style>
+</style>

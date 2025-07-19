@@ -9,12 +9,12 @@
         <div class="flex flex-col lg:items-center w-full gap-2">
           <div class="flex-grow">
             <h3
-              class="text-[0.5rem] font-bold text-surface-900 dark:text-surface-0 leading-tight"
+              class="text-[0.5rem] font-bold lg:text-surface-900 dark:text-surface-0 leading-tight"
             >
               Create amazing screens today
             </h3>
             <p
-              class="text-surface-0/90 lg:text-surface-700 dark:text-surface-200 text-[0.3rem] lg:mt-0.5 max-w-md"
+              class="lg:text-surface-900 dark:text-surface-0 text-[0.3rem] lg:mt-0.5 max-w-md"
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.

@@ -39,7 +39,7 @@
     </template>
     <slot v-else>{{ modelValue }}</slot>
   </component>
-  <teleport to="body">
+  <teleport :to="iframeWindow?.document.body" v-if="iframeWindow">
     <template v-if="isSelectWrapper.currWrapper == id">
       <div
         v-if="showOpBtns"
@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch } from "vue";
+import { ref, nextTick, watch, VNode } from "vue";
 import { T, Plus, U, B, H2, H3 } from "../source";
 import { uuid } from "mooljs";
 const props = defineProps({
@@ -134,12 +134,14 @@ const toolbar = ref({
 const isSelectWrapper = inject<{
   value: { currWrapper: null | string; currHover: null | string };
 }>("activeIds", { value: { currWrapper: null, currHover: null } }).value;
+const iframeWindow = inject<Window | null>("iframeWindow", null);
+
 const emit = defineEmits(["update:modelValue"]);
 
 const isEditing = ref(false);
 const showToolbar = ref(false);
 const showOpBtns = ref(true);
-const editableElement = ref(null);
+const editableElement = ref<VNode|null>(null);
 const toolbarRef = ref(null);
 const currentRect = ref({
   top: 0,
@@ -162,12 +164,12 @@ const clickWrapper = (e) => {
 const setLocation = (e) => {
   const { top, right, bottom, left } = e.target.getBoundingClientRect();
   currentRect.value = { top, bottom, left };
-  const { width, height } = getComputedStyle(toolbarRef.value! as Element);
+  const { width, height } = iframeWindow?.getComputedStyle(toolbarRef.value! as Element)!;
   toolbar.value.x = right - +width?.replace("px", "");
   toolbar.value.y = top < 66 ? bottom : top - +height.replace("px", "");
   isEnter.value = false;
 };
-const canvasEl = document.querySelector(".canvas_container");
+const canvasEl = iframeWindow?.document.querySelector(".canvas_container");
 onMounted(() => {
   let top = 0;
   canvasEl?.addEventListener("scroll", (e) => {
@@ -180,8 +182,6 @@ const startEditing = () => {
   isEditing.value = true;
 
   nextTick(() => {
-    console.log(currentRect.value);
-
     const { top, bottom, left } = currentRect.value;
     const { height } = getComputedStyle(toolbarRef.value! as Element);
     toolbar.value.x = left;
@@ -190,15 +190,15 @@ const startEditing = () => {
     if (editableElement.value) {
       // editableElement.value.focus?.();
       // 选择所有文本
-      const range = document.createRange();
+      const range = iframeWindow?.document.createRange();
       const $el = editableElement.value.$el
         ? editableElement.value.$el
         : editableElement.value;
 
-      range.selectNodeContents($el);
-      const selection = window.getSelection();
+      range?.selectNodeContents($el);
+      const selection = iframeWindow?.getSelection();
       selection?.removeAllRanges();
-      selection?.addRange(range);
+      selection?.addRange(range as Range);
     }
   });
 };

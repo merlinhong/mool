@@ -10,12 +10,12 @@
       <i
         class="pi pi-desktop mr-4"
         @click="switchToPC(0)"
-        :class="{ 'icon-active': isPC }"
+        :class="{ 'icon-active': !isMobile }"
       ></i>
       <i
         class="pi pi-mobile"
         @click="switchToMobile(0)"
-        :class="{ 'icon-active': !isPC }"
+        :class="{ 'icon-active': isMobile }"
       ></i>
     </div>
 
@@ -34,7 +34,7 @@
       <i v-tooltip.bottom="'回退'" class="pi-arrow-left pi !mr-4"></i>
       <i v-tooltip.bottom="'下一步'" class="pi-arrow-right pi !mr-4"></i>
       <i v-tooltip.bottom="'重置'" class="pi-refresh pi !mr-4"></i>
-      <i v-tooltip.bottom="'预览'" class="pi-eye pi !mr-4"></i>
+      <i v-tooltip.bottom="'预览'" class="pi-eye pi !mr-4" @click="preview"></i>
       <i v-tooltip.bottom="'保存'" class="pi-save pi !mr-4"></i>
       <i v-tooltip.bottom="'下载'" class="pi-download pi" @click="genCode"></i>
     </div>
@@ -44,20 +44,22 @@
 <script setup lang="tsx">
 import { ref, Ref, PropType, watch } from "vue";
 import { useLayout } from "@/layouts/layout";
+import {usePreview} from '../hooks/usePreview';
+const {preview} = usePreview();
 
 const { toggleDarkMode, isDarkTheme } = useLayout();
-const PCSize = "100%";
-const MobileSize = "25%";
-
-const emit = defineEmits(["changeSize"]);
-const PageSchema = defineModel<any[]>("pageSchema", { required: true });
+const route = useRoute();
+const PageSchema = inject<Ref<any[]>>("pageSchema", ref([]));
 const statuIcon = ref<"info" | "success" | "warning" | "error">("info");
 
 const statuTitle = ref("正在出码，请稍等....");
 const generateCoding = ref(false);
-onMounted(()=>{
-  toggleDarkMode()
-})
+const isMobile = inject<Ref<boolean>>("isMobile", ref(false));
+onMounted(() => {
+  toggleDarkMode();
+});
+
+
 const genCode = async () => {
   try {
     // 请求文件夹选择
@@ -65,9 +67,6 @@ const genCode = async () => {
     const folderHandle = await self.showDirectoryPicker();
 
     // generateCoding.value = true;
-    console.log(PageSchema.value);
-    console.log(Object.entries(PageSchema.value));
-
     const schema = {
       modules: Object.entries(toRaw(PageSchema.value)).reduce(
         (acc, [key, value]) => {
@@ -77,7 +76,6 @@ const genCode = async () => {
         {} as Record<string, any>
       ),
     };
-    console.log(schema);
 
     fetch(
       "/api/generate-code",
@@ -206,47 +204,13 @@ const saveSchema = () => {
   });
 };
 
-// 新增的响应式变量和方法
-const isPC = ref(true);
-const _isPC = ref(true);
-
-const containerStyle = ref<{ width?: string; margin?: string }>({
-  margin: "0",
-});
 const switchToPC = (type?: number) => {
-  // 这里可以添加切换到PC视图的逻辑
-  if (type) {
-    _isPC.value = true;
-    return (containerStyle.value.width = "100%");
-  }
-  isPC.value = true;
-
-  emit("changeSize", { size: PCSize, isPC: true });
+  isMobile.value = false;
 };
 
 const switchToMobile = (type?: number) => {
-  // 这里可以添加切换到移动端视图的逻辑
-  if (type) {
-    _isPC.value = false;
-    return (
-      (containerStyle.value.width = "25%"),
-      (containerStyle.value.margin = "auto")
-    );
-  }
-  isPC.value = false;
-  emit("changeSize", { size: MobileSize, isPC: false });
+  isMobile.value = true;
 };
-
-// 监听isPC的变化
-watch(isPC, (newValue) => {
-  if (newValue) {
-    console.log("切换到PC视图");
-    // 这里可以添加更多PC视图相关的逻辑
-  } else {
-    console.log("切换到移动端视图");
-    // 这里可以添加更多移动端视图相关的逻辑
-  }
-});
 
 const redo = () => {
   console.log("重做");

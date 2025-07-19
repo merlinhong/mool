@@ -1,45 +1,30 @@
 <script setup lang="tsx">
 import TopBar from "./components/TopBar.vue";
 import SideBar from "./components/SideBar.vue";
-import CanvasFrame from "./components/CanvasFrame.vue"; // 导入 CanvasFrame 组件
+import CanvasFrame from "./components/iframe.vue"; // 导入 CanvasFrame 组件
 import ConfigPlane from "./components/propSetting.vue";
 import { useMagicKeys, useEventListener } from "@vueuse/core";
-import { useStore, useLoading } from "mooljs";
+import { useStore, useLoading, } from "mooljs";
+import {usePreview} from './hooks/usePreview';
+import { useProvide } from "./hooks/useProvide";
 const route = useRoute();
 const router = useRouter();
 
 const { loading, setLoading } = useLoading(true);
-// const { canvas } = useStore();
-// const canvasFrameRef = ref<InstanceType<typeof CanvasFrame> | null>(null);
 
 const pageName = ref("");
 
-const pageSchema = ref<any[]>([]);
+const {getUserName,setUserName} = usePreview();
 
-// const containerStyle = ref<{ width?: string; margin?: string }>({});
-
-
-// const changeSize = (option: { size: string; isPC: boolean }) => {
-//   containerStyle.value.width = option.size;
-// };
+const {drawer} = useProvide();
 watch(
   () => route.query,
   (n, o) => {
-    querySchema(n.id as string);
+    // querySchema(n.id as string);
     pageName.value = n.pageName as string;
   }
 );
-const openPage = (args: string[]) => {
-  router.push({
-    path: "/editor",
-    query: {
-      id: args[0],
-      projectName: route.query.projectName,
-      pageName: args[1],
-    },
-  });
-  querySchema(args[0]);
-};
+
 const querySchema = (id: string = "cmef4ey5") => {
   setLoading(true);
   Object.assign(pageConfig.value, clonePageConfig);
@@ -102,61 +87,50 @@ const back = () => {
     },
   });
 };
-const drawer = ref(false);
 const onMouseenter = () => {
   drawer.value = false;
 };
 const hint = ref(false);
-const place = ref<any | null>(null);
+
 const activeIds = ref({
   currActive: null,
   currHover: null,
   currRect: null,
-  currWrapper:null
+  currWrapper: null,
 });
-provide("drawer", drawer);
-const checked = ref(false);
+
+onMounted(() => {
+  router.replace({
+    query: {
+      ...route.query,
+      uid: getUserName()
+    },
+  });
+  setUserName();
+});
 </script>
 
 <template>
   <div class="h-[100vh] flex flex-col">
-    <TopBar v-model:pageSchema="pageSchema" @changeSize="changeSize" />
+    <TopBar />
     <Splitter class="h-[100%]">
       <SplitterPanel>
-        <div class="flex panel_container justify-between">
-          <!-- 侧边栏组件，用于显示和编辑页面配置 -->
-          <!-- v-model:pageConfig 用于双向绑定页面配置 -->
-          <!-- @change 事件用于监听侧边栏的打开或关闭 -->
-          <SideBar
-            v-model:pageSchema="pageSchema"
-            v-model:hint="hint"
-            v-model:activeIds="activeIds"
-            @place="
-              (item) => {
-                place = item;
-              }
-            "
-          />
+        <main class="flex panel_container justify-between">
+          <SideBar v-model:hint="hint" v-model:activeIds="activeIds" />
           <!-- 画布组件，用于显示和编辑页面内容 -->
           <!-- v-model:pageConfig 用于双向绑定页面配置 -->
           <CanvasFrame
             @mouseenter="onMouseenter"
             :hint="hint"
-            :place="place"
             v-model:activeIds="activeIds"
-            v-model:pageSchema="pageSchema"
           />
-          <!-- 侧边栏组件，用于显示和编辑页面配置 -->
-          <el-aside
+          <aside
             class="page-design-config !w-[21rem]"
-            style="background-color: var(--surface-ground);"
-            v-model:activeIds="activeIds"
+            style="background-color: var(--surface-ground)"
           >
-            <!-- <config-plane :is-show-config="true" v-model:current="currentConf" v-model:pageConfig="pageConfig"
-            @openJs="openPanel.js = true" @openRef="openPanel.ref = true" /> -->
             <ConfigPlane></ConfigPlane>
-          </el-aside>
-        </div>
+          </aside>
+        </main>
       </SplitterPanel>
     </Splitter>
   </div>

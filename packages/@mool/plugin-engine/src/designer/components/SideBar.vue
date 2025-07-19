@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { CirclePlus } from "@element-plus/icons-vue";
 import { SortableEvent, VueDraggable } from "vue-draggable-plus";
 import { componentLibrary } from "../schema";
-import { useRefs } from "mooljs";
-import { cloneDeep } from "mooljs";
+import { cloneDeep, uuid, useRefs } from "mooljs";
+import { PropType } from "vue";
 const { refs, setRefs } = useRefs();
 defineProps({
   width: {
@@ -33,7 +32,6 @@ defineProps({
     }),
   },
 });
-
 const curStatus = ref<"normal" | "dragStart" | "dragEnd" | "draging">("normal");
 
 // 侧边栏按钮组
@@ -42,6 +40,8 @@ const btnGroup = ref<{ name: string; className: string; active?: boolean }[]>([
 ]);
 
 const drawer = inject<Ref<boolean>>("drawer");
+const editData = inject<Ref<any[]>>("editData", ref([]));
+
 const aside = ref();
 const emit = defineEmits(["change", "editPage", "place"]);
 
@@ -84,6 +84,8 @@ const onPopoverLeave = (e: MouseEvent, id: string) => {
  * @param e 监听拖拽开始
  */
 const onStart = (e: SortableEvent) => {
+  hint.value = true;
+  editData.value = [];
   Object.keys(refs).forEach((_) => {
     refs[_].classList.add("out-in-fade");
     refs[_].classList.remove("fade-in-out");
@@ -139,54 +141,6 @@ const onMove = (e) => {
   curStatus.value = "draging";
   e.dragged.style.display = "none";
   hint.value = true;
-  const { originalEvent, relatedRect, related } = e;
-  // if (!originalEvent.type) return;
-
-  // if(originalEvent.clientY - relatedRect?.top > relatedRect?.height){
-  //   emit("place", {
-  //     el: related,
-  //     orientation: "after",
-  //   });
-  // }else{
-  //   emit("place", {
-  //     el: related,
-  //     orientation: "before",
-  //   });
-  // }
-  // 计算鼠标位置
-  if (activeIds.value.currRect) {
-    if (relatedRect?.top > activeIds.value.currRect) {
-      emit("place", {
-        el: related,
-        orientation: "after",
-      });
-      activeIds.value.currRect = relatedRect?.top;
-
-      return;
-    }
-    if (relatedRect?.top < activeIds.value.currRect) {
-      emit("place", {
-        el: related,
-        orientation: "before",
-      });
-      activeIds.value.currRect = relatedRect?.top;
-
-      return;
-    }
-  }
-
-  if (originalEvent.clientY - relatedRect?.top < relatedRect?.height / 2) {
-    emit("place", {
-      el: related,
-      orientation: "before",
-    });
-  } else {
-    emit("place", {
-      el: related,
-      orientation: "after",
-    });
-  }
-  activeIds.value.currRect = relatedRect?.top;
 };
 /**
  * 添加内容
@@ -199,7 +153,12 @@ const addContent = () => {
   }, 300);
 };
 const clone = (item: any) => {
-  return JSON.parse(JSON.stringify(item));
+  return JSON.parse(
+    JSON.stringify({
+      ...item,
+      id: `${item.template}_${uuid({})}`,
+    })
+  );
 };
 </script>
 
@@ -207,7 +166,7 @@ const clone = (item: any) => {
   <div class="sidebar-container">
     <nav
       class="sidebar-nav border-r border-zinc-800 z-2001 rounded-bl-[5px]"
-      style="background-color: var(--surface-ground);"
+      style="background-color: var(--surface-ground)"
     >
       <div class="top-buttons">
         <div
@@ -254,15 +213,15 @@ const clone = (item: any) => {
       </div>
     </nav>
     <Splitter
-      class="relative !w-[30rem] bottom-[1px]"
+      class="relative !w-[26rem] bottom-[1px]"
       style="z-index: 2000; transition: transform 0.3s ease"
       :style="{
         ...(drawer
           ? { transform: 'translateX(0rem)' }
-          : { transform: 'translateX(-30rem)' }),
+          : { transform: 'translateX(-26rem)' }),
       }"
     >
-      <SplitterPanel class="rounded-br-[5px] ">
+      <SplitterPanel class="rounded-br-[5px]">
         <div
           ref="aside"
           style="
@@ -273,19 +232,28 @@ const clone = (item: any) => {
             width: 100%;
             transition: transform 1s ease;
             z-index: 9999;
-            border-right:1px solid #999
+            border-right: 1px solid #999;
           "
         >
           <div
             style="padding: 20px; font-size: 13px; color: #333"
             v-for="_ in componentLibrary"
           >
-            <div style="padding: 0px 10px; margin-bottom: 10px; color: var(--code-color)">
+            <div
+              style="
+                padding: 0px 10px;
+                margin-bottom: 10px;
+                color: var(--code-color);
+              "
+            >
               {{ _.name }}
             </div>
 
             <div class="flex justify-between items-center flex-wrap">
-              <div v-for="item in _.compList" class="!w-[45%] box relative !mb-12">
+              <div
+                v-for="item in _.compList"
+                class="!w-[47%] box relative !mb-12"
+              >
                 <VueDraggable
                   v-model="item.schema"
                   @move="onMove"
@@ -295,23 +263,17 @@ const clone = (item: any) => {
                   :animation="150"
                   :sort="false"
                   :group="{ name: 'blocks', pull: 'clone', put: false }"
-                  :class="[
-                    { 'bg-gray-500 ': item.id.includes('bar') },
-                    
-                  ]"
+                  :class="[{ 'bg-gray-500 ': item.id.includes('bar') }]"
                   @mouseenter="(e: MouseEvent) => onPopoverEnter(e, item.id)"
                   @mouseleave="(e: MouseEvent) => onPopoverLeave(e, item.id)"
                 >
-                  <div
-                    :class="[
-                      { 'py-10': item.id.includes('bar')},
-                      item.id,
-                    ]"
-                  >
+                  <div :class="[{ 'py-10': item.id.includes('bar') }, item.id]">
                     <component :is="item.miniComponent"> </component>
                   </div>
                 </VueDraggable>
-                <div class=" absolute bottom-[-25px] text-[var(--code-color)]">{{ item.desc }}</div>
+                <div class="absolute bottom-[-25px] text-[var(--code-color)]">
+                  {{ item.desc }}
+                </div>
                 <div
                   class="popover_container absolute opacity-0 bg-black p-2 w-100 hidden"
                   :ref="setRefs(item.id)"
